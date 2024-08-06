@@ -18,7 +18,7 @@ import { color } from "../utilities/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../state/auth/authSlice";
-import { baseUrl } from "../config";
+// import { baseUrl } from "../config";
 import axios from "axios";
 import { TouchableOpacity } from "react-native-gesture-handler";
 

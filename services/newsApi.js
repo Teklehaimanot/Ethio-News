@@ -1,8 +1,7 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseUrl } from "../config";
 
-const BASE_URL = baseUrl;
+const BASE_URL = process.env.API_KEY;
 export const newsApi = createApi({
   reducerPath: "newsApi",
   baseQuery: fetchBaseQuery({
