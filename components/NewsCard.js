@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   imageCard: {
     width: width * 1,
-    height: 220,
+    height: 260,
     marginVertical: width * 0.06,
   },
   image: {
