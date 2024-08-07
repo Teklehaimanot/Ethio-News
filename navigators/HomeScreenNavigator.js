@@ -1,29 +1,31 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../screens/home/Home";
 import { color } from "../utilities/Colors";
+import Post from "../screens/news/Post";
+import { useLayoutEffect } from "react";
 
 const Stack = createNativeStackNavigator();
 const HomeScreenNavigator = ({ navigation }) => {
-  // useLayoutEffect(() => {
-  //   const unsubscribe = navigation.addListener("state", (e) => {
-  //     const route = e.data.state.routes[e.data.state.index];
-  //     const index = route === null ? 0 : route?.state?.index;
+  useLayoutEffect(() => {
+    const unsubscribe = navigation.addListener("state", (e) => {
+      const route = e.data.state.routes[e.data.state.index];
+      const index = route === null ? 0 : route?.state?.index;
 
-  //     if (index === 1 || index === 2) {
-  //       navigation.setOptions({
-  //         drawerLockMode: "locked-closed",
-  //         headerShown: false,
-  //       });
-  //     } else {
-  //       navigation.setOptions({
-  //         drawerLockMode: "unlocked",
-  //         headerShown: true,
-  //       });
-  //     }
-  //   });
+      if (index === 1 || index === 2) {
+        navigation.setOptions({
+          drawerLockMode: "locked-closed",
+          headerShown: false,
+        });
+      } else {
+        navigation.setOptions({
+          drawerLockMode: "unlocked",
+          headerShown: true,
+        });
+      }
+    });
 
-  //   return unsubscribe;
-  // }, [navigation]);
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <Stack.Navigator
@@ -32,7 +34,7 @@ const HomeScreenNavigator = ({ navigation }) => {
         headerStyle: {
           backgroundColor: color.primary,
         },
-        headerTintColor: color.black,
+        headerTintColor: color.secondary,
         headerTitleStyle: {
           fontWeight: "bold",
           fontSize: 20,
@@ -47,11 +49,11 @@ const HomeScreenNavigator = ({ navigation }) => {
       />
 
       <Stack.Screen
-        name="details"
-        component={Home}
+        name="Details"
+        component={Post}
         options={{
           headerShown: true,
-          headerTitle: "News",
+          headerTitle: " ",
         }}
       />
     </Stack.Navigator>

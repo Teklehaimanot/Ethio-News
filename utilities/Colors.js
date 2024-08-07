@@ -5,8 +5,8 @@ export const color = {
   white: "#80d463",
   blueGray: "#2E3A59",
   blueOcean: "#523CAD",
+  black: "#444",
 
-  black: "#000000",
   grayLight: "#A1A6B3",
   grayDark: "#a9a9a9",
   grayBackground: "#E5E5E5",

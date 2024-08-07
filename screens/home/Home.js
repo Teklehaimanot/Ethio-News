@@ -13,7 +13,7 @@ import NewsCard from "../../components/NewsCard";
 const initialLimit = 15;
 const initialStart = 1;
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const [news, setNews] = useState([]);
   const [start, setStart] = useState(initialStart);
 
@@ -49,7 +49,9 @@ const Home = () => {
     }
   };
 
-  const renderItem = ({ item }) => <NewsCard item={item} />;
+  const renderItem = ({ item }) => (
+    <NewsCard item={item} navigation={navigation} />
+  );
 
   if (isLoading && start === 1) {
     return <ActivityIndicator size={"large"} color={color.primary} />;

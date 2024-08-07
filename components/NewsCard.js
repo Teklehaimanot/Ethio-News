@@ -13,14 +13,15 @@ import { AntDesign } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 
 const { width } = Dimensions.get("window");
-const NewsCard = ({ item }) => {
+
+const NewsCard = ({ item, navigation }) => {
   const basicUrl = process.env.API_KEY;
   const { user } = useSelector((state) => state.auth);
 
   const formatDateToYYYYMMDD = (date) => {
     const dateObject = new Date(date);
     const year = dateObject.getFullYear();
-    const month = String(dateObject.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+    const month = String(dateObject.getMonth() + 1).padStart(2, "0");
     const day = String(dateObject.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
@@ -30,7 +31,7 @@ const NewsCard = ({ item }) => {
     <SafeAreaView style={styles.cardview}>
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate("details", {
+          navigation.navigate("Details", {
             id: item._id,
             title: item.title,
             image: basicUrl + "/" + item.image,
@@ -123,13 +124,15 @@ const styles = StyleSheet.create({
   titleStyle: {
     marginHorizontal: 15,
     marginTop: 15,
-    color: color.greenGray,
+    color: color.black,
     borderLeftWidth: 0.8,
     borderLeftColor: color.primary,
     paddingLeft: width * 0.05,
     borderRightWidth: 0.8,
     borderRightColor: color.primary,
     paddingRight: width * 0.05,
+    fontSize: 16,
+    fontWeight: "bold",
   },
   imageCard: {
     width: width * 1,
