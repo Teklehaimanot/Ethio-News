@@ -48,11 +48,11 @@ const Home = ({ navigation }) => {
   };
 
   const handleEndReached = () => {
-    if (posts?.data.length === initialLimit) {
+    if (posts?.data.length === initialLimit && !isFetching) {
       setStart((prev) => prev + 1);
     }
   };
-
+  console.log(start);
   const renderItem = ({ item }) => (
     <NewsCard item={item} navigation={navigation} />
   );
@@ -71,7 +71,7 @@ const Home = ({ navigation }) => {
       data={news}
       keyExtractor={(item) => item._id}
       onEndReached={handleEndReached}
-      onEndReachedThreshold={0.5}
+      onEndReachedThreshold={0.1}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ gap: 2, paddingHorizontal: 1 }}
       renderItem={renderItem}
