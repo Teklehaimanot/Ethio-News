@@ -29,7 +29,7 @@ const DrawerNavigator = () => {
           component={HomeScreenNavigator}
           options={{
             drawerLabel: "Home",
-            title: " ",
+            title: " Ethiopian News",
           }}
         />
         <Drawer.Screen

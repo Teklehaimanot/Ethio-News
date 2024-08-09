@@ -5,6 +5,8 @@ import {
   ActivityIndicator,
   RefreshControl,
   StyleSheet,
+  Text,
+  TouchableOpacity,
 } from "react-native";
 import { useGetNewsQuery } from "../../services";
 import { color } from "../../utilities/Colors";
@@ -69,6 +71,7 @@ const Home = ({ navigation }) => {
       </View>
     );
   }
+  console.log(isLoading && start === 1);
   return (
     <FlatList
       style={styles.cardList}
@@ -84,7 +87,9 @@ const Home = ({ navigation }) => {
       }
       ListFooterComponent={() => (
         <View>
-          {isFetching && <ActivityIndicator size="large" color={color} />}
+          {isFetching && (
+            <ActivityIndicator size="large" color={color.primary} />
+          )}
         </View>
       )}
     />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   SafeAreaView,
@@ -11,12 +11,19 @@ import {
 import { color } from "../utilities/Colors";
 import { AntDesign } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
+import {
+  useDislikeNewsByIdMutation,
+  useLikeNewsByIdMutation,
+} from "../services";
 
 const { width } = Dimensions.get("window");
 
 const NewsCard = ({ item, navigation }) => {
   const basicUrl = process.env.API_KEY;
   const { user } = useSelector((state) => state.auth);
+  const [news, setNews] = useState({});
+  const [likeNews] = useLikeNewsByIdMutation();
+  const [dislikeNews] = useDislikeNewsByIdMutation();
 
   const formatDateToYYYYMMDD = (date) => {
     const dateObject = new Date(date);
@@ -27,88 +34,142 @@ const NewsCard = ({ item, navigation }) => {
     return `${year}-${month}-${day}`;
   };
 
+  useEffect(() => {
+    setNews(item);
+  }, [item]);
+
+  const handleLiked = (newsid) => {
+    try {
+      if (user) {
+        likeNews(newsid);
+        setNews({
+          ...news,
+          likes: news.likedBy.includes(user.id) ? news.likes : news.likes + 1,
+          dislikes: news.dislikedBy.includes(user.id)
+            ? news.dislikes - 1
+            : news.dislikes,
+          likedBy: [...news.likedBy, user.id],
+          dislikedBy: news.dislikedBy.filter((eachDislike) => {
+            return eachDislike !== user.id;
+          }),
+        });
+      } else navigation.navigate("login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(news);
+
+  const handleDisliked = (newsid) => {
+    try {
+      if (user) {
+        dislikeNews(newsid);
+        setNews({
+          ...news,
+          dislikes: news.dislikedBy.includes(user.id)
+            ? news.dislikes
+            : news.dislikes + 1,
+          likes: news.dislikedBy.includes(user.id)
+            ? news.likes
+            : news.likes - 1,
+          dislikedBy: [...news.dislikedBy, user.id],
+          likedBy: news.likedBy.filter((eachlike) => {
+            return eachlike !== user.id;
+          }),
+        });
+      } else navigation.navigate("login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <SafeAreaView style={styles.cardview}>
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("Details", {
-            id: item._id,
-            title: item.title,
-            image: basicUrl + "/" + item.image,
-            description: item.description,
-            comments: item.comments,
-            date: item.date,
-            likes: item.likes,
-            dislikes: item.dislikes,
-            likedBy: item.likedBy,
-            dislikedBy: item.dislikedBy,
-          })
-        }
-      >
-        <View>
-          <Text style={styles.titleStyle}>{item.title}</Text>
-          <View style={styles.imageCard}>
-            <Image
-              style={styles.image}
-              source={{
-                uri: `${basicUrl + "/" + item.image}`,
-              }}
-            />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <View style={styles.bottomCardStyle}>
-        <View>
-          <Text style={styles.dateStyle}>Date</Text>
-          <Text>{formatDateToYYYYMMDD(item.date)}</Text>
-        </View>
-        <TouchableOpacity
-          onPress={() => {
-            handleLiked(item._id);
-          }}
-          style={styles.likeButtonStyle}
-        >
-          <AntDesign
-            name="like2"
-            size={18}
-            color={color.blue}
-            style={item.likedBy.includes(user?.id) ? styles.likedeButton : " "}
-          />
-          <Text style={{ textAlign: "center" }}>{item.likes}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            handleDisliked(item._id);
-          }}
-          style={styles.likeButtonStyle}
-        >
-          <AntDesign
-            name="dislike2"
-            size={18}
-            color={color.blue}
-            style={
-              item.dislikedBy.includes(user?.id) ? styles.likedeButton : " "
-            }
-          />
-          <Text style={{ textAlign: "center" }}>{item.dislikes}</Text>
-        </TouchableOpacity>
+    news && (
+      <SafeAreaView style={styles.cardview}>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate("comments", {
-              newsid: item._id,
-              comments: item.comments,
+            navigation.navigate("Details", {
+              id: news._id,
+              title: news.title,
+              image: basicUrl + "/" + news.image,
+              description: news.description,
+              comments: news.comments,
+              date: news.date,
+              likes: news.likes,
+              dislikes: news.dislikes,
+              likedBy: news.likedBy,
+              dislikedBy: news.dislikedBy,
             })
           }
-          style={{
-            paddingHorizontal: 8,
-            paddingVertical: 2,
-          }}
         >
-          <Text style={{ color: color.blue }}>comments</Text>
-          <Text style={{ textAlign: "center" }}>{item.comments.length}</Text>
+          <View>
+            <Text style={styles.titleStyle}>{news.title}</Text>
+            <View style={styles.imageCard}>
+              <Image
+                style={styles.image}
+                source={{
+                  uri: `${basicUrl + "/" + news.image}`,
+                }}
+              />
+            </View>
+          </View>
         </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        <View style={styles.bottomCardStyle}>
+          <View>
+            <Text style={styles.dateStyle}>Date</Text>
+            <Text>{formatDateToYYYYMMDD(news.date)}</Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              handleLiked(news._id);
+            }}
+            style={styles.likeButtonStyle}
+          >
+            <AntDesign
+              name="like2"
+              size={18}
+              color={color.blue}
+              style={
+                news.likedBy?.includes(user?.id) ? styles.likedeButton : " "
+              }
+            />
+            <Text style={{ textAlign: "center" }}>{news.likes}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleDisliked(news._id);
+            }}
+            style={styles.likeButtonStyle}
+          >
+            <AntDesign
+              name="dislike2"
+              size={18}
+              color={color.blue}
+              style={
+                news.dislikedBy?.includes(user?.id) ? styles.likedeButton : " "
+              }
+            />
+            <Text style={{ textAlign: "center" }}>{news.dislikes}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("comments", {
+                newsid: news._id,
+                comments: news.comments,
+              })
+            }
+            style={{
+              paddingHorizontal: 8,
+              paddingVertical: 2,
+            }}
+          >
+            <Text style={{ color: color.blue }}>comments</Text>
+            <Text style={{ textAlign: "center" }}>{item.comments.length}</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    )
   );
 };
 const styles = StyleSheet.create({

@@ -40,12 +40,9 @@ const Post = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    refetch(likes, dislikes);
-  }, [likes, dislikes]);
-
-  useEffect(() => {
     setNews(data);
   }, [data]);
+
   const handleLiked = (newsid) => {
     try {
       if (user) {
