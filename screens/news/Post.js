@@ -100,6 +100,17 @@ const Post = ({ route, navigation }) => {
         }
       >
         <Text style={styles.titleStyle}>{title}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            marginHorizontal: 10,
+          }}
+        >
+          <Text style={{ color: color.grayLight, fontWeight: "300" }}>
+            Addis Maleda |
+          </Text>
+          <Text style={{ color: color.grayLight, fontWeight: "300" }}>1h</Text>
+        </View>
         <View style={styles.imageCard}>
           <Image style={styles.image} source={{ uri: image }} />
         </View>

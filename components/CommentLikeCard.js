@@ -3,15 +3,9 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { color } from "../utilities/Colors";
 import { AntDesign } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import {
-  useDislikeNewsByIdMutation,
-  useLikeNewsByIdMutation,
-} from "../services";
 
 const CommentLikeCard = ({ news, navigation, handleLiked, handleDisliked }) => {
   const { user } = useSelector((state) => state.auth);
-  const [likeNews] = useLikeNewsByIdMutation();
-  const [dislikeNews] = useDislikeNewsByIdMutation();
 
   const formatDateToYYYYMMDD = (date) => {
     const dateObject = new Date(date);
@@ -22,54 +16,6 @@ const CommentLikeCard = ({ news, navigation, handleLiked, handleDisliked }) => {
     return `${year}-${month}-${day}`;
   };
 
-  //   useEffect(() => {
-  //     setNews();
-  //   }, [likeNews]);
-
-  //   const handleLiked = (newsid) => {
-  //     console.log(newsid);
-  //     try {
-  //       if (user) {
-  //         likeNews(newsid);
-  //         setNews({
-  //           ...news,
-  //           likes: news.likedBy.includes(user.id) ? news.likes : news.likes + 1,
-  //           dislikes: news.dislikedBy.includes(user.id)
-  //             ? news.dislikes - 1
-  //             : news.dislikes,
-  //           likedBy: [...news.likedBy, user.id],
-  //           dislikedBy: news.dislikedBy.filter((eachDislike) => {
-  //             return eachDislike !== user.id;
-  //           }),
-  //         });
-  //       } else navigation.navigate("login");
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   const handleDisliked = (newsid) => {
-  //     try {
-  //       if (user) {
-  //         dislikeNews(newsid);
-  //         setNews({
-  //           ...news,
-  //           dislikes: news.dislikedBy.includes(user.id)
-  //             ? news.dislikes
-  //             : news.dislikes + 1,
-  //           likes: news.dislikedBy.includes(user.id)
-  //             ? news.likes
-  //             : news.likes - 1,
-  //           dislikedBy: [...news.dislikedBy, user.id],
-  //           likedBy: news.likedBy.filter((eachlike) => {
-  //             return eachlike !== user.id;
-  //           }),
-  //         });
-  //       } else navigation.navigate("login");
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
   return (
     <View style={styles.bottomCardStyle}>
       <View>
@@ -85,7 +31,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked, handleDisliked }) => {
         <AntDesign
           name="like2"
           size={18}
-          color={color.blue}
+          color={color.black}
           style={news.likedBy?.includes(user?.id) ? styles.likedeButton : " "}
         />
         <Text style={{ textAlign: "center" }}>{news.likes}</Text>
@@ -99,7 +45,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked, handleDisliked }) => {
         <AntDesign
           name="dislike2"
           size={18}
-          color={color.blue}
+          color={color.black}
           style={
             news.dislikedBy?.includes(user?.id) ? styles.likedeButton : " "
           }
@@ -118,7 +64,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked, handleDisliked }) => {
           paddingVertical: 2,
         }}
       >
-        <Text style={{ color: color.blue }}>comments</Text>
+        <Text style={{ color: color.black }}>comments</Text>
         <Text style={{ textAlign: "center" }}>{news?.comments?.length}</Text>
       </TouchableOpacity>
     </View>
@@ -129,13 +75,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
-    margin: 10,
-    borderTopColor: color.blueOcean,
-    borderTopWidth: 0.5,
+    // margin: 10,
+    // borderTopColor: color.blueOcean,
+    // borderTopWidth: 0.5,
     backgroundColor: color.gray,
-    paddingTop: 7,
+    paddingTop: 1,
   },
-  dateStyle: { color: color.blue, textAlign: "center" },
+  dateStyle: { color: color.black, textAlign: "center" },
   likeButtonStyle: {
     paddingHorizontal: 10,
     paddingVertical: 2,

@@ -7,8 +7,8 @@ export const color = {
   blueOcean: "#523CAD",
   black: "#444",
   blue: "#0000ff",
+  grayLight: "#666",
 
-  grayLight: "#A1A6B3",
   grayDark: "#a9a9a9",
   grayBackground: "#E5E5E5",
   splashTextColor: "#3C3A36",

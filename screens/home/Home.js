@@ -5,8 +5,6 @@ import {
   ActivityIndicator,
   RefreshControl,
   StyleSheet,
-  Text,
-  TouchableOpacity,
 } from "react-native";
 import { useGetNewsQuery } from "../../services";
 import { color } from "../../utilities/Colors";

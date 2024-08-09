@@ -96,6 +96,20 @@ const NewsCard = ({ item, navigation }) => {
         >
           <View>
             <Text style={styles.titleStyle}>{news.title}</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 10,
+                marginHorizontal: 10,
+              }}
+            >
+              <Text style={{ color: color.grayLight, fontWeight: "300" }}>
+                Addis Maleda |
+              </Text>
+              <Text style={{ color: color.grayLight, fontWeight: "300" }}>
+                1h
+              </Text>
+            </View>
             <View style={styles.imageCard}>
               <Image
                 style={styles.image}
@@ -125,15 +139,15 @@ const styles = StyleSheet.create({
     width: width * 1,
     borderColor: color.blueGray,
     borderWidth: 0.2,
-    marginTop: 4,
+    marginTop: 0.05,
   },
   titleStyle: {
-    marginHorizontal: 15,
+    marginHorizontal: 10,
     marginTop: 15,
     color: color.black,
     borderLeftWidth: 0.8,
     borderLeftColor: color.primary,
-    paddingLeft: width * 0.05,
+    paddingLeft: width * 0.04,
     borderRightWidth: 0.8,
     borderRightColor: color.primary,
     paddingRight: width * 0.05,
@@ -143,34 +157,12 @@ const styles = StyleSheet.create({
   imageCard: {
     width: width * 1,
     height: 260,
-    marginVertical: width * 0.06,
+    marginVertical: 10,
   },
   image: {
     width: "100%",
     height: "100%",
     resizeMode: "cover",
-  },
-  bottomCardStyle: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    margin: 10,
-    borderTopColor: color.blueOcean,
-    borderTopWidth: 0.5,
-    backgroundColor: color.gray,
-    paddingTop: 7,
-  },
-  dateStyle: { color: color.blue, textAlign: "center" },
-  likeButtonStyle: {
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-  },
-  likedeButton: {
-    backgroundColor: color.blueOcean,
-    color: color.white,
-    width: 20,
-    height: 20,
-    borderRadius: 50,
   },
 });
 
