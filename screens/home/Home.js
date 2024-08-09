@@ -11,6 +11,7 @@ import {
 import { useGetNewsQuery } from "../../services";
 import { color } from "../../utilities/Colors";
 import NewsCard from "../../components/NewsCard";
+import Error from "../../components/Error";
 
 const initialLimit = 15;
 const initialStart = 1;
@@ -18,6 +19,7 @@ const initialStart = 1;
 const Home = ({ navigation }) => {
   const [news, setNews] = useState([]);
   const [start, setStart] = useState(initialStart);
+  const [refreshing, setRefreshing] = useState(false);
 
   const {
     data: posts,
@@ -40,9 +42,11 @@ const Home = ({ navigation }) => {
     }
   }, [posts]);
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
+    setRefreshing(true);
     setStart(initialStart);
-    refetch();
+    await refetch();
+    setRefreshing(false);
   };
 
   const handleEndReached = () => {
@@ -60,18 +64,9 @@ const Home = ({ navigation }) => {
   }
 
   if (isError) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontSize: 18, color: color.red }}>
-          Error loading data. Please try again.
-        </Text>
-        <TouchableOpacity onPress={refetch}>
-          <Text style={{ color: color.blue, marginTop: 10 }}>Tap to retry</Text>
-        </TouchableOpacity>
-      </View>
-    );
+    return <Error message={"Tap to retry"} refetch={refetch} />;
   }
-  console.log(isLoading && start === 1);
+
   return (
     <FlatList
       style={styles.cardList}
@@ -83,7 +78,7 @@ const Home = ({ navigation }) => {
       contentContainerStyle={{ gap: 2, paddingHorizontal: 1 }}
       renderItem={renderItem}
       refreshControl={
-        <RefreshControl refreshing={isFetching} onRefresh={handleRefresh} />
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
       }
       ListFooterComponent={() => (
         <View>

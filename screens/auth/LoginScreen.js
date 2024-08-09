@@ -34,7 +34,6 @@ const LoginScreen = ({ navigation }) => {
       if (data) {
         const { user, token } = data;
         const jsonUser = JSON.stringify(data);
-        console.log(jsonUser);
         AsyncStorage.setItem("token", jsonUser);
         setErrors(false);
         setIsLoading(false);

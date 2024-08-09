@@ -4,13 +4,10 @@ import {
   View,
   Image,
   Dimensions,
-  Pressable,
-  ActivityIndicator,
-  TouchableOpacity,
   SafeAreaView,
+  RefreshControl,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { AntDesign, EvilIcons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import {
   useDislikeNewsByIdMutation,
@@ -19,34 +16,34 @@ import {
 } from "../../services";
 import { useEffect, useState } from "react";
 import { color } from "../../utilities/Colors";
+import CommentLikeCard from "../../components/CommentLikeCard";
+import Loading from "../../components/Loading";
+import Error from "../../components/Error";
 
 const { width } = Dimensions.get("window");
 const Post = ({ route, navigation }) => {
-  const { id, title, image, description, date, likes, dislikes, comments } =
-    route.params;
+  const { _id, title, image, description } = route.params;
   const { user } = useSelector((state) => state.auth);
-  const { data, error, isLoading, refetch } = useGetNewsByIdQuery(id);
+  const { data, refetch, isLoading, isError } = useGetNewsByIdQuery(_id);
   const [news, setNews] = useState({});
+  const [refreshing, setRefreshing] = useState(false);
 
   const [likeNews] = useLikeNewsByIdMutation();
   const [dislikeNews] = useDislikeNewsByIdMutation();
-  const formatDateToYYYYMMDD = (date) => {
-    const dateObject = new Date(date);
-    const year = dateObject.getFullYear();
-    const month = String(dateObject.getMonth() + 1).padStart(2, "0"); // Months are 0-based
-    const day = String(dateObject.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-  };
 
   useEffect(() => {
     setNews(data);
   }, [data]);
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
   const handleLiked = (newsid) => {
+    console.log(newsid);
     try {
       if (user) {
-        console.log(news);
         likeNews(newsid);
         setNews({
           ...news,
@@ -88,96 +85,40 @@ const Post = ({ route, navigation }) => {
     }
   };
 
-  if (isLoading) {
+  if (isError) {
     return (
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <ActivityIndicator size="large" color={color.primary} />
-      </View>
+      <Error message={"Press the arrow button and Go back to home page"} />
     );
   }
 
-  if (error) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontSize: 18, color: color.red }}>
-          Error loading data.
-        </Text>
-        <Text style={{ color: color.blue, marginTop: 10 }}>
-          Press the arrow button and Go back to home page
-        </Text>
-      </View>
-    );
-  }
-
+  console.log(news, "new");
   return (
-    news && (
-      <SafeAreaView style={styles.container}>
-        <ScrollView>
-          <Text style={styles.titleStyle}>{title}</Text>
-          <View style={styles.imageCard}>
-            <Image style={styles.image} source={{ uri: image }} />
-          </View>
-          <Text style={styles.description}>{description}</Text>
-
-          <View style={styles.bottomCommentCard}>
-            <View>
-              <Text style={{ color: color.blue, textAlign: "center" }}>
-                Date
-              </Text>
-              <Text>{formatDateToYYYYMMDD(date)}</Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                handleLiked(id);
-              }}
-              style={styles.likeButton}
-            >
-              <AntDesign
-                name="like2"
-                size={18}
-                color={color.blue}
-                style={
-                  news.likedBy?.includes(user?.id) ? styles.likedeButton : " "
-                }
-              />
-              <Text style={{ textAlign: "center" }}>{news?.likes}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                handleDisliked(id);
-              }}
-              style={styles.likeButton}
-            >
-              <AntDesign
-                name="dislike2"
-                size={18}
-                color={color.blue}
-                style={
-                  news.dislikedBy?.includes(user?.id)
-                    ? styles.likedeButton
-                    : " "
-                }
-              />
-              <Text style={{ textAlign: "center" }}>{news?.dislikes}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("comments", {
-                  newsid: id,
-                  comments: comments,
-                })
-              }
-            >
-              <Text style={{ color: color.blue }}>comments</Text>
-              <Text style={{ textAlign: "center" }}>
-                {news?.comments?.length}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    )
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
+        <Text style={styles.titleStyle}>{title}</Text>
+        <View style={styles.imageCard}>
+          <Image style={styles.image} source={{ uri: image }} />
+        </View>
+        <Text style={styles.description}>{description}</Text>
+        {isLoading ? (
+          <Loading size={"small"} />
+        ) : (
+          news && (
+            <CommentLikeCard
+              handleLiked={handleLiked}
+              handleDisliked={handleDisliked}
+              news={news}
+              navigation={navigation}
+              setNews={setNews}
+            />
+          )
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

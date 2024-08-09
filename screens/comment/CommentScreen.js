@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   Dimensions,
   StyleSheet,
   Text,
   View,
   KeyboardAvoidingView,
   Platform,
+  RefreshControl,
 } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { color } from "../../utilities/Colors";
@@ -17,25 +17,31 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Error from "../../components/Error";
+import Loading from "../../components/Loading";
 
 const { width } = Dimensions.get("window");
 
 const CommentScreen = ({ route, navigation }) => {
-  const { newsid, comments } = route.params;
+  const { newsid } = route.params;
   const [comment, setComment] = useState("");
   const { user } = useSelector((state) => state.auth);
-  const basicUrl = process.env.API_KEY;
 
   const {
     data: commentsData,
-    error: commentsError,
+    isError: commentsError,
     isLoading: isCommentsLoading,
     refetch,
+    isFetching,
   } = useGetCommentsByIdQuery(newsid);
 
   useEffect(() => {
-    refetch(comments);
-  }, [comments]);
+    refetch();
+  }, [commentsData]);
+
+  const handleRefresh = async () => {
+    await refetch();
+  };
 
   const [
     postCommment,
@@ -51,7 +57,7 @@ const CommentScreen = ({ route, navigation }) => {
     setComment(newText);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
       if (user) {
         const newComment = {
@@ -60,7 +66,7 @@ const CommentScreen = ({ route, navigation }) => {
         };
 
         if (newComment.commentText) {
-          postCommment({ newComment, newsid });
+          await postCommment({ newComment, newsid });
           setComment("");
         }
       } else navigation.navigate("login");
@@ -70,24 +76,11 @@ const CommentScreen = ({ route, navigation }) => {
   };
 
   if (isPostLoading || isCommentsLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <ActivityIndicator size="large" color={color.primary} />
-      </View>
-    );
+    return <Loading />;
   }
 
-  if (postError) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontSize: 18, color: color.red }}>
-          Error posting comment. Please try again.
-        </Text>
-        {/* <TouchableOpacity onPress={refetch}>
-          <Text style={{ color: color.blue, marginTop: 10 }}>Tap to retry</Text>
-        </TouchableOpacity> */}
-      </View>
-    );
+  if (postError || commentsError) {
+    return <Error message={"Tap to retry"} refetch={refetch} />;
   }
 
   return (
@@ -97,7 +90,11 @@ const CommentScreen = ({ route, navigation }) => {
       style={{ flex: 1 }}
     >
       <SafeAreaView style={styles.container}>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={isFetching} onRefresh={handleRefresh} />
+          }
+        >
           {commentsData?.map(
             (comment) =>
               comment.comment.user && (
@@ -106,7 +103,6 @@ const CommentScreen = ({ route, navigation }) => {
                     <Text style={styles.text}>
                       {comment.comment.user.name.substring(0, 2).toUpperCase()}
                     </Text>
-                    {/* <Image style={styles.image} source={image} /> */}
                   </View>
                   <View style={styles.commentView}>
                     <Text
@@ -193,7 +189,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderTopWidth: 1,
     borderBlockColor: color.grayBackground,
-    backgroundColor: color.gray,
+    backgroundColor: color.black,
     position: "absolute",
     bottom: 0,
     zIndex: 1,

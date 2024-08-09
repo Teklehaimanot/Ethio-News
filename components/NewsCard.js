@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import { color } from "../utilities/Colors";
-import { AntDesign } from "@expo/vector-icons";
+import CommentLikeCard from "./CommentLikeCard";
 import { useSelector } from "react-redux";
 import {
   useDislikeNewsByIdMutation,
@@ -20,25 +20,17 @@ const { width } = Dimensions.get("window");
 
 const NewsCard = ({ item, navigation }) => {
   const basicUrl = process.env.API_KEY;
-  const { user } = useSelector((state) => state.auth);
   const [news, setNews] = useState({});
+  const { user } = useSelector((state) => state.auth);
   const [likeNews] = useLikeNewsByIdMutation();
   const [dislikeNews] = useDislikeNewsByIdMutation();
-
-  const formatDateToYYYYMMDD = (date) => {
-    const dateObject = new Date(date);
-    const year = dateObject.getFullYear();
-    const month = String(dateObject.getMonth() + 1).padStart(2, "0");
-    const day = String(dateObject.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-  };
 
   useEffect(() => {
     setNews(item);
   }, [item]);
 
   const handleLiked = (newsid) => {
+    console.log(newsid);
     try {
       if (user) {
         likeNews(newsid);
@@ -59,9 +51,8 @@ const NewsCard = ({ item, navigation }) => {
     }
   };
 
-  console.log(news);
-
   const handleDisliked = (newsid) => {
+    console.log(newsid);
     try {
       if (user) {
         dislikeNews(newsid);
@@ -90,7 +81,7 @@ const NewsCard = ({ item, navigation }) => {
         <TouchableOpacity
           onPress={() =>
             navigation.navigate("Details", {
-              id: news._id,
+              _id: news._id,
               title: news.title,
               image: basicUrl + "/" + news.image,
               description: news.description,
@@ -115,59 +106,13 @@ const NewsCard = ({ item, navigation }) => {
             </View>
           </View>
         </TouchableOpacity>
-        <View style={styles.bottomCardStyle}>
-          <View>
-            <Text style={styles.dateStyle}>Date</Text>
-            <Text>{formatDateToYYYYMMDD(news.date)}</Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              handleLiked(news._id);
-            }}
-            style={styles.likeButtonStyle}
-          >
-            <AntDesign
-              name="like2"
-              size={18}
-              color={color.blue}
-              style={
-                news.likedBy?.includes(user?.id) ? styles.likedeButton : " "
-              }
-            />
-            <Text style={{ textAlign: "center" }}>{news.likes}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              handleDisliked(news._id);
-            }}
-            style={styles.likeButtonStyle}
-          >
-            <AntDesign
-              name="dislike2"
-              size={18}
-              color={color.blue}
-              style={
-                news.dislikedBy?.includes(user?.id) ? styles.likedeButton : " "
-              }
-            />
-            <Text style={{ textAlign: "center" }}>{news.dislikes}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("comments", {
-                newsid: news._id,
-                comments: news.comments,
-              })
-            }
-            style={{
-              paddingHorizontal: 8,
-              paddingVertical: 2,
-            }}
-          >
-            <Text style={{ color: color.blue }}>comments</Text>
-            <Text style={{ textAlign: "center" }}>{item.comments.length}</Text>
-          </TouchableOpacity>
-        </View>
+        <CommentLikeCard
+          handleLiked={handleLiked}
+          handleDisliked={handleDisliked}
+          news={news}
+          navigation={navigation}
+          setNews={setNews}
+        />
       </SafeAreaView>
     )
   );
