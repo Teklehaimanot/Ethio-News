@@ -72,7 +72,7 @@ const NewsCard = ({ item, navigation }) => {
               }}
             >
               <Text style={{ color: color.grayLight, fontWeight: "300" }}>
-                Addis Maleda |
+                {news.source ? `${news.source + " " + "|" + " "}` : " "}
               </Text>
               <Text style={{ color: color.grayLight, fontWeight: "300" }}>
                 1h
