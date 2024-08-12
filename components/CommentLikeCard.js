@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { color } from "../utilities/Colors";
 import { AntDesign } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 
-const CommentLikeCard = ({ news, navigation, handleLiked, handleDisliked }) => {
+const CommentLikeCard = ({ news, navigation, handleLiked }) => {
   const { user } = useSelector((state) => state.auth);
-
   const formatDateToYYYYMMDD = (date) => {
     const dateObject = new Date(date);
     const year = dateObject.getFullYear();
@@ -35,22 +34,6 @@ const CommentLikeCard = ({ news, navigation, handleLiked, handleDisliked }) => {
           style={news.likedBy?.includes(user?.id) ? styles.likedeButton : " "}
         />
         <Text style={{ textAlign: "center" }}>{news.likes}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          handleDisliked(news._id);
-        }}
-        style={styles.likeButtonStyle}
-      >
-        <AntDesign
-          name="dislike2"
-          size={18}
-          color={color.black}
-          style={
-            news.dislikedBy?.includes(user?.id) ? styles.likedeButton : " "
-          }
-        />
-        <Text style={{ textAlign: "center" }}>{news.dislikes}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() =>

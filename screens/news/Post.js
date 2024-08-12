@@ -29,7 +29,6 @@ const Post = ({ route, navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const [likeNews] = useLikeNewsByIdMutation();
-  const [dislikeNews] = useDislikeNewsByIdMutation();
 
   useEffect(() => {
     setNews(data);
@@ -41,43 +40,19 @@ const Post = ({ route, navigation }) => {
     setRefreshing(false);
   };
   const handleLiked = (newsid) => {
-    console.log(newsid);
     try {
       if (user) {
         likeNews(newsid);
         setNews({
           ...news,
-          likes: news.likedBy.includes(user.id) ? news.likes : news.likes + 1,
-          dislikes: news.dislikedBy.includes(user.id)
-            ? news.dislikes - 1
-            : news.dislikes,
-          likedBy: [...news.likedBy, user.id],
-          dislikedBy: news.dislikedBy.filter((eachDislike) => {
-            return eachDislike !== user.id;
-          }),
-        });
-      } else navigation.navigate("login");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleDisliked = (newsid) => {
-    try {
-      if (user) {
-        dislikeNews(newsid);
-        setNews({
-          ...news,
-          dislikes: news.dislikedBy.includes(user.id)
-            ? news.dislikes
-            : news.dislikes + 1,
-          likes: news.dislikedBy.includes(user.id)
-            ? news.likes
-            : news.likes - 1,
-          dislikedBy: [...news.dislikedBy, user.id],
-          likedBy: news.likedBy.filter((eachlike) => {
-            return eachlike !== user.id;
-          }),
+          likes: news.likedBy.includes(user.id)
+            ? news.likes - 1
+            : news.likes + 1,
+          likedBy: news.likedBy.includes(user.id)
+            ? news.likedBy.filter((eachLike) => {
+                return eachLike !== user.id;
+              })
+            : [...news.likedBy, user.id],
         });
       } else navigation.navigate("login");
     } catch (error) {
@@ -91,7 +66,6 @@ const Post = ({ route, navigation }) => {
     );
   }
 
-  console.log(news, "new");
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -121,7 +95,6 @@ const Post = ({ route, navigation }) => {
           news && (
             <CommentLikeCard
               handleLiked={handleLiked}
-              handleDisliked={handleDisliked}
               news={news}
               navigation={navigation}
               setNews={setNews}
