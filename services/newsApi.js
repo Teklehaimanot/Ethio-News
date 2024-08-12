@@ -43,13 +43,6 @@ export const newsApi = createApi({
       }),
       invalidatesTags: ["News", "Like"],
     }),
-    dislikeNewsById: builder.mutation({
-      query: (newsid) => ({
-        url: `api/v1/news/${newsid}/dislike`,
-        method: "POST",
-      }),
-      invalidatesTags: ["News", "Like"],
-    }),
   }),
 });
 
@@ -59,5 +52,4 @@ export const {
   usePostCommentsMutation,
   useGetCommentsByIdQuery,
   useLikeNewsByIdMutation,
-  useDislikeNewsByIdMutation,
 } = newsApi;

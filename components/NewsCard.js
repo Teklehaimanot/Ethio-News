@@ -11,19 +11,14 @@ import {
 import { color } from "../utilities/Colors";
 import CommentLikeCard from "./CommentLikeCard";
 import { useSelector } from "react-redux";
-import {
-  useDislikeNewsByIdMutation,
-  useLikeNewsByIdMutation,
-} from "../services";
+import { useLikeNewsByIdMutation } from "../services";
 
 const { width } = Dimensions.get("window");
-
 const NewsCard = ({ item, navigation }) => {
   const basicUrl = process.env.API_KEY;
   const [news, setNews] = useState({});
   const { user } = useSelector((state) => state.auth);
   const [likeNews] = useLikeNewsByIdMutation();
-  const [dislikeNews] = useDislikeNewsByIdMutation();
 
   useEffect(() => {
     setNews(item);

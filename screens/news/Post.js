@@ -9,11 +9,7 @@ import {
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
-import {
-  useDislikeNewsByIdMutation,
-  useGetNewsByIdQuery,
-  useLikeNewsByIdMutation,
-} from "../../services";
+import { useGetNewsByIdQuery, useLikeNewsByIdMutation } from "../../services";
 import { useEffect, useState } from "react";
 import { color } from "../../utilities/Colors";
 import CommentLikeCard from "../../components/CommentLikeCard";
@@ -27,7 +23,6 @@ const Post = ({ route, navigation }) => {
   const { data, refetch, isLoading, isError } = useGetNewsByIdQuery(_id);
   const [news, setNews] = useState({});
   const [refreshing, setRefreshing] = useState(false);
-
   const [likeNews] = useLikeNewsByIdMutation();
 
   useEffect(() => {
