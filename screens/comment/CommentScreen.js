@@ -84,52 +84,59 @@ const CommentScreen = ({ route, navigation }) => {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={80}
-      style={{ flex: 1 }}
-    >
-      <SafeAreaView style={styles.container}>
-        <ScrollView
-          refreshControl={
-            <RefreshControl refreshing={isFetching} onRefresh={handleRefresh} />
-          }
-        >
-          {commentsData?.map(
-            (comment) =>
-              comment.comment.user && (
-                <View style={styles.commentCard} key={comment.comment._id}>
-                  <View style={styles.image}>
-                    <Text style={styles.text}>
-                      {comment.comment.user.name.substring(0, 2).toUpperCase()}
-                    </Text>
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={80}
+        style={{ flex: 1 }}
+      >
+        <View style={{ marginBottom: 80 }}>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={isFetching}
+                onRefresh={handleRefresh}
+              />
+            }
+          >
+            {commentsData?.map(
+              (comment) =>
+                comment.comment.user && (
+                  <View style={styles.commentCard} key={comment.comment._id}>
+                    <View style={styles.image}>
+                      <Text style={styles.text}>
+                        {comment.comment.user.name
+                          .substring(0, 2)
+                          .toUpperCase()}
+                      </Text>
+                    </View>
+                    <View style={styles.commentView}>
+                      <Text
+                        style={{
+                          padding: 5,
+                          fontWeight: "bold",
+                          letterSpacing: 0.8,
+                          fontSize: 15,
+                          color: color.greenGray,
+                        }}
+                      >
+                        {comment.comment.user.name}
+                      </Text>
+                      <Text
+                        style={{
+                          paddingHorizontal: 5,
+                          paddingVertical: 2,
+                          color: color.black,
+                        }}
+                      >
+                        {comment.comment.comment}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={styles.commentView}>
-                    <Text
-                      style={{
-                        padding: 5,
-                        fontWeight: "bold",
-                        letterSpacing: 0.8,
-                        fontSize: 15,
-                        color: color.greenGray,
-                      }}
-                    >
-                      {comment.comment.user.name}
-                    </Text>
-                    <Text
-                      style={{
-                        paddingHorizontal: 5,
-                        paddingVertical: 2,
-                        color: color.black,
-                      }}
-                    >
-                      {comment.comment.comment}
-                    </Text>
-                  </View>
-                </View>
-              )
-          )}
-        </ScrollView>
+                )
+            )}
+          </ScrollView>
+        </View>
 
         <View style={styles.commentInputCard}>
           <TextInput
@@ -149,8 +156,8 @@ const CommentScreen = ({ route, navigation }) => {
             onPress={handleSubmit}
           />
         </View>
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
@@ -159,7 +166,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   commentCard: {
-    flex: 1,
     flexDirection: "row",
     marginVertical: 8,
     width: width * 0.8,
@@ -195,7 +201,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   commentInput: {
-    margin: 15,
+    margin: 10,
     borderWidth: 0.05,
     padding: 10,
     flex: 8,
