@@ -18,7 +18,7 @@ import Error from "../../components/Error";
 
 const { width } = Dimensions.get("window");
 const Post = ({ route, navigation }) => {
-  const { _id, title, image, description } = route.params;
+  const { _id, title, image, description, source } = route.params;
   const { user } = useSelector((state) => state.auth);
   const { data, refetch, isLoading, isError } = useGetNewsByIdQuery(_id);
   const [news, setNews] = useState({});
@@ -76,7 +76,7 @@ const Post = ({ route, navigation }) => {
           }}
         >
           <Text style={{ color: color.grayLight, fontWeight: "300" }}>
-            Addis Maleda |
+            {source ? `${source + " " + "|" + " "}` : " "}
           </Text>
           <Text style={{ color: color.grayLight, fontWeight: "300" }}>1h</Text>
         </View>

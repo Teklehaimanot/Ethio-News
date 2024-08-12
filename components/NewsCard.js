@@ -54,6 +54,7 @@ const NewsCard = ({ item, navigation }) => {
               _id: news._id,
               title: news.title,
               image: basicUrl + "/" + news.image,
+              source: news.source,
               description: news.description,
               comments: news.comments,
               date: news.date,
