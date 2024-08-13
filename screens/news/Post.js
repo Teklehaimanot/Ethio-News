@@ -15,15 +15,38 @@ import { color } from "../../utilities/Colors";
 import CommentLikeCard from "../../components/CommentLikeCard";
 import Loading from "../../components/Loading";
 import Error from "../../components/Error";
+import moment from "moment";
 
 const { width } = Dimensions.get("window");
 const Post = ({ route, navigation }) => {
-  const { _id, title, image, description, source } = route.params;
+  const { _id, title, image, description, source, date } = route.params;
   const { user } = useSelector((state) => state.auth);
   const { data, refetch, isLoading, isError } = useGetNewsByIdQuery(_id);
   const [news, setNews] = useState({});
   const [refreshing, setRefreshing] = useState(false);
   const [likeNews] = useLikeNewsByIdMutation();
+
+  const now = moment();
+  const postMoment = moment(date);
+
+  const diffInDays = now.diff(postMoment, "days");
+  const diffInYears = now.diff(postMoment, "years");
+
+  const formatDate = () => {
+    if (diffInYears >= 1) {
+      return postMoment.format("MMM D, YYYY"); // Example: Aug 1, 2023
+    } else if (diffInDays > 7) {
+      return postMoment.format("MMM D"); // Example: Aug 1
+    } else if (diffInDays >= 1) {
+      return `${diffInDays} d`;
+    } else if (now.diff(postMoment, "hours") >= 1) {
+      return `${now.diff(postMoment, "hours")} h`;
+    } else if (now.diff(postMoment, "minutes") >= 1) {
+      return `${now.diff(postMoment, "minutes")} m`;
+    } else {
+      return `Just now`;
+    }
+  };
 
   useEffect(() => {
     setNews(data);
@@ -78,7 +101,9 @@ const Post = ({ route, navigation }) => {
           <Text style={{ color: color.grayLight, fontWeight: "300" }}>
             {source ? `${source + " " + "|" + " "}` : " "}
           </Text>
-          <Text style={{ color: color.grayLight, fontWeight: "300" }}>1h</Text>
+          <Text style={{ color: color.grayLight, fontWeight: "300" }}>
+            {formatDate()}
+          </Text>
         </View>
         <View style={styles.imageCard}>
           <Image style={styles.image} source={{ uri: image }} />
