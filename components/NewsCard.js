@@ -12,6 +12,7 @@ import { color } from "../utilities/Colors";
 import CommentLikeCard from "./CommentLikeCard";
 import { useSelector } from "react-redux";
 import { useLikeNewsByIdMutation } from "../services";
+import moment from "moment";
 
 const { width } = Dimensions.get("window");
 const NewsCard = ({ item, navigation }) => {
@@ -19,6 +20,28 @@ const NewsCard = ({ item, navigation }) => {
   const [news, setNews] = useState({});
   const { user } = useSelector((state) => state.auth);
   const [likeNews] = useLikeNewsByIdMutation();
+
+  const now = moment();
+  const postMoment = moment(news.date);
+
+  const diffInDays = now.diff(postMoment, "days");
+  const diffInYears = now.diff(postMoment, "years");
+
+  const formatDate = () => {
+    if (diffInYears >= 1) {
+      return postMoment.format("MMM D, YYYY"); // Example: Aug 1, 2023
+    } else if (diffInDays > 7) {
+      return postMoment.format("MMM D"); // Example: Aug 1
+    } else if (diffInDays >= 1) {
+      return `${diffInDays} d`;
+    } else if (now.diff(postMoment, "hours") >= 1) {
+      return `${now.diff(postMoment, "hours")} h`;
+    } else if (now.diff(postMoment, "minutes") >= 1) {
+      return `${now.diff(postMoment, "minutes")} m`;
+    } else {
+      return `Just now`;
+    }
+  };
 
   useEffect(() => {
     setNews(item);
@@ -44,7 +67,7 @@ const NewsCard = ({ item, navigation }) => {
       console.log(error);
     }
   };
-
+  console.log(news.image);
   return (
     news && (
       <SafeAreaView style={styles.cardview}>
@@ -76,7 +99,7 @@ const NewsCard = ({ item, navigation }) => {
                 {news.source ? `${news.source + " " + "|" + " "}` : " "}
               </Text>
               <Text style={{ color: color.grayLight, fontWeight: "300" }}>
-                1h
+                {formatDate()}
               </Text>
             </View>
             <View style={styles.imageCard}>
