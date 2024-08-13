@@ -67,7 +67,7 @@ const NewsCard = ({ item, navigation }) => {
       console.log(error);
     }
   };
-  console.log(news.image);
+
   return (
     news && (
       <SafeAreaView style={styles.cardview}>

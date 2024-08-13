@@ -65,7 +65,7 @@ const Home = ({ navigation }) => {
     return <Error message={"Tap to retry"} refetch={refetch} />;
   }
 
-  console.log(news);
+  // console.log(news);
   return (
     <FlatList
       style={styles.cardList}
