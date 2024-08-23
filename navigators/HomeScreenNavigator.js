@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import { Dimensions, TextInput, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../screens/home/Home";
 import { color } from "../utilities/Colors";
@@ -6,9 +8,24 @@ import { useLayoutEffect } from "react";
 import CommentScreen from "../screens/comment/CommentScreen";
 import LoginScreen from "../screens/auth/LoginScreen";
 import RegisterAccount from "../screens/auth/RegisterAccount";
+import SearchScreen from "../screens/search/SearchScreen";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+
+const { width } = Dimensions.get("window");
 
 const Stack = createNativeStackNavigator();
 const HomeScreenNavigator = ({ navigation }) => {
+  const [searchText, setSearchText] = useState("");
+
+  const handleSearchChange = (text) => {
+    setSearchText(text);
+  };
+
+  const handleSearchSubmit = (text) => {
+    navigation.navigate("search", { query: text });
+    setSearchText("");
+  };
+
   useLayoutEffect(() => {
     const unsubscribe = navigation.addListener("state", (e) => {
       const route = e.data.state.routes[e.data.state.index];
@@ -30,6 +47,7 @@ const HomeScreenNavigator = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
+  console.log("tk", searchText);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -57,6 +75,46 @@ const HomeScreenNavigator = ({ navigation }) => {
         options={{
           headerShown: true,
           headerTitle: " ",
+        }}
+      />
+      <Stack.Screen
+        name="search"
+        component={SearchScreen}
+        options={{
+          headerShown: true,
+          headerTitle: " ",
+          headerRight: () => (
+            <View
+              style={{
+                flexDirection: "row",
+                width: width * 0.8,
+                justifyContent: "space-between",
+                height: "100%",
+                padding: 5,
+              }}
+            >
+              <TextInput
+                style={{
+                  backgroundColor: color.gray,
+                  width: "90%",
+                  borderRadius: 5,
+                  paddingHorizontal: 8,
+                }}
+                placeholder="Search..."
+                value={searchText}
+                onChangeText={handleSearchChange}
+                onSubmitEditing={() => handleSearchSubmit(searchText)}
+              />
+              {searchText && (
+                <MaterialIcons
+                  name="cancel"
+                  size={24}
+                  color={color.gray}
+                  onPress={() => setSearchText("")}
+                />
+              )}
+            </View>
+          ),
         }}
       />
       <Stack.Screen

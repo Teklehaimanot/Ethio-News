@@ -8,9 +8,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import { View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: color.primary }}>
       <Drawer.Navigator
@@ -46,7 +48,7 @@ const DrawerNavigator = () => {
                   name="search"
                   size={28}
                   color={color.white}
-                  onPress={() => alert("This is a button!")}
+                  onPress={() => navigation.navigate("search")}
                   style={{ marginRight: 20 }}
                 />
                 <Entypo
