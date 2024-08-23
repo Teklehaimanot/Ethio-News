@@ -2,6 +2,7 @@ import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 const BASE_URL = process.env.API_KEY;
+
 export const newsApi = createApi({
   reducerPath: "newsApi",
   baseQuery: fetchBaseQuery({
@@ -44,6 +45,8 @@ export const newsApi = createApi({
     }),
   }),
 });
+
+console.log(useGetCommentsByIdQuery);
 
 export const {
   useGetNewsQuery,

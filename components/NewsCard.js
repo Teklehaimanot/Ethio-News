@@ -47,6 +47,7 @@ const NewsCard = ({ item, navigation }) => {
     setNews(item);
   }, [item]);
 
+  // console.log(news.image);
   const handleLiked = (newsid) => {
     try {
       if (user) {
