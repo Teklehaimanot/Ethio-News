@@ -4,7 +4,6 @@ import CustomSidebarMenu from "../components/DrawerContent";
 import HomeScreenNavigator from "./HomeScreenNavigator";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BookMarks from "../screens/bookmarks/BookMarks";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import { View } from "react-native";
