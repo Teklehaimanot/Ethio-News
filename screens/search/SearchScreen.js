@@ -6,7 +6,7 @@ import {
   RefreshControl,
   StyleSheet,
 } from "react-native";
-import { useGetNewsQuery } from "../../services";
+import { useGetNewsByTitleQuery, useGetNewsQuery } from "../../services";
 import { color } from "../../utilities/Colors";
 import NewsCard from "../../components/NewsCard";
 import Error from "../../components/Error";
@@ -14,20 +14,21 @@ import Error from "../../components/Error";
 const initialLimit = 15;
 const initialStart = 1;
 
-const SearchScreen = ({ navigation }) => {
+const SearchScreen = ({ navigation, route }) => {
   const [news, setNews] = useState([]);
   const [start, setStart] = useState(initialStart);
   const [refreshing, setRefreshing] = useState(false);
-
+  const { query } = route.params ? route.params : "";
   const {
     data: posts,
     isError,
     isLoading,
     isFetching,
     refetch,
-  } = useGetNewsQuery({
+  } = useGetNewsByTitleQuery({
     page: start,
     limit: initialLimit,
+    title: query,
   });
 
   useEffect(() => {
@@ -65,7 +66,6 @@ const SearchScreen = ({ navigation }) => {
     return <Error message={"Tap to retry"} refetch={refetch} />;
   }
 
-  // console.log(news);
   return (
     <FlatList
       style={styles.cardList}

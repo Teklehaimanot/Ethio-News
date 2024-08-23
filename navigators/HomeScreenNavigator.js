@@ -23,7 +23,7 @@ const HomeScreenNavigator = ({ navigation }) => {
 
   const handleSearchSubmit = (text) => {
     navigation.navigate("search", { query: text });
-    setSearchText("");
+    // setSearchText("");
   };
 
   useLayoutEffect(() => {
@@ -47,7 +47,6 @@ const HomeScreenNavigator = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
-  console.log("tk", searchText);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -89,8 +88,10 @@ const HomeScreenNavigator = ({ navigation }) => {
                 flexDirection: "row",
                 width: width * 0.8,
                 justifyContent: "space-between",
-                height: "100%",
-                padding: 5,
+                paddingHorizontal: 10,
+                paddingVertical: 2,
+                backgroundColor: color.gray,
+                borderRadius: 15,
               }}
             >
               <TextInput
@@ -109,7 +110,7 @@ const HomeScreenNavigator = ({ navigation }) => {
                 <MaterialIcons
                   name="cancel"
                   size={24}
-                  color={color.gray}
+                  color={color.black}
                   onPress={() => setSearchText("")}
                 />
               )}
