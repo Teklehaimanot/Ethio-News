@@ -1,8 +1,6 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { color } from "../utilities/Colors";
-import { AntDesign } from "@expo/vector-icons";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
-// import EvilIcons from "@expo/vector-icons/EvilIcons";
 import { useSelector } from "react-redux";
 
 const CommentLikeCard = ({ news, navigation, handleLiked }) => {

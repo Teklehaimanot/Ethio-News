@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ethio-news",
+    "name": "ethionews",
     "slug": "ethio-news",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,17 +15,29 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "config": {
+        "cleartext": true
+      },
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.teklehaimanot.ethionews"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f0b90088-cdb3-4249-90d6-a1d652479b6d"
+      }
     }
   }
 }

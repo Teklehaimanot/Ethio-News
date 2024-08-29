@@ -6,7 +6,7 @@ import {
   RefreshControl,
   StyleSheet,
 } from "react-native";
-import { useGetNewsByTitleQuery, useGetNewsQuery } from "../../services";
+import { useGetNewsByTitleQuery } from "../../services";
 import { color } from "../../utilities/Colors";
 import NewsCard from "../../components/NewsCard";
 import Error from "../../components/Error";

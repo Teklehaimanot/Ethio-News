@@ -6,7 +6,6 @@ import {
   Image,
   Text,
   Linking,
-  Pressable,
 } from "react-native";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import {
@@ -18,7 +17,6 @@ import { color } from "../utilities/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../state/auth/authSlice";
-// import { baseUrl } from "../config";
 import axios from "axios";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
