@@ -7,6 +7,10 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "permissions": ["INTERNET"],
+    "androidStatusBar": {
+      "backgroundColor": "#2e5b71",
+      "translucent": true
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,11 +21,15 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.teklehaimanot.ethionews",
+      "packageType": "apk",
+      "config": {
+        "cleartext": true
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.teklehaimanot.ethionews"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
