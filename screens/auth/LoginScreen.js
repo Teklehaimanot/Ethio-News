@@ -10,7 +10,8 @@ import {
 import { color } from "../../utilities/Colors";
 import { TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
-import { API_KEY } from "@env";
+// import { API_KEY } from "@env";
+import { API_KEY } from "../../config";
 import { login } from "../../state/auth/authSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
