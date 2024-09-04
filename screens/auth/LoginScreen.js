@@ -10,6 +10,7 @@ import {
 import { color } from "../../utilities/Colors";
 import { TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
+import { API_KEY } from "@env";
 import { login } from "../../state/auth/authSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
@@ -22,7 +23,7 @@ const LoginScreen = ({ navigation }) => {
   const [errors, setErrors] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  const basicUrl = process.env.API_KEY;
+  const basicUrl = API_KEY;
 
   const handleSubmit = async (e) => {
     try {

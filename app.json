@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ethionews",
+    "name": "ethio-news",
     "slug": "ethio-news",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,9 +22,6 @@
       "supportsTablet": true
     },
     "android": {
-      "config": {
-        "cleartext": true
-      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
@@ -38,6 +35,12 @@
       "eas": {
         "projectId": "f0b90088-cdb3-4249-90d6-a1d652479b6d"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/f0b90088-cdb3-4249-90d6-a1d652479b6d"
     }
   }
 }

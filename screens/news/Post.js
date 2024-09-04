@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,12 +11,11 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { useGetNewsByIdQuery, useLikeNewsByIdMutation } from "../../services";
-import { useEffect, useState } from "react";
+import moment from "moment";
 import { color } from "../../utilities/Colors";
 import CommentLikeCard from "../../components/CommentLikeCard";
 import Loading from "../../components/Loading";
 import Error from "../../components/Error";
-import moment from "moment";
 
 const { width } = Dimensions.get("window");
 const Post = ({ route, navigation }) => {
@@ -84,6 +84,7 @@ const Post = ({ route, navigation }) => {
     );
   }
 
+  // console.log(image);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
