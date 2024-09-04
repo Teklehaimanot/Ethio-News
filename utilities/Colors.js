@@ -8,6 +8,7 @@ export const color = {
   black: "#444",
   blue: "#0000ff",
   grayLight: "#666",
+  statusbar: "#2e5b71",
 
   grayDark: "#a9a9a9",
   grayBackground: "#E5E5E5",

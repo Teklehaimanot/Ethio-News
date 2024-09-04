@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import { login } from "../state/auth/authSlice";
+import { StatusBar } from "react-native";
+import { color } from "../utilities/Colors";
 
 const RootNavigator = () => {
   const dispatch = useDispatch();
@@ -33,6 +35,7 @@ const RootNavigator = () => {
   };
   return (
     <NavigationContainer>
+      <StatusBar backgroundColor={color.statusbar} barStyle="light-content" />
       <DrawerNavigator />
     </NavigationContainer>
   );
