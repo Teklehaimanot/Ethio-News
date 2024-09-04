@@ -17,9 +17,11 @@ import { color } from "../utilities/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../state/auth/authSlice";
+import { baseUrl } from "../config";
 import axios from "axios";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
+const BASE_URL = baseUrl;
 const CustomSidebarMenu = (props) => {
   const BASE_PATH =
     "https://firebasestorage.googleapis.com/v0/b/ndmc-mobile-5a8b5.appspot.com/o/profileImage";
@@ -27,7 +29,7 @@ const CustomSidebarMenu = (props) => {
     "%2FFinalb.png?alt=media&token=e2a1c01b-960f-4779-9b94-a5d922144283";
 
   const { user } = useSelector((state) => state.auth);
-  const basicUrl = process.env.API_KEY;
+  const basicUrl = BASE_URL;
   const dispatch = useDispatch();
   const handleLogout = async () => {
     const response = await axios.get(
