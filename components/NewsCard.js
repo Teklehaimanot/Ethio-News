@@ -12,11 +12,13 @@ import { color } from "../utilities/Colors";
 import CommentLikeCard from "./CommentLikeCard";
 import { useSelector } from "react-redux";
 import { useLikeNewsByIdMutation } from "../services";
+import { baseUrl } from "../config";
 import moment from "moment";
 
+const BASE_URL = baseUrl;
 const { width } = Dimensions.get("window");
 const NewsCard = ({ item, navigation }) => {
-  const basicUrl = process.env.API_KEY;
+  const basicUrl = BASE_URL;
   const [news, setNews] = useState({});
   const { user } = useSelector((state) => state.auth);
   const [likeNews] = useLikeNewsByIdMutation();
