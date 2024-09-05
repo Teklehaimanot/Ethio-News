@@ -17,9 +17,9 @@ import { color } from "../utilities/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../state/auth/authSlice";
-import { baseUrl } from "../config";
 import axios from "axios";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { baseUrl } from "../config";
 
 const BASE_URL = baseUrl;
 const CustomSidebarMenu = (props) => {
@@ -41,7 +41,7 @@ const CustomSidebarMenu = (props) => {
       AsyncStorage.removeItem("token");
     }
   };
-
+  console.log(basicUrl);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: color.gray }}>
       <View
