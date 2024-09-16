@@ -14,7 +14,7 @@ import Error from "../../components/Error";
 const initialLimit = 15;
 const initialStart = 1;
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
   const [news, setNews] = useState([]);
   const [start, setStart] = useState(initialStart);
   const [refreshing, setRefreshing] = useState(false);
@@ -65,7 +65,6 @@ const Home = ({ navigation }) => {
     return <Error message={"Tap to retry"} refetch={refetch} />;
   }
 
-  // console.log(news);
   return (
     <FlatList
       style={styles.cardList}

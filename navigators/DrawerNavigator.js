@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { color } from "../utilities/Colors";
 import CustomSidebarMenu from "../components/DrawerContent";
@@ -6,12 +7,24 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import BookMarks from "../screens/bookmarks/BookMarks";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Entypo from "@expo/vector-icons/Entypo";
-import { View } from "react-native";
+import { Modal, View, Text, Button, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+
+const { width } = Dimensions.get("window");
 
 const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => {
   const navigation = useNavigation();
+  const [showPopup, setShowPopup] = useState(false);
+
+  const togglePopup = () => {
+    setShowPopup(!showPopup);
+  };
+
+  const handleRefresh = () => {
+    navigation.navigate("Home", { refresh: true });
+    togglePopup();
+  };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: color.primary }}>
       <Drawer.Navigator
@@ -54,7 +67,7 @@ const DrawerNavigator = () => {
                   name="dots-three-vertical"
                   size={18}
                   color={color.white}
-                  onPress={() => alert("This is a button!")}
+                  onPress={togglePopup}
                   style={{ marginRight: 10 }}
                 />
               </View>
@@ -70,6 +83,36 @@ const DrawerNavigator = () => {
           }}
         />
       </Drawer.Navigator>
+      {showPopup && (
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={showPopup}
+          onRequestClose={togglePopup}
+        >
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            <View
+              style={{
+                width: width * 0.35,
+                padding: 10,
+                backgroundColor: color.secondary,
+                borderRadius: 5,
+                left: width * 0.65,
+                top: 0,
+              }}
+            >
+              {/* <Text style={{ fontSize: 18, marginBottom: 10 }}>Popup Menu</Text> */}
+              <Button title="Refresh Home" onPress={handleRefresh} />
+              {/* <Button title="Close" onPress={togglePopup} /> */}
+            </View>
+          </View>
+        </Modal>
+      )}
     </SafeAreaView>
   );
 };
