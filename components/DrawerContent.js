@@ -22,6 +22,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { baseUrl } from "../config";
 
 const BASE_URL = baseUrl;
+
+console.log(BASE_URL);
 const CustomSidebarMenu = (props) => {
   const BASE_PATH =
     "https://firebasestorage.googleapis.com/v0/b/ndmc-mobile-5a8b5.appspot.com/o/profileImage";
