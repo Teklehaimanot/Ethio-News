@@ -63,13 +63,13 @@ const DrawerNavigator = () => {
                   onPress={() => navigation.navigate("search")}
                   style={{ marginRight: 20 }}
                 />
-                <Entypo
+                {/* <Entypo
                   name="dots-three-vertical"
                   size={18}
                   color={color.white}
                   onPress={togglePopup}
                   style={{ marginRight: 10 }}
-                />
+                /> */}
               </View>
             ),
           }}

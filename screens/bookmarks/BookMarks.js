@@ -3,8 +3,10 @@ import { View, Text } from "react-native";
 
 const BookMarks = () => {
   return (
-    <View>
-      <Text>BookMarks</Text>
+    <View style={{ flex: 1, flexDirection: "column" }}>
+      <Text style={{ marginVertical: "auto", marginHorizontal: "auto" }}>
+        It's under development, comming soon
+      </Text>
     </View>
   );
 };
