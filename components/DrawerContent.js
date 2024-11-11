@@ -123,7 +123,12 @@ const CustomSidebarMenu = (props) => {
             label="Logout"
             onPress={handleLogout}
             icon={() => (
-              <AntDesign name="logout" size={24} color={color.primary} />
+              <AntDesign
+                name="logout"
+                size={24}
+                color={color.primary}
+                style={{ transform: [{ scaleX: -1 }] }}
+              />
             )}
             labelStyle={styles.drawerItemText}
           />

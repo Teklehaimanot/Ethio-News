@@ -41,7 +41,7 @@ const ContactUs = () => {
           onPress={handlePhonePress}
           style={styles.contactButton}
         >
-          <Text style={styles.contactText}>+251 91 234 5678</Text>
+          <Text style={styles.contactText}>+251 71 228 4904</Text>
         </TouchableOpacity>
       </View>
 
