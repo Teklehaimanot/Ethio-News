@@ -10,6 +10,7 @@ import LoginScreen from "../screens/auth/LoginScreen";
 import RegisterAccount from "../screens/auth/RegisterAccount";
 import SearchScreen from "../screens/search/SearchScreen";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import ContactUs from "../screens/contactUs/ContactUs";
 
 const { width } = Dimensions.get("window");
 
@@ -55,6 +56,7 @@ const HomeScreenNavigator = ({ navigation }) => {
           backgroundColor: color.primary,
         },
         headerTintColor: color.secondary,
+        headerTitleAlign: "center",
         headerTitleStyle: {
           fontWeight: "bold",
           fontSize: 20,
@@ -73,7 +75,7 @@ const HomeScreenNavigator = ({ navigation }) => {
         component={Post}
         options={{
           headerShown: true,
-          headerTitle: " ",
+          headerTitle: "",
         }}
       />
       <Stack.Screen
@@ -81,7 +83,7 @@ const HomeScreenNavigator = ({ navigation }) => {
         component={SearchScreen}
         options={{
           headerShown: true,
-          headerTitle: " ",
+          headerTitle: "",
           headerRight: () => (
             <View
               style={{
@@ -126,12 +128,26 @@ const HomeScreenNavigator = ({ navigation }) => {
       <Stack.Screen
         name="login"
         component={LoginScreen}
-        options={{ headerShown: true }}
+        options={{
+          headerShown: true,
+          headerTitle: "Login",
+        }}
       />
       <Stack.Screen
         name="signUp"
         component={RegisterAccount}
-        options={{ headerShown: true }}
+        options={{
+          headerShown: true,
+          headerTitle: " SignUp",
+        }}
+      />
+      <Stack.Screen
+        name="contactUs"
+        component={ContactUs}
+        options={{
+          headerShown: true,
+          headerTitle: " Contact Us",
+        }}
       />
     </Stack.Navigator>
   );

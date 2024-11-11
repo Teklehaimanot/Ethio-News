@@ -8,6 +8,7 @@ import {
   Linking,
 } from "react-native";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -94,41 +95,38 @@ const CustomSidebarMenu = (props) => {
           }}
         ></View>
         <DrawerItem
+          label="Contact Us"
+          onPress={() => props.navigation.navigate("contactUs")}
+          icon={() => <AntDesign name="mail" size={20} color={color.primary} />}
+          labelStyle={styles.drawerItemText}
+        />
+        <DrawerItem
           label="Rate Us"
           onPress={() => Linking.openURL("https://smartcsvtool.com")}
+          icon={() => (
+            <AntDesign name="staro" size={20} color={color.primary} />
+          )}
+          labelStyle={styles.drawerItemText}
         />
 
         {!user ? (
-          <TouchableOpacity
-            style={styles.customLogout}
+          <DrawerItem
+            label="Login"
             onPress={() => props.navigation.navigate("login")}
-          >
-            <SimpleLineIcons name="login" size={16} color={color.greenGray} />
-            <Text
-              style={{
-                color: color.greenGray,
-                fontWeight: "900",
-                letterSpacing: 1,
-                marginHorizontal: 5,
-              }}
-            >
-              Login
-            </Text>
-          </TouchableOpacity>
+            icon={() => (
+              <AntDesign name="login" size={24} color={color.primary} />
+            )}
+            labelStyle={styles.drawerItemText}
+          />
         ) : (
-          <TouchableOpacity style={styles.customLogout} onPress={handleLogout}>
-            <SimpleLineIcons name="logout" size={16} color={color.blue} />
-            <Text
-              style={{
-                color: color.blue,
-                fontWeight: "900",
-                letterSpacing: 1,
-                marginHorizontal: 5,
-              }}
-            >
-              Logout
-            </Text>
-          </TouchableOpacity>
+          <DrawerItem
+            label="Logout"
+            onPress={handleLogout}
+            icon={() => (
+              <AntDesign name="logout" size={24} color={color.primary} />
+            )}
+            labelStyle={styles.drawerItemText}
+          />
         )}
       </DrawerContentScrollView>
     </SafeAreaView>
@@ -145,15 +143,15 @@ const styles = StyleSheet.create({
     backgroundColor: color.cameraBackground,
     margin: 20,
   },
-  iconStyle: {
-    width: 15,
-    height: 15,
-    marginHorizontal: 5,
-  },
   customItem: {
     padding: 16,
     flexDirection: "row",
     alignItems: "center",
+  },
+  drawerItemText: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: color.primary,
   },
   customLogout: {
     padding: 16,
