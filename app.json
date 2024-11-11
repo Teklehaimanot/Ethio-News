@@ -21,6 +21,7 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 2,
       "package": "com.teklehaimanot.ethionews",
       "packageType": "apk",
       "config": {
