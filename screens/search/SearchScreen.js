@@ -5,6 +5,8 @@ import {
   ActivityIndicator,
   RefreshControl,
   StyleSheet,
+  Text,
+  Image,
 } from "react-native";
 import { useGetNewsByTitleQuery } from "../../services";
 import { color } from "../../utilities/Colors";
@@ -53,7 +55,7 @@ const SearchScreen = ({ navigation, route }) => {
       setStart((prev) => prev + 1);
     }
   };
-  console.log(start);
+
   const renderItem = ({ item }) => (
     <NewsCard item={item} navigation={navigation} />
   );
@@ -64,6 +66,32 @@ const SearchScreen = ({ navigation, route }) => {
 
   if (isError) {
     return <Error message={"Tap to retry"} refetch={refetch} />;
+  }
+
+  // Show placeholder if no query is entered
+  if (!query) {
+    return (
+      <View style={styles.placeholderContainer}>
+        <Image
+          source={require("../../assets/search.png")}
+          style={styles.placeholderImage}
+        />
+        <Text style={styles.placeholderText}>
+          Type something to start searching...
+        </Text>
+      </View>
+    );
+  }
+
+  // Show "No results" message if query is entered but no results are found
+  if (query && news.length === 0 && !isLoading) {
+    return (
+      <View style={styles.noResultsContainer}>
+        <Text style={styles.noResultsText}>
+          No results found for "{query}".
+        </Text>
+      </View>
+    );
   }
 
   return (
@@ -93,6 +121,34 @@ const SearchScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   cardList: {
     backgroundColor: color.grayDark,
+  },
+  placeholderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: color.grayDark,
+  },
+  placeholderImage: {
+    width: 80,
+    height: 80,
+    marginBottom: 20,
+  },
+  placeholderText: {
+    fontSize: 18,
+    color: color.black,
+    textAlign: "center",
+  },
+  noResultsContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: color.grayDark,
+  },
+  noResultsText: {
+    fontSize: 18,
+    color: color.black,
+    textAlign: "center",
+    marginTop: 20,
   },
 });
 

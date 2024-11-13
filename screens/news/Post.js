@@ -7,6 +7,7 @@ import {
   Dimensions,
   SafeAreaView,
   RefreshControl,
+  Linking,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
@@ -19,7 +20,8 @@ import Error from "../../components/Error";
 
 const { width } = Dimensions.get("window");
 const Post = ({ route, navigation }) => {
-  const { _id, title, image, description, source, date } = route.params;
+  const { _id, title, image, description, source, sourceUrl, date } =
+    route.params;
   const { user } = useSelector((state) => state.auth);
   const { data, refetch, isLoading, isError } = useGetNewsByIdQuery(_id);
   const [news, setNews] = useState({});
@@ -78,13 +80,20 @@ const Post = ({ route, navigation }) => {
     }
   };
 
+  const openSourceUrl = () => {
+    if (sourceUrl) {
+      Linking.openURL(sourceUrl).catch((err) =>
+        console.error("Failed to open URL:", err)
+      );
+    }
+  };
+
   if (isError) {
     return (
       <Error message={"Press the arrow button and Go back to home page"} />
     );
   }
 
-  // console.log(image);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -97,13 +106,14 @@ const Post = ({ route, navigation }) => {
           style={{
             flexDirection: "row",
             marginHorizontal: 10,
+            marginVertical: 5,
           }}
         >
-          <Text style={{ color: color.grayLight, fontWeight: "300" }}>
-            {source ? `${source + " " + "|" + " "}` : " "}
+          <Text style={styles.sourceText} onPress={openSourceUrl}>
+            {source ? `${source} ` : " "}
           </Text>
           <Text style={{ color: color.grayLight, fontWeight: "300" }}>
-            {formatDate()}
+            {`  | ${formatDate()}`}
           </Text>
         </View>
         <View style={styles.imageCard}>
@@ -143,11 +153,16 @@ const styles = StyleSheet.create({
     letterSpacing: 0.7,
     color: color.black,
   },
-  imageCard: { width: width * 1, height: 300 },
+  sourceText: {
+    color: color.primary,
+    fontWeight: "300",
+    textDecorationLine: "underline", // Makes the source text look clickable
+  },
+  imageCard: { width: width * 1, height: 340 },
   image: {
     width: "100%",
     height: "100%",
-    resizeMode: "contain",
+    resizeMode: "cover",
   },
   description: {
     paddingHorizontal: 10,

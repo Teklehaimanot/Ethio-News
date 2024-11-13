@@ -42,6 +42,9 @@ const CustomSidebarMenu = (props) => {
     if (data) {
       dispatch(logout());
       AsyncStorage.removeItem("token");
+    } else {
+      dispatch(logout());
+      AsyncStorage.removeItem("token");
     }
   };
   console.log(basicUrl);
@@ -102,7 +105,7 @@ const CustomSidebarMenu = (props) => {
         />
         <DrawerItem
           label="Rate Us"
-          onPress={() => Linking.openURL("https://smartcsvtool.com")}
+          onPress={() => Linking.openURL("https://www.kelaltech.com/")}
           icon={() => (
             <AntDesign name="staro" size={20} color={color.primary} />
           )}
