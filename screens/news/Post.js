@@ -158,11 +158,11 @@ const styles = StyleSheet.create({
     fontWeight: "300",
     textDecorationLine: "underline", // Makes the source text look clickable
   },
-  imageCard: { width: width * 1, height: 340 },
+  imageCard: { width: width * 1, height: 300 },
   image: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
+    resizeMode: "contain",
   },
   description: {
     paddingHorizontal: 10,
