@@ -35,7 +35,7 @@ const RootNavigator = () => {
   };
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor={color.statusbar} barStyle="light-content" />
+      <StatusBar backgroundColor={color.white} barStyle={"dark-content"} />
       <DrawerNavigator />
     </NavigationContainer>
   );

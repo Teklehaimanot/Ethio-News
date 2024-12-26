@@ -105,7 +105,11 @@ const CustomSidebarMenu = (props) => {
         />
         <DrawerItem
           label="Rate Us"
-          onPress={() => Linking.openURL("https://www.kelaltech.com/")}
+          onPress={() =>
+            Linking.openURL(
+              "https://play.google.com/store/apps/details?id=com.teklehaimanot.ethionews"
+            )
+          }
           icon={() => (
             <AntDesign name="staro" size={20} color={color.primary} />
           )}

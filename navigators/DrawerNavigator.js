@@ -36,9 +36,9 @@ const DrawerNavigator = () => {
         drawerLabelStyle: { fontSize: 16 },
         headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: color.primary,
+          backgroundColor: color.white,
         },
-        headerTintColor: color.secondary,
+        headerTintColor: color.black,
       }}
       drawerContent={(props) => <CustomSidebarMenu {...props} />}
     >

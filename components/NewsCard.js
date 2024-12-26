@@ -91,6 +91,14 @@ const NewsCard = ({ item, navigation }) => {
           }
         >
           <View>
+            <View style={styles.imageCard}>
+              <Image
+                style={styles.image}
+                source={{
+                  uri: `${basicUrl + "/" + news.image}`,
+                }}
+              />
+            </View>
             <Text style={styles.titleStyle}>{news.title}</Text>
             <View
               style={{
@@ -106,14 +114,6 @@ const NewsCard = ({ item, navigation }) => {
                 {formatDate()}
               </Text>
             </View>
-            <View style={styles.imageCard}>
-              <Image
-                style={styles.image}
-                source={{
-                  uri: `${basicUrl + "/" + news.image}`,
-                }}
-              />
-            </View>
           </View>
         </TouchableOpacity>
         <CommentLikeCard
@@ -128,31 +128,35 @@ const NewsCard = ({ item, navigation }) => {
 };
 const styles = StyleSheet.create({
   cardview: {
-    backgroundColor: color.gray,
+    backgroundColor: color.white,
     flexDirection: "column",
     justifyContent: "space-between",
-    width: width * 1,
-    borderColor: color.blueGray,
-    borderWidth: 0.2,
-    marginTop: 0.05,
+    width: width * 0.92,
+    borderColor: color.white,
+    marginTop: width * 0.07,
+    marginHorizontal: "auto",
+    borderRadius: 10,
+
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3.05,
+    elevation: 1,
   },
   titleStyle: {
-    marginHorizontal: 10,
     marginTop: 15,
     color: color.black,
-    borderLeftWidth: 0.8,
-    borderLeftColor: color.primary,
-    paddingLeft: width * 0.04,
-    borderRightWidth: 0.8,
-    borderRightColor: color.primary,
-    paddingRight: width * 0.05,
+    paddingLeft: 10,
     fontSize: 16,
     fontWeight: "bold",
   },
   imageCard: {
-    width: width * 1,
-    height: 260,
-    marginVertical: 10,
+    height: 240,
+    borderRadius: 10,
+    // marginVertical: 10,
   },
   image: {
     width: "100%",

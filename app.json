@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "permissions": ["INTERNET"],
     "androidStatusBar": {
-      "backgroundColor": "#2e5b71",
+      "backgroundColor": "#fff",
       "translucent": true
     },
     "splash": {
@@ -21,7 +21,7 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 3,
+      "versionCode": 5,
       "package": "com.teklehaimanot.ethionews",
       "packageType": "apk",
       "config": {

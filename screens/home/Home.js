@@ -91,7 +91,7 @@ const Home = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   cardList: {
-    backgroundColor: color.grayDark,
+    backgroundColor: color.white,
   },
 });
 
