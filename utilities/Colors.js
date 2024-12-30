@@ -5,8 +5,10 @@ export const color = {
   white: "#ffffff",
   blueGray: "#2E3A59",
   blueOcean: "#523CAD",
+  fontColor: "#191919",
+  sourceColor: "#B3B3B3",
   black: "#444",
-  blue: "#0000ff",
+  blue: "#3A9CF1",
   grayLight: "#666",
   statusbar: "#2e5b71",
 

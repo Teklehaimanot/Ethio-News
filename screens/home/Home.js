@@ -6,6 +6,7 @@ import {
   RefreshControl,
   StyleSheet,
 } from "react-native";
+import { useFonts } from "expo-font";
 import { useGetNewsQuery } from "../../services";
 import { color } from "../../utilities/Colors";
 import NewsCard from "../../components/NewsCard";
@@ -18,6 +19,11 @@ const Home = ({ navigation, route }) => {
   const [news, setNews] = useState([]);
   const [start, setStart] = useState(initialStart);
   const [refreshing, setRefreshing] = useState(false);
+  const [fontsLoaded] = useFonts({
+    "Figtree-Regular": require("../../assets/fonts/Figtree-Regular.ttf"),
+    "Figtree-Bold": require("../../assets/fonts/Figtree-Bold.ttf"),
+    "Figtree-SemiBold": require("../../assets/fonts/Figtree-SemiBold.ttf"),
+  });
 
   const {
     data: posts,
@@ -57,7 +63,7 @@ const Home = ({ navigation, route }) => {
     <NewsCard item={item} navigation={navigation} />
   );
 
-  if (isLoading && start === 1) {
+  if ((isLoading && start === 1) || !fontsLoaded) {
     return <ActivityIndicator size={"large"} color={color.primary} />;
   }
 

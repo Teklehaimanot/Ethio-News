@@ -12,6 +12,7 @@ import { color } from "../utilities/Colors";
 import CommentLikeCard from "./CommentLikeCard";
 import { useSelector } from "react-redux";
 import { useLikeNewsByIdMutation } from "../services";
+import { useFonts } from "expo-font";
 import { baseUrl } from "../config";
 import moment from "moment";
 
@@ -28,6 +29,11 @@ const NewsCard = ({ item, navigation }) => {
 
   const diffInDays = now.diff(postMoment, "days");
   const diffInYears = now.diff(postMoment, "years");
+
+  // const [fontsLoaded] = useFonts({
+  //   "Figtree-Regular": require("../assets/fonts/Figtree-Regular.tff"),
+  //   "Figtree-Bold": require("../assets/fonts/Figtree-Bold.ttf"),
+  // });
 
   const formatDate = () => {
     if (diffInYears >= 1) {
@@ -99,21 +105,19 @@ const NewsCard = ({ item, navigation }) => {
                 }}
               />
             </View>
-            <Text style={styles.titleStyle}>{news.title}</Text>
             <View
               style={{
                 flexDirection: "row",
-                marginTop: 10,
-                marginHorizontal: 10,
+                marginVertical: 20,
+                marginHorizontal: 25,
               }}
             >
-              <Text style={{ color: color.grayLight, fontWeight: "300" }}>
+              <Text style={styles.sourceStyle}>
                 {news.source ? `${news.source + " " + "|" + " "}` : " "}
               </Text>
-              <Text style={{ color: color.grayLight, fontWeight: "300" }}>
-                {formatDate()}
-              </Text>
+              <Text style={styles.sourceStyle}>{formatDate()}</Text>
             </View>
+            <Text style={styles.titleStyle}>{news.title}</Text>
           </View>
         </TouchableOpacity>
         <CommentLikeCard
@@ -147,21 +151,27 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   titleStyle: {
-    marginTop: 15,
-    color: color.black,
-    paddingLeft: 10,
+    color: color.fontColor,
+    paddingHorizontal: 25,
+    fontFamily: "Figtree-SemiBold",
     fontSize: 16,
-    fontWeight: "bold",
+    lineHeight: 19.2,
+  },
+  sourceStyle: {
+    color: color.sourceColor,
+    fontFamily: "Figtree-Regular",
+    fontSize: 14.5,
+    lineHeight: 16.5,
   },
   imageCard: {
     height: 240,
-    borderRadius: 10,
-    // marginVertical: 10,
   },
   image: {
     width: "100%",
     height: "100%",
     resizeMode: "cover",
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
 });
 
