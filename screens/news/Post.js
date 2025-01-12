@@ -9,9 +9,16 @@ import {
   RefreshControl,
   Linking,
 } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { useGetNewsByIdQuery, useLikeNewsByIdMutation } from "../../services";
+import {
+  getBookmarks,
+  addBookmark,
+  removeBookmark,
+  isBookmarked as checkIsBookmarked,
+} from "../../utilities/Bookmark";
 import moment from "moment";
 import { color } from "../../utilities/Colors";
 import CommentLikeCard from "../../components/CommentLikeCard";
@@ -22,6 +29,7 @@ const { width } = Dimensions.get("window");
 const Post = ({ route, navigation }) => {
   const { _id, title, image, description, source, sourceUrl, date } =
     route.params;
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const { data, refetch, isLoading, isError } = useGetNewsByIdQuery(_id);
   const [news, setNews] = useState({});
@@ -48,6 +56,24 @@ const Post = ({ route, navigation }) => {
     } else {
       return `Just now`;
     }
+  };
+
+  useEffect(() => {
+    const fetchBookmarkStatus = async () => {
+      const bookmarked = await checkIsBookmarked(_id);
+      setIsBookmarked(bookmarked);
+    };
+    fetchBookmarkStatus();
+  }, [_id]);
+
+  const handleBookmark = async () => {
+    console.log("book");
+    if (isBookmarked) {
+      await removeBookmark(_id);
+    } else {
+      await addBookmark(_id);
+    }
+    setIsBookmarked(!isBookmarked);
   };
 
   useEffect(() => {
@@ -101,25 +127,41 @@ const Post = ({ route, navigation }) => {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <Text style={styles.titleStyle}>{title}</Text>
+        <View
+          style={{
+            marginHorizontal: 20,
+            marginTop: 25,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Text style={styles.title}>News Detail</Text>
+          <FontAwesome
+            name={isBookmarked ? "bookmark" : "bookmark-o"}
+            size={24}
+            color={color.fontColor}
+            onPress={handleBookmark}
+          />
+        </View>
+
+        <View style={styles.imageCard}>
+          <Image style={styles.image} source={{ uri: image }} />
+        </View>
         <View
           style={{
             flexDirection: "row",
-            marginHorizontal: 10,
-            marginVertical: 5,
+            marginHorizontal: 20,
+            marginBottom: 20,
           }}
         >
           <Text style={styles.sourceText} onPress={openSourceUrl}>
             {source ? `${source} ` : " "}
           </Text>
-          <Text style={{ color: color.grayLight, fontWeight: "300" }}>
-            {`  | ${formatDate()}`}
-          </Text>
-        </View>
-        <View style={styles.imageCard}>
-          <Image style={styles.image} source={{ uri: image }} />
+          <Text style={styles.sourceText}>{`  | ${formatDate()}`}</Text>
         </View>
         <Text style={styles.description}>{description}</Text>
+        {/* <Text style={styles.description}>{description}</Text> */}
         {isLoading ? (
           <Loading size={"small"} />
         ) : (
@@ -143,35 +185,48 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  titleStyle: {
-    marginTop: 20,
-    paddingHorizontal: 10,
-    paddingBottom: 10,
-    fontWeight: "bold",
+  title: {
+    color: color.fontColor,
+    fontFamily: "Figtree-Regular",
     fontSize: 18,
-    lineHeight: 25,
-    letterSpacing: 0.7,
-    color: color.black,
+    lineHeight: 19.2,
+  },
+  description: {
+    color: color.fontColor,
+    paddingHorizontal: 20,
+    fontFamily: "Figtree-Regular",
+    fontSize: 16,
+    lineHeight: 19.2,
   },
   sourceText: {
-    color: color.primary,
-    fontWeight: "300",
-    textDecorationLine: "underline", // Makes the source text look clickable
+    color: color.sourceColor,
+    fontFamily: "Figtree-Regular",
+    fontSize: 14,
+    lineHeight: 16.5,
   },
-  imageCard: { width: width * 1, height: 300 },
+  imageCard: {
+    marginVertical: 15,
+    width: width * 0.92,
+    height: 300,
+    marginHorizontal: "auto",
+    borderRadius: 10,
+    borderColor: color.white,
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3.05,
+    elevation: 1,
+  },
   image: {
     width: "100%",
     height: "100%",
-    resizeMode: "contain",
+    resizeMode: "cover",
+    borderRadius: 10,
   },
-  description: {
-    paddingHorizontal: 10,
-    color: color.blueGray,
-    marginBottom: 20,
-    lineHeight: 25,
-    letterSpacing: 0.5,
-    fontSize: 15,
-  },
+
   bottomCommentCard: {
     flex: 1,
     flexDirection: "row",

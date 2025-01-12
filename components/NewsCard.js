@@ -30,11 +30,6 @@ const NewsCard = ({ item, navigation }) => {
   const diffInDays = now.diff(postMoment, "days");
   const diffInYears = now.diff(postMoment, "years");
 
-  // const [fontsLoaded] = useFonts({
-  //   "Figtree-Regular": require("../assets/fonts/Figtree-Regular.tff"),
-  //   "Figtree-Bold": require("../assets/fonts/Figtree-Bold.ttf"),
-  // });
-
   const formatDate = () => {
     if (diffInYears >= 1) {
       return postMoment.format("MMM D, YYYY"); // Example: Aug 1, 2023

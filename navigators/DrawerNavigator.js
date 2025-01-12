@@ -11,7 +11,6 @@ import { EvilIcons, Ionicons } from "@expo/vector-icons";
 const { width } = Dimensions.get("window");
 
 const Drawer = createDrawerNavigator();
-
 const DrawerNavigator = () => {
   const navigation = useNavigation();
   const [showPopup, setShowPopup] = useState(false);

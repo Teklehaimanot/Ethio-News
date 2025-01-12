@@ -11,6 +11,7 @@ import RegisterAccount from "../screens/auth/RegisterAccount";
 import SearchScreen from "../screens/search/SearchScreen";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import ContactUs from "../screens/contactUs/ContactUs";
+import BookMarks from "../screens/bookmarks/BookMarks";
 
 const { width } = Dimensions.get("window");
 
@@ -53,9 +54,9 @@ const HomeScreenNavigator = ({ navigation }) => {
       screenOptions={{
         animation: "slide_from_right",
         headerStyle: {
-          backgroundColor: color.primary,
+          backgroundColor: color.white,
         },
-        headerTintColor: color.secondary,
+        headerTintColor: color.black,
         headerTitleAlign: "center",
         headerTitleStyle: {
           fontWeight: "bold",
@@ -69,7 +70,14 @@ const HomeScreenNavigator = ({ navigation }) => {
         component={Home}
         options={{ headerShown: false }}
       />
-
+      <Stack.Screen
+        name="Bookmarks"
+        component={BookMarks}
+        options={{
+          headerShown: true,
+          headerTitle: "",
+        }}
+      />
       <Stack.Screen
         name="Details"
         component={Post}
@@ -78,6 +86,7 @@ const HomeScreenNavigator = ({ navigation }) => {
           headerTitle: "",
         }}
       />
+
       <Stack.Screen
         name="search"
         component={SearchScreen}

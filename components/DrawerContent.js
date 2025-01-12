@@ -7,7 +7,6 @@ import {
   Text,
   Linking,
 } from "react-native";
-import { SimpleLineIcons } from "@expo/vector-icons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import {
   DrawerContentScrollView,
@@ -47,14 +46,24 @@ const CustomSidebarMenu = (props) => {
       AsyncStorage.removeItem("token");
     }
   };
-  console.log(basicUrl);
+  // console.log(basicUrl);
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: color.gray }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: color.white }}>
       <View
         style={{
-          backgroundColor: color.primary,
+          backgroundColor: color.white,
           paddingBottom: 30,
-          borderBottomEndRadius: 10,
+
+          borderColor: color.white,
+          shadowColor: "#000000",
+          shadowOffset: {
+            width: 0,
+            height: 3,
+          },
+          shadowOpacity: 0.05,
+          shadowRadius: 3.05,
+          elevation: 1,
+          marginBottom: 40,
         }}
       >
         <Image
@@ -65,19 +74,21 @@ const CustomSidebarMenu = (props) => {
           <View style={{ alignItems: "center" }}>
             <Text
               style={{
-                color: color.white,
-                fontSize: 25,
-                fontWeight: "bold",
-                paddingBottom: 5,
+                color: color.fontColor,
+                paddingHorizontal: 20,
+                fontFamily: "Figtree-Regular",
+                fontSize: 20,
+                lineHeight: 20,
               }}
             >
               {user.name.charAt(0).toUpperCase() + user.name.slice(1)}
             </Text>
             <Text
               style={{
-                color: color.white,
-                fontSize: 15,
-                fontWeight: "bold",
+                color: color.sourceColor,
+                fontFamily: "Figtree-Regular",
+                fontSize: 16,
+                lineHeight: 20,
               }}
             >
               {user.email}
@@ -90,13 +101,6 @@ const CustomSidebarMenu = (props) => {
 
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
-        <View
-          style={{
-            borderBottomColor: color.blueGray,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            marginTop: 0,
-          }}
-        ></View>
         <DrawerItem
           label="Contact Us"
           onPress={() => props.navigation.navigate("contactUs")}

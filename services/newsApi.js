@@ -1,6 +1,7 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseUrl } from "../config";
+import { getBookmarks } from "../utilities/Bookmark";
 
 const BASE_URL = baseUrl;
 
@@ -18,7 +19,8 @@ export const newsApi = createApi({
   tagTypes: ["News", "Comments", "Like"],
   endpoints: (builder) => ({
     getNews: builder.query({
-      query: ({ page, limit }) => `api/v1/news?page=${page}&limit=${limit}`,
+      query: ({ page = 1, limit = 15 }) =>
+        `api/v1/news?page=${page}&limit=${limit}`,
       providesTags: ["News"],
     }),
     getNewsByTitle: builder.query({
@@ -28,6 +30,14 @@ export const newsApi = createApi({
     }),
     getNewsById: builder.query({
       query: (newsid) => `api/v1/news/${newsid}`,
+      providesTags: ["News"],
+    }),
+    getBookmarks: builder.query({
+      query: (newsIds) => ({
+        url: `api/v1/news/bookmarks`,
+        method: "POST",
+        body: newsIds,
+      }),
       providesTags: ["News"],
     }),
     postComments: builder.mutation({
@@ -52,7 +62,7 @@ export const newsApi = createApi({
   }),
 });
 
-console.log(useGetCommentsByIdQuery);
+console.log(baseUrl);
 
 export const {
   useGetNewsQuery,
@@ -61,4 +71,5 @@ export const {
   useGetCommentsByIdQuery,
   useLikeNewsByIdMutation,
   useGetNewsByTitleQuery,
+  useGetBookmarksQuery,
 } = newsApi;
