@@ -23,6 +23,7 @@ import { color } from "../../utilities/Colors";
 import CommentLikeCard from "../../components/CommentLikeCard";
 import Loading from "../../components/Loading";
 import Error from "../../components/Error";
+import Feather from "@expo/vector-icons/Feather";
 
 const { width } = Dimensions.get("window");
 const Post = ({ route, navigation }) => {
@@ -128,7 +129,7 @@ const Post = ({ route, navigation }) => {
       >
         <View style={styles.header}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <FontAwesome
+            <Feather
               name="arrow-left"
               size={24}
               color={color.fontColor}
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: color.white,
     marginHorizontal: 20,
-    marginTop: 25,
+    marginBottom: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
