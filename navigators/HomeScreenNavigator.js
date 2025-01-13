@@ -50,20 +50,12 @@ const HomeScreenNavigator = ({ navigation }) => {
         component={DrawerNavigator}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name="Bookmarks"
-        component={BookMarks}
-        options={{
-          headerShown: true,
-          headerTitle: "",
-        }}
-      />
+
       <Stack.Screen
         name="Details"
         component={Post}
         options={{
           headerShown: false,
-          headerTitle: "",
         }}
       />
 
@@ -112,7 +104,7 @@ const HomeScreenNavigator = ({ navigation }) => {
       <Stack.Screen
         name="comments"
         component={CommentScreen}
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="login"

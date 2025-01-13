@@ -1,30 +1,12 @@
-import React, { useState } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { color } from "../utilities/Colors";
 import CustomSidebarMenu from "../components/DrawerContent";
-// import HomeScreenNavigator from "./HomeScreenNavigator";
 import BookMarks from "../screens/bookmarks/BookMarks";
-import { View, Dimensions } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { EvilIcons, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import Home from "../screens/home/Home";
-
-const { width } = Dimensions.get("window");
 
 const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => {
-  const navigation = useNavigation();
-  const [showPopup, setShowPopup] = useState(false);
-
-  const togglePopup = () => {
-    setShowPopup(!showPopup);
-  };
-
-  const handleRefresh = () => {
-    navigation.navigate("Home", { refresh: true });
-    togglePopup();
-  };
-
   return (
     <Drawer.Navigator
       initialRouteName="News"
@@ -44,7 +26,7 @@ const DrawerNavigator = () => {
         options={{
           drawerLabel: "Home",
           title: "Ethiopian News",
-          drawerIcon: ({ focused, size }) => (
+          drawerIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "home" : "home-outline"}
               size={20}
@@ -59,7 +41,7 @@ const DrawerNavigator = () => {
         options={{
           drawerLabel: "Bookmarks",
           title: "Bookmarks",
-          drawerIcon: ({ focused, size }) => (
+          drawerIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "bookmark" : "bookmark-outline"}
               size={20}

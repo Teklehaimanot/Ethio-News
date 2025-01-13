@@ -136,14 +136,14 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
     borderRadius: 10,
 
-    shadowColor: "#000000",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 0,
     },
-    shadowOpacity: 0.05,
-    shadowRadius: 3.05,
-    elevation: 1,
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 3,
   },
   titleStyle: {
     color: color.fontColor,
