@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Dimensions, TextInput, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Home from "../screens/home/Home";
+// import Home from "../screens/home/Home";
 import { color } from "../utilities/Colors";
 import Post from "../screens/news/Post";
-import { useLayoutEffect } from "react";
+// import { useLayoutEffect } from "react";
 import CommentScreen from "../screens/comment/CommentScreen";
 import LoginScreen from "../screens/auth/LoginScreen";
 import RegisterAccount from "../screens/auth/RegisterAccount";
@@ -12,6 +12,7 @@ import SearchScreen from "../screens/search/SearchScreen";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import ContactUs from "../screens/contactUs/ContactUs";
 import BookMarks from "../screens/bookmarks/BookMarks";
+import DrawerNavigator from "./DrawerNavigator";
 
 const { width } = Dimensions.get("window");
 
@@ -27,27 +28,6 @@ const HomeScreenNavigator = ({ navigation }) => {
     navigation.navigate("search", { query: text });
     // setSearchText("");
   };
-
-  useLayoutEffect(() => {
-    const unsubscribe = navigation.addListener("state", (e) => {
-      const route = e.data.state.routes[e.data.state.index];
-      const index = route === null ? 0 : route?.state?.index;
-
-      if (index === 1 || index === 2) {
-        navigation.setOptions({
-          drawerLockMode: "locked-closed",
-          headerShown: false,
-        });
-      } else {
-        navigation.setOptions({
-          drawerLockMode: "unlocked",
-          headerShown: true,
-        });
-      }
-    });
-
-    return unsubscribe;
-  }, [navigation]);
 
   return (
     <Stack.Navigator
@@ -67,7 +47,7 @@ const HomeScreenNavigator = ({ navigation }) => {
     >
       <Stack.Screen
         name="Home"
-        component={Home}
+        component={DrawerNavigator}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -82,7 +62,7 @@ const HomeScreenNavigator = ({ navigation }) => {
         name="Details"
         component={Post}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerTitle: "",
         }}
       />

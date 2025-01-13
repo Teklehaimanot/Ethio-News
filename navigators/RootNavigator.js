@@ -1,4 +1,5 @@
-import "react-native-gesture-handler";
+import React from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import DrawerNavigator from "./DrawerNavigator";
 import { useEffect } from "react";
@@ -7,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../state/auth/authSlice";
 import { StatusBar } from "react-native";
 import { color } from "../utilities/Colors";
+import HomeScreenNavigator from "./HomeScreenNavigator";
 
 const RootNavigator = () => {
   const dispatch = useDispatch();
@@ -33,11 +35,14 @@ const RootNavigator = () => {
       return null;
     }
   };
+
   return (
-    <NavigationContainer>
-      <StatusBar backgroundColor={color.white} barStyle={"dark-content"} />
-      <DrawerNavigator />
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <StatusBar backgroundColor={color.white} barStyle={"dark-content"} />
+        <HomeScreenNavigator />
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 };
 

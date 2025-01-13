@@ -5,6 +5,9 @@ import {
   ActivityIndicator,
   StyleSheet,
   Text,
+  Animated,
+  TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { useGetBookmarksQuery } from "../../services";
@@ -13,10 +16,13 @@ import NewsCard from "../../components/NewsCard";
 import Error from "../../components/Error";
 import { clearBookmarks, getBookmarks } from "../../utilities/Bookmark";
 import { RefreshControl } from "react-native-gesture-handler";
-
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+const { width } = Dimensions.get("window");
 const BookMarks = ({ navigation }) => {
+  const [isRefreshing, setRefreshing] = useState(false);
   const [bookmarkedIds, setBookmarkIds] = useState([]);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [scrollY, setScrollY] = useState(0); // Store the current scroll position
+  const headerOffset = useState(new Animated.Value(0))[0];
 
   const [fontsLoaded] = useFonts({
     "Figtree-Regular": require("../../assets/fonts/Figtree-Regular.ttf"),
@@ -47,12 +53,12 @@ const BookMarks = ({ navigation }) => {
 
   const handleRefresh = async () => {
     try {
-      setIsRefreshing(true);
+      setRefreshing(true);
       await refetch();
     } catch (error) {
       console.error("Error refreshing data:", error);
     } finally {
-      setIsRefreshing(false);
+      setRefreshing(false);
     }
   };
 
@@ -60,8 +66,34 @@ const BookMarks = ({ navigation }) => {
     <NewsCard item={item} navigation={navigation} />
   );
 
+  const handleScroll = (event) => {
+    const currentOffset = event.nativeEvent.contentOffset.y;
+    const direction = currentOffset > scrollY ? "down" : "up";
+    if (direction === "down" && currentOffset > 50) {
+      Animated.timing(headerOffset, {
+        toValue: -100,
+        duration: 100,
+        useNativeDriver: true,
+      }).start();
+    } else if (direction === "up") {
+      Animated.timing(headerOffset, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }).start();
+    }
+
+    setScrollY(currentOffset);
+  };
+
   if (isLoading || !fontsLoaded) {
-    return <ActivityIndicator size={"large"} color={color.primary} />;
+    return (
+      <ActivityIndicator
+        size={"large"}
+        color={color.primary}
+        style={{ marginVertical: "auto" }}
+      />
+    );
   }
 
   if (isError) {
@@ -69,34 +101,104 @@ const BookMarks = ({ navigation }) => {
   }
   if (!bookmarkedIds.length || !data) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text
-          style={{
-            fontFamily: "Figtree-Regular",
-            fontSize: 16,
-            color: color.sourceColor,
-          }}
+      <View style={styles.container}>
+        <Animated.View
+          style={[styles.header, { transform: [{ translateY: headerOffset }] }]}
         >
-          No Bookmarks Found
-        </Text>
+          <TouchableOpacity
+            onPress={() => navigation.openDrawer()}
+            style={styles.drawerIcon}
+          >
+            <MaterialIcons name="menu" size={28} color={color.fontColor} />
+          </TouchableOpacity>
+          <Text style={styles.title}>Bookmarks</Text>
+        </Animated.View>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text
+            style={{
+              fontFamily: "Figtree-Regular",
+              fontSize: 16,
+              color: color.sourceColor,
+            }}
+          >
+            No Bookmarks Found
+          </Text>
+        </View>
       </View>
     );
   }
 
   return (
-    <FlatList
-      style={styles.cardList}
-      data={data}
-      keyExtractor={(item) => item._id}
-      renderItem={renderItem}
-      refreshControl={
-        <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
-      }
-    />
+    <View style={styles.container}>
+      <Animated.View
+        style={[styles.header, { transform: [{ translateY: headerOffset }] }]}
+      >
+        <TouchableOpacity
+          onPress={() => navigation.openDrawer()}
+          style={styles.drawerIcon}
+        >
+          <MaterialIcons name="menu" size={28} color={color.fontColor} />
+        </TouchableOpacity>
+        <Text style={styles.title}>Bookmarks</Text>
+      </Animated.View>
+
+      <FlatList
+        style={styles.cardList}
+        data={data}
+        keyExtractor={(item) => item._id}
+        onEndReachedThreshold={0.1}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          gap: 2,
+          paddingHorizontal: 1,
+          paddingTop: 50,
+        }}
+        renderItem={renderItem}
+        onScroll={handleScroll}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            colors={[color.primary]}
+          />
+        }
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: color.white,
+  },
+  header: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: width * 0.04,
+    zIndex: 1000,
+    marginHorizontal: "auto",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: 50,
+    backgroundColor: color.white,
+  },
+  drawerIcon: {
+    marginRight: 25,
+  },
+  title: {
+    color: color.fontColor,
+    fontFamily: "Figtree-Bold",
+    fontSize: 20,
+    fontWeight: "bold",
+    flex: 1,
+  },
+
   cardList: {
     backgroundColor: color.white,
   },

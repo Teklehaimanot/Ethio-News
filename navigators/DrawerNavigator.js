@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { color } from "../utilities/Colors";
 import CustomSidebarMenu from "../components/DrawerContent";
-import HomeScreenNavigator from "./HomeScreenNavigator";
+// import HomeScreenNavigator from "./HomeScreenNavigator";
 import BookMarks from "../screens/bookmarks/BookMarks";
 import { View, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { EvilIcons, Ionicons } from "@expo/vector-icons";
+import Home from "../screens/home/Home";
 
 const { width } = Dimensions.get("window");
 
@@ -33,17 +34,13 @@ const DrawerNavigator = () => {
         drawerActiveBackgroundColor: color.primary,
         drawerItemStyle: { marginVertical: 10 },
         drawerLabelStyle: { fontSize: 16 },
-        headerTitleAlign: "center",
-        headerStyle: {
-          backgroundColor: color.white,
-        },
-        headerTintColor: color.black,
+        headerShown: false,
       }}
       drawerContent={(props) => <CustomSidebarMenu {...props} />}
     >
       <Drawer.Screen
         name="Home Page"
-        component={HomeScreenNavigator}
+        component={Home}
         options={{
           drawerLabel: "Home",
           title: "Ethiopian News",
@@ -53,23 +50,6 @@ const DrawerNavigator = () => {
               size={20}
               color={focused ? color.secondary : color.active}
             />
-          ),
-          headerRight: () => (
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <EvilIcons
-                name="search"
-                size={28}
-                color={color.white}
-                onPress={() => navigation.navigate("search")}
-                style={{ marginRight: 20 }}
-              />
-            </View>
           ),
         }}
       />

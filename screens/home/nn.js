@@ -6,21 +6,17 @@ import {
   RefreshControl,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  Dimensions,
   Animated,
+  Dimensions,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { useGetNewsQuery } from "../../services";
 import { color } from "../../utilities/Colors";
 import NewsCard from "../../components/NewsCard";
 import Error from "../../components/Error";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const initialLimit = 15;
 const initialStart = 1;
-const { width } = Dimensions.get("window");
 
 const Home = ({ navigation }) => {
   const [news, setNews] = useState([]);
@@ -28,6 +24,7 @@ const Home = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [scrollY, setScrollY] = useState(0); // Store the current scroll position
   const headerOffset = useState(new Animated.Value(0))[0];
+
   const [fontsLoaded] = useFonts({
     "Figtree-Regular": require("../../assets/fonts/Figtree-Regular.ttf"),
     "Figtree-Bold": require("../../assets/fonts/Figtree-Bold.ttf"),
@@ -72,9 +69,12 @@ const Home = ({ navigation }) => {
     <NewsCard item={item} navigation={navigation} />
   );
 
+  // Handle scroll logic
   const handleScroll = (event) => {
     const currentOffset = event.nativeEvent.contentOffset.y;
     const direction = currentOffset > scrollY ? "down" : "up";
+
+    // Hide header on scroll down, show on scroll up
     if (direction === "down" && currentOffset > 50) {
       Animated.timing(headerOffset, {
         toValue: -100,
@@ -93,13 +93,7 @@ const Home = ({ navigation }) => {
   };
 
   if ((isLoading && start === 1) || !fontsLoaded) {
-    return (
-      <ActivityIndicator
-        size={"large"}
-        color={color.primary}
-        style={{ marginVertical: "auto" }}
-      />
-    );
+    return <ActivityIndicator size={"large"} color={color.primary} />;
   }
 
   if (isError) {
@@ -107,26 +101,15 @@ const Home = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      {/* Animated Header */}
       <Animated.View
         style={[styles.header, { transform: [{ translateY: headerOffset }] }]}
       >
-        <TouchableOpacity
-          onPress={() => navigation.openDrawer()}
-          style={styles.drawerIcon}
-        >
-          <MaterialIcons name="menu" size={28} color={color.fontColor} />
-        </TouchableOpacity>
-        <Text style={styles.title}>Ethiopian News</Text>
-
-        <TouchableOpacity
-          onPress={() => navigation.navigate("search")}
-          style={styles.searchIcon}
-        >
-          <MaterialIcons name="search" size={28} color={color.fontColor} />
-        </TouchableOpacity>
+        <Text style={styles.headerText}>Sticky Header</Text>
       </Animated.View>
 
+      {/* FlatList */}
       <FlatList
         style={styles.cardList}
         data={news}
@@ -137,16 +120,12 @@ const Home = ({ navigation }) => {
         contentContainerStyle={{
           gap: 2,
           paddingHorizontal: 1,
-          paddingTop: 50,
+          paddingTop: 100,
         }}
         renderItem={renderItem}
-        onScroll={handleScroll}
+        onScroll={handleScroll} // Handle scroll event dynamically
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            colors={[color.primary]}
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
         ListFooterComponent={() => (
           <View>
@@ -156,7 +135,7 @@ const Home = ({ navigation }) => {
           </View>
         )}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -170,26 +149,14 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    paddingHorizontal: width * 0.04,
+    padding: 20,
     zIndex: 1000,
-    marginHorizontal: "auto",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    height: 50,
-    backgroundColor: color.white,
   },
-  drawerIcon: {
-    marginRight: 25,
-  },
-  title: {
-    color: color.fontColor,
-    fontFamily: "Figtree-Bold",
+  headerText: {
     fontSize: 20,
     fontWeight: "bold",
-    flex: 1,
+    color: color.fontColor,
   },
-
   cardList: {
     backgroundColor: color.white,
   },

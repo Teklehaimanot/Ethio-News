@@ -14,7 +14,6 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { useGetNewsByIdQuery, useLikeNewsByIdMutation } from "../../services";
 import {
-  getBookmarks,
   addBookmark,
   removeBookmark,
   isBookmarked as checkIsBookmarked,
@@ -127,16 +126,17 @@ const Post = ({ route, navigation }) => {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <View
-          style={{
-            marginHorizontal: 20,
-            marginTop: 25,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Text style={styles.title}>News Detail</Text>
+        <View style={styles.header}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <FontAwesome
+              name="arrow-left"
+              size={24}
+              color={color.fontColor}
+              onPress={() => navigation.goBack()}
+              style={{ marginRight: 15 }}
+            />
+            <Text style={styles.title}>News Detail</Text>
+          </View>
           <FontAwesome
             name={isBookmarked ? "bookmark" : "bookmark-o"}
             size={24}
@@ -184,10 +184,20 @@ export default Post;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: color.white,
+  },
+  header: {
+    backgroundColor: color.white,
+    marginHorizontal: 20,
+    marginTop: 25,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 50,
   },
   title: {
     color: color.fontColor,
-    fontFamily: "Figtree-Regular",
+    fontFamily: "Figtree-Bold",
     fontSize: 18,
     lineHeight: 19.2,
   },
