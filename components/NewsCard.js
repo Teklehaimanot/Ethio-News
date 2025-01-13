@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     marginTop: width * 0.07,
     marginHorizontal: "auto",
     borderRadius: 10,
-
+    marginVertical: 10,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

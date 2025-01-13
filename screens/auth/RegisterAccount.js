@@ -10,6 +10,7 @@ import {
 import { color } from "../../utilities/Colors";
 import { TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
+import { Feather } from "@expo/vector-icons";
 // import { API_KEY } from "@env";
 import { baseUrl } from "../../config";
 import { login } from "../../state/auth/authSlice";
@@ -57,97 +58,127 @@ const RegisterAccount = ({ navigation }) => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.loginCard}>
-          <Text
-            style={{
-              color: color.error,
-            }}
-          >
-            {errors}
-          </Text>
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: color.blueGray,
-              paddingHorizontal: 5,
-              fontSize: 20,
-            }}
-          >
-            Create Account
-          </Text>
-          <TextInput
-            placeholder="Name"
-            style={styles.textInput}
-            onChangeText={(text) => setName(text)}
-            value={name}
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Feather
+            name="arrow-left"
+            size={24}
+            color={color.fontColor}
+            onPress={() => navigation.goBack()}
+            style={{ marginRight: 15 }}
           />
-          <TextInput
-            placeholder="Email"
-            style={styles.textInput}
-            onChangeText={(text) => setEmail(text)}
-            value={email}
-          />
-          <TextInput
-            placeholder="Password"
-            style={styles.textInput}
-            onChangeText={(text) => setPassword(text)}
-            value={password}
-            secureTextEntry={true}
-          />
-          <TextInput
-            placeholder="Confirm Password"
-            style={styles.textInput}
-            onChangeText={(text) => setConfirmPassword(text)}
-            value={confirmPassword}
-            secureTextEntry={true}
-          />
-          <Pressable style={styles.button} onPress={handleSubmit}>
-            {isLoading ? (
-              <ActivityIndicator size="small" color={color.white} />
-            ) : (
-              <Text
-                style={{
-                  color: color.white,
-                  fontWeight: "bold",
-                  fontSize: 15,
-                  textAlign: "center",
-                  letterSpacing: 1,
-                }}
-              >
-                Create Account
-              </Text>
-            )}
-          </Pressable>
-
-          <View style={styles.createAccount}>
-            <Text style={{ color: color.blueGray }}>Have an Account?</Text>
-            <Pressable onPress={() => navigation.navigate("login")}>
-              <Text style={{ color: color.blue }}>Login</Text>
-            </Pressable>
-          </View>
+          <Text style={styles.title}>Login</Text>
         </View>
       </View>
-    </ScrollView>
+      <View style={styles.loginCard}>
+        <Text
+          style={{
+            color: color.error,
+          }}
+        >
+          {errors}
+        </Text>
+        <Text
+          style={{
+            fontWeight: "bold",
+            color: color.blueGray,
+            paddingHorizontal: 5,
+            fontSize: 20,
+          }}
+        >
+          Create Account
+        </Text>
+        <TextInput
+          placeholder="Name"
+          style={styles.textInput}
+          onChangeText={(text) => setName(text)}
+          value={name}
+        />
+        <TextInput
+          placeholder="Email"
+          style={styles.textInput}
+          onChangeText={(text) => setEmail(text)}
+          value={email}
+        />
+        <TextInput
+          placeholder="Password"
+          style={styles.textInput}
+          onChangeText={(text) => setPassword(text)}
+          value={password}
+          secureTextEntry={true}
+        />
+        <TextInput
+          placeholder="Confirm Password"
+          style={styles.textInput}
+          onChangeText={(text) => setConfirmPassword(text)}
+          value={confirmPassword}
+          secureTextEntry={true}
+        />
+        <Pressable style={styles.button} onPress={handleSubmit}>
+          {isLoading ? (
+            <ActivityIndicator size="small" color={color.white} />
+          ) : (
+            <Text
+              style={{
+                color: color.white,
+                fontWeight: "bold",
+                fontSize: 15,
+                textAlign: "center",
+                letterSpacing: 1,
+              }}
+            >
+              Create Account
+            </Text>
+          )}
+        </Pressable>
+
+        <View style={styles.createAccount}>
+          <Text style={{ color: color.blueGray }}>Have an Account?</Text>
+          <Pressable onPress={() => navigation.navigate("login")}>
+            <Text style={{ color: color.blue }}>Login</Text>
+          </Pressable>
+        </View>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    backgroundColor: color.white,
+  },
+  header: {
+    backgroundColor: color.white,
+    marginHorizontal: 20,
+    marginBottom: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    marginTop: width * 0.1,
-    // grayBackground: color.grayBackground,
+    height: 50,
+  },
+  title: {
+    color: color.fontColor,
+    fontFamily: "Figtree-Bold",
+    fontSize: 18,
+    lineHeight: 19.2,
   },
   loginCard: {
     width: width * 0.88,
     marginHorizontal: width * 0.06,
-    // backgroundColor: color.grayBackground,
     borderRadius: 10,
-    paddingVertical: 20,
-    paddingHorizontal: 10,
+    marginVertical: 70,
+    padding: 25,
+
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 1,
   },
   textInput: {
     padding: 8,

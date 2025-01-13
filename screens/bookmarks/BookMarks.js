@@ -96,9 +96,37 @@ const BookMarks = ({ navigation }) => {
     );
   }
 
+  if (isError && error.data.error === "No news items found") {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Animated.View
+          style={[styles.header, { transform: [{ translateY: headerOffset }] }]}
+        >
+          <TouchableOpacity
+            onPress={() => navigation.openDrawer()}
+            style={styles.drawerIcon}
+          >
+            <MaterialIcons name="menu" size={28} color={color.fontColor} />
+          </TouchableOpacity>
+          <Text style={styles.title}>Bookmarks</Text>
+        </Animated.View>
+        <Text
+          style={{
+            fontFamily: "Figtree-Regular",
+            fontSize: 16,
+            color: color.sourceColor,
+          }}
+        >
+          Your data has been deleted from the server.
+        </Text>
+      </View>
+    );
+  }
+
   if (isError) {
     return <Error message={"Tap to retry"} refetch={refetch} />;
   }
+
   if (!bookmarkedIds.length || !data) {
     return (
       <View style={styles.container}>

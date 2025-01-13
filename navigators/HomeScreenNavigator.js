@@ -110,16 +110,14 @@ const HomeScreenNavigator = ({ navigation }) => {
         name="login"
         component={LoginScreen}
         options={{
-          headerShown: true,
-          headerTitle: "Login",
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="signUp"
         component={RegisterAccount}
         options={{
-          headerShown: true,
-          headerTitle: " SignUp",
+          headerShown: false,
         }}
       />
       <Stack.Screen
