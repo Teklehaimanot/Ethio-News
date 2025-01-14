@@ -7,20 +7,29 @@ import {
   StyleSheet,
   Text,
   Image,
+  SafeAreaView,
+  Dimensions,
+  Animated,
+  TextInput,
 } from "react-native";
 import { useGetNewsByTitleQuery } from "../../services";
 import { color } from "../../utilities/Colors";
 import NewsCard from "../../components/NewsCard";
 import Error from "../../components/Error";
+import { Feather } from "@expo/vector-icons";
 
 const initialLimit = 15;
 const initialStart = 1;
+const { width } = Dimensions.get("window");
 
 const SearchScreen = ({ navigation, route }) => {
   const [news, setNews] = useState([]);
   const [start, setStart] = useState(initialStart);
   const [refreshing, setRefreshing] = useState(false);
-  const { query } = route.params ? route.params : "";
+  const [scrollY, setScrollY] = useState(0);
+  const headerOffset = useState(new Animated.Value(0))[0];
+  const [searchQuery, setSearchQuery] = useState("");
+
   const {
     data: posts,
     isError,
@@ -30,7 +39,7 @@ const SearchScreen = ({ navigation, route }) => {
   } = useGetNewsByTitleQuery({
     page: start,
     limit: initialLimit,
-    title: query,
+    title: searchQuery,
   });
 
   useEffect(() => {
@@ -56,9 +65,35 @@ const SearchScreen = ({ navigation, route }) => {
     }
   };
 
+  const handleScroll = (event) => {
+    const currentOffset = event.nativeEvent.contentOffset.y;
+    const direction = currentOffset > scrollY ? "down" : "up";
+    if (direction === "down" && currentOffset > 50) {
+      Animated.timing(headerOffset, {
+        toValue: -100,
+        duration: 100,
+        useNativeDriver: true,
+      }).start();
+    } else if (direction === "up") {
+      Animated.timing(headerOffset, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }).start();
+    }
+
+    setScrollY(currentOffset);
+  };
+
   const renderItem = ({ item }) => (
     <NewsCard item={item} navigation={navigation} />
   );
+
+  const handleSearchChange = (text) => {
+    setSearchQuery(text);
+    setStart(initialStart);
+    refetch();
+  };
 
   if (isLoading && start === 1) {
     return <ActivityIndicator size={"large"} color={color.primary} />;
@@ -68,87 +103,106 @@ const SearchScreen = ({ navigation, route }) => {
     return <Error message={"Tap to retry"} refetch={refetch} />;
   }
 
-  // Show placeholder if no query is entered
-  if (!query) {
-    return (
-      <View style={styles.placeholderContainer}>
-        <Image
-          source={require("../../assets/search.png")}
-          style={styles.placeholderImage}
-        />
-        <Text style={styles.placeholderText}>
-          Type something to start searching...
-        </Text>
-      </View>
-    );
-  }
-
-  // Show "No results" message if query is entered but no results are found
-  if (query && news.length === 0 && !isLoading) {
-    return (
-      <View style={styles.noResultsContainer}>
-        <Text style={styles.noResultsText}>
-          No results found for "{query}".
-        </Text>
-      </View>
-    );
-  }
-
   return (
-    <FlatList
-      style={styles.cardList}
-      data={news}
-      keyExtractor={(item) => item._id}
-      onEndReached={handleEndReached}
-      onEndReachedThreshold={0.1}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ gap: 2, paddingHorizontal: 1 }}
-      renderItem={renderItem}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-      }
-      ListFooterComponent={() => (
-        <View>
-          {isFetching && (
-            <ActivityIndicator size="large" color={color.primary} />
-          )}
+    <SafeAreaView style={styles.container}>
+      <Animated.View
+        style={[styles.header, { transform: [{ translateY: headerOffset }] }]}
+      >
+        <Feather
+          name="arrow-left"
+          size={24}
+          color={color.fontColor}
+          onPress={() => navigation.goBack()}
+          style={styles.backIcon}
+        />
+        <View style={styles.searchContainer}>
+          <Feather
+            name="search"
+            size={20}
+            color={color.fontColor}
+            style={styles.searchIcon}
+          />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search news..."
+            placeholderTextColor={color.sourceColor}
+            value={searchQuery}
+            onChangeText={handleSearchChange}
+            autoCorrect={false}
+            autoCapitalize="none"
+          />
         </View>
+      </Animated.View>
+      {searchQuery && (
+        <FlatList
+          style={styles.cardList}
+          data={news}
+          keyExtractor={(item) => item._id}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.1}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
+          renderItem={renderItem}
+          onScroll={handleScroll}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
+          ListFooterComponent={() =>
+            isFetching && (
+              <ActivityIndicator size="large" color={color.primary} />
+            )
+          }
+        />
       )}
-    />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: color.white,
+  },
+  header: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1000,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    height: 60,
+    backgroundColor: color.white,
+  },
+  backIcon: {
+    marginRight: 15,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: color.white,
+    borderRadius: 25,
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderWidth: 0.5,
+    borderColor: color.sourceColor,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: color.fontColor,
+  },
   cardList: {
-    backgroundColor: color.grayDark,
+    marginTop: 70,
   },
-  placeholderContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: color.grayDark,
-  },
-  placeholderImage: {
-    width: 80,
-    height: 80,
-    marginBottom: 20,
-  },
-  placeholderText: {
-    fontSize: 18,
-    color: color.black,
-    textAlign: "center",
-  },
-  noResultsContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: color.grayDark,
-  },
-  noResultsText: {
-    fontSize: 18,
-    color: color.black,
-    textAlign: "center",
-    marginTop: 20,
+  listContent: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
   },
 });
 

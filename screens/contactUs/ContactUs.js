@@ -53,7 +53,16 @@ const ContactUs = ({ navigation }) => {
           onPress={handleEmailPress}
           style={{ paddingHorizontal: 15 }}
         >
-          <Text style={{ color: color.primary }}>kelaltech24@gmail.com</Text>
+          <Text
+            style={{
+              color: color.primary,
+              fontFamily: "Figtree-Regular",
+              fontSize: 16,
+              lineHeight: 19.2,
+            }}
+          >
+            kelaltech24@gmail.com
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -66,7 +75,16 @@ const ContactUs = ({ navigation }) => {
           onPress={handlePhonePress}
           style={{ paddingHorizontal: 15 }}
         >
-          <Text style={{ color: color.primary }}>+251 71 228 4904</Text>
+          <Text
+            style={{
+              color: color.primary,
+              fontFamily: "Figtree-Regular",
+              fontSize: 16,
+              lineHeight: 19.2,
+            }}
+          >
+            +251 71 228 4904
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.contactUscontainer}>
@@ -93,10 +111,10 @@ const ContactUs = ({ navigation }) => {
             onPress={handleTelegramPress}
             style={{ marginRight: 20 }}
           >
-            <FontAwesome name="telegram" size={28} color={color.primary} />
+            <FontAwesome name="telegram" size={32} color={color.primary} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleTikTokPress}>
-            <FontAwesome5 name="tiktok" size={28} color={color.fontColor} />
+            <FontAwesome5 name="tiktok" size={32} color={color.fontColor} />
           </TouchableOpacity>
         </View>
       </View>
@@ -116,7 +134,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 50,
+    height: 60,
   },
   title: {
     color: color.fontColor,
@@ -143,7 +161,7 @@ const styles = StyleSheet.create({
   },
   emailText: {
     fontFamily: "Figtree-Regular",
-    fontSize: 16,
+    fontSize: 18,
     lineHeight: 19.2,
     color: color.fontColor,
     paddingBottom: 10,

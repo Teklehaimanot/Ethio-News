@@ -181,7 +181,7 @@ const BookMarks = ({ navigation }) => {
         contentContainerStyle={{
           gap: 2,
           paddingHorizontal: 1,
-          paddingTop: 50,
+          paddingTop: 60,
         }}
         renderItem={renderItem}
         onScroll={handleScroll}
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    height: 50,
+    height: 60,
     backgroundColor: color.white,
   },
   drawerIcon: {

@@ -17,6 +17,7 @@ import NewsCard from "../../components/NewsCard";
 import Error from "../../components/Error";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Feather } from "@expo/vector-icons";
 
 const initialLimit = 15;
 const initialStart = 1;
@@ -123,7 +124,12 @@ const Home = ({ navigation }) => {
           onPress={() => navigation.navigate("search")}
           style={styles.searchIcon}
         >
-          <MaterialIcons name="search" size={28} color={color.fontColor} />
+          <Feather
+            name="search"
+            size={24}
+            color={color.fontColor}
+            style={styles.searchIcon}
+          />
         </TouchableOpacity>
       </Animated.View>
 
@@ -137,7 +143,7 @@ const Home = ({ navigation }) => {
         contentContainerStyle={{
           gap: 2,
           paddingHorizontal: 1,
-          paddingTop: 50,
+          paddingTop: 60,
         }}
         renderItem={renderItem}
         onScroll={handleScroll}
@@ -176,7 +182,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    height: 50,
+    height: 60,
     backgroundColor: color.white,
   },
   drawerIcon: {

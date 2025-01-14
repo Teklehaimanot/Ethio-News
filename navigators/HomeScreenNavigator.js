@@ -63,42 +63,7 @@ const HomeScreenNavigator = ({ navigation }) => {
         name="search"
         component={SearchScreen}
         options={{
-          headerShown: true,
-          headerTitle: "",
-          headerRight: () => (
-            <View
-              style={{
-                flexDirection: "row",
-                width: width * 0.8,
-                justifyContent: "space-between",
-                paddingHorizontal: 10,
-                paddingVertical: 2,
-                backgroundColor: color.gray,
-                borderRadius: 15,
-              }}
-            >
-              <TextInput
-                style={{
-                  backgroundColor: color.gray,
-                  width: "90%",
-                  borderRadius: 5,
-                  paddingHorizontal: 8,
-                }}
-                placeholder="Search..."
-                value={searchText}
-                onChangeText={handleSearchChange}
-                onSubmitEditing={() => handleSearchSubmit(searchText)}
-              />
-              {searchText && (
-                <MaterialIcons
-                  name="cancel"
-                  size={24}
-                  color={color.black}
-                  onPress={() => setSearchText("")}
-                />
-              )}
-            </View>
-          ),
+          headerShown: false,
         }}
       />
       <Stack.Screen
