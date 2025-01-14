@@ -68,7 +68,7 @@ const RegisterAccount = ({ navigation }) => {
             onPress={() => navigation.goBack()}
             style={{ marginRight: 15 }}
           />
-          <Text style={styles.title}>Login</Text>
+          <Text style={styles.title}>Create Account</Text>
         </View>
       </View>
       <View style={styles.loginCard}>
@@ -168,17 +168,10 @@ const styles = StyleSheet.create({
     width: width * 0.88,
     marginHorizontal: width * 0.06,
     borderRadius: 10,
-    marginVertical: 70,
+    marginVertical: 40,
     padding: 25,
-
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 1,
+    borderWidth: 0.5,
+    borderColor: color.sourceColor,
   },
   textInput: {
     padding: 8,

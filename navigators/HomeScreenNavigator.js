@@ -124,8 +124,7 @@ const HomeScreenNavigator = ({ navigation }) => {
         name="contactUs"
         component={ContactUs}
         options={{
-          headerShown: true,
-          headerTitle: " Contact Us",
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

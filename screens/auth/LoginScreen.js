@@ -151,17 +151,11 @@ const styles = StyleSheet.create({
     width: width * 0.88,
     marginHorizontal: width * 0.06,
     borderRadius: 10,
-    marginVertical: 70,
+    marginVertical: 40,
     padding: 25,
-
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 1,
+    borderWidth: 0.5,
+    borderColor: color.sourceColor,
+    borderRadius: 15,
   },
   textInput: {
     padding: 8,
