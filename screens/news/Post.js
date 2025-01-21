@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   RefreshControl,
   Linking,
+  TouchableOpacity,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
@@ -129,13 +130,13 @@ const Post = ({ route, navigation }) => {
       >
         <View style={styles.header}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Feather
-              name="arrow-left"
-              size={24}
-              color={color.fontColor}
+            <TouchableOpacity
               onPress={() => navigation.goBack()}
-              style={{ marginRight: 15 }}
-            />
+              style={styles.backIcon}
+            >
+              <Feather name="arrow-left" size={24} color={color.fontColor} />
+            </TouchableOpacity>
+
             <Text style={styles.title}>News Detail</Text>
           </View>
           <FontAwesome
@@ -195,6 +196,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     height: 60,
+  },
+  backIcon: {
+    marginRight: 15,
   },
   title: {
     color: color.fontColor,

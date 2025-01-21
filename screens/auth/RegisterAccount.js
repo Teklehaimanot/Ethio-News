@@ -6,6 +6,7 @@ import {
   Pressable,
   ActivityIndicator,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import { color } from "../../utilities/Colors";
 import { TextInput } from "react-native-gesture-handler";
@@ -61,13 +62,12 @@ const RegisterAccount = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Feather
-            name="arrow-left"
-            size={24}
-            color={color.fontColor}
+          <TouchableOpacity
             onPress={() => navigation.goBack()}
-            style={{ marginRight: 15 }}
-          />
+            style={styles.backIcon}
+          >
+            <Feather name="arrow-left" size={24} color={color.fontColor} />
+          </TouchableOpacity>
           <Text style={styles.title}>Create Account</Text>
         </View>
       </View>
@@ -163,6 +163,9 @@ const styles = StyleSheet.create({
     fontFamily: "Figtree-Bold",
     fontSize: 18,
     lineHeight: 19.2,
+  },
+  backIcon: {
+    marginRight: 15,
   },
   loginCard: {
     width: width * 0.88,

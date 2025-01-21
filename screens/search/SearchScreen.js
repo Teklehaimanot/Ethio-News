@@ -11,6 +11,7 @@ import {
   Dimensions,
   Animated,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
 import { useGetNewsByTitleQuery } from "../../services";
 import { color } from "../../utilities/Colors";
@@ -95,7 +96,7 @@ const SearchScreen = ({ navigation, route }) => {
     refetch();
   };
 
-  if (isLoading && start === 1) {
+  if (isLoading && start === 1 && searchQuery) {
     return <ActivityIndicator size={"large"} color={color.primary} />;
   }
 
@@ -108,13 +109,13 @@ const SearchScreen = ({ navigation, route }) => {
       <Animated.View
         style={[styles.header, { transform: [{ translateY: headerOffset }] }]}
       >
-        <Feather
-          name="arrow-left"
-          size={24}
-          color={color.fontColor}
+        <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backIcon}
-        />
+        >
+          <Feather name="arrow-left" size={24} color={color.fontColor} />
+        </TouchableOpacity>
+
         <View style={styles.searchContainer}>
           <Feather
             name="search"

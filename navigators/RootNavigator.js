@@ -9,8 +9,15 @@ import { login } from "../state/auth/authSlice";
 import { StatusBar } from "react-native";
 import { color } from "../utilities/Colors";
 import HomeScreenNavigator from "./HomeScreenNavigator";
+import { useFonts } from "expo-font";
 
 const RootNavigator = () => {
+  const [fontsLoaded] = useFonts({
+    "Figtree-Regular": require("../assets/fonts/Figtree-Regular.ttf"),
+    "Figtree-Bold": require("../assets/fonts/Figtree-Bold.ttf"),
+    "Figtree-SemiBold": require("../assets/fonts/Figtree-SemiBold.ttf"),
+  });
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,10 +45,12 @@ const RootNavigator = () => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer>
-        <StatusBar backgroundColor={color.white} barStyle={"dark-content"} />
-        <HomeScreenNavigator />
-      </NavigationContainer>
+      {fontsLoaded && (
+        <NavigationContainer>
+          <StatusBar backgroundColor={color.white} barStyle={"dark-content"} />
+          <HomeScreenNavigator />
+        </NavigationContainer>
+      )}
     </GestureHandlerRootView>
   );
 };

@@ -34,13 +34,13 @@ const ContactUs = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Feather
-            name="arrow-left"
-            size={24}
-            color={color.fontColor}
+          <TouchableOpacity
             onPress={() => navigation.goBack()}
-            style={{ marginRight: 15 }}
-          />
+            style={styles.backIcon}
+          >
+            <Feather name="arrow-left" size={24} color={color.fontColor} />
+          </TouchableOpacity>
+
           <Text style={styles.title}>Contact Us</Text>
         </View>
       </View>
@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 19.2,
   },
+  backIcon: { marginRight: 15 },
 
   contactUscontainer: {
     width: width * 0.92,

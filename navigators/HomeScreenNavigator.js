@@ -1,34 +1,18 @@
-import React, { useState } from "react";
-import { Dimensions, TextInput, View } from "react-native";
+import { Dimensions } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-// import Home from "../screens/home/Home";
 import { color } from "../utilities/Colors";
 import Post from "../screens/news/Post";
-// import { useLayoutEffect } from "react";
 import CommentScreen from "../screens/comment/CommentScreen";
 import LoginScreen from "../screens/auth/LoginScreen";
 import RegisterAccount from "../screens/auth/RegisterAccount";
 import SearchScreen from "../screens/search/SearchScreen";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import ContactUs from "../screens/contactUs/ContactUs";
-import BookMarks from "../screens/bookmarks/BookMarks";
 import DrawerNavigator from "./DrawerNavigator";
 
 const { width } = Dimensions.get("window");
 
 const Stack = createNativeStackNavigator();
 const HomeScreenNavigator = ({ navigation }) => {
-  const [searchText, setSearchText] = useState("");
-
-  const handleSearchChange = (text) => {
-    setSearchText(text);
-  };
-
-  const handleSearchSubmit = (text) => {
-    navigation.navigate("search", { query: text });
-    // setSearchText("");
-  };
-
   return (
     <Stack.Navigator
       screenOptions={{

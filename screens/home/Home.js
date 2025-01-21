@@ -29,11 +29,6 @@ const Home = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [scrollY, setScrollY] = useState(0); // Store the current scroll position
   const headerOffset = useState(new Animated.Value(0))[0];
-  const [fontsLoaded] = useFonts({
-    "Figtree-Regular": require("../../assets/fonts/Figtree-Regular.ttf"),
-    "Figtree-Bold": require("../../assets/fonts/Figtree-Bold.ttf"),
-    "Figtree-SemiBold": require("../../assets/fonts/Figtree-SemiBold.ttf"),
-  });
 
   const {
     data: posts,
@@ -93,7 +88,7 @@ const Home = ({ navigation }) => {
     setScrollY(currentOffset);
   };
 
-  if ((isLoading && start === 1) || !fontsLoaded) {
+  if (isLoading && start === 1) {
     return (
       <ActivityIndicator
         size={"large"}

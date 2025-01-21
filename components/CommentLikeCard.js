@@ -11,8 +11,8 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
       <View
         style={{
           flexDirection: "row",
-          marginVertical: 5,
-          paddingVertical: 2,
+          marginVertical: 3,
+          paddingVertical: 7,
         }}
       >
         <View
