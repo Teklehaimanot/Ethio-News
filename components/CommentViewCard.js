@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { Dimensions, StyleSheet, View, Text } from "react-native";
-import { color } from "../utilities/Colors";
+import { ThemeContext } from "../utilities/ThemeProvider";
 
 const { width } = Dimensions.get("window");
 const CommentViewCard = ({ comment }) => {
@@ -19,18 +19,24 @@ const CommentViewCard = ({ comment }) => {
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   }, []);
+  const { theme } = useContext(ThemeContext);
   return (
     <View style={styles.commentCard} key={comment.comment._id}>
       <View style={styles.name}>
-        <View style={[styles.image, { backgroundColor: randomColor }]}>
-          <Text style={styles.text}>
+        <View
+          style={[
+            styles.image,
+            { borderColor: theme.bg, backgroundColor: randomColor },
+          ]}
+        >
+          <Text style={[styles.text, { color: theme.text }]}>
             {comment.comment.user.name.substring(0, 1).toUpperCase()}
           </Text>
         </View>
         <Text
           style={{
             fontFamily: "Figtree-Regular",
-            color: color.sourceColor,
+            color: theme.text2,
             fontSize: 16,
             lineHeight: 19.2,
           }}
@@ -50,8 +56,8 @@ const CommentViewCard = ({ comment }) => {
           style={{
             fontFamily: "Figtree-Regular",
             fontSize: 14,
-            color: color.fontColor,
-            marginBottom: 15, // Applying random color
+            color: theme.text,
+            marginBottom: 15,
           }}
         >
           {comment.comment.comment}
@@ -79,12 +85,11 @@ const styles = StyleSheet.create({
     borderRadius: (width * 0.1) / 2,
     alignItems: "center",
     justifyContent: "center",
-    borderColor: color.white,
+
     borderWidth: 0.5,
     marginRight: 10,
   },
   text: {
-    color: color.white,
     fontFamily: "Figtree-Bold",
     fontSize: 16,
     lineHeight: 19.2,
