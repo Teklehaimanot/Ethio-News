@@ -125,11 +125,11 @@ const RegisterAccount = ({ navigation }) => {
           onPress={handleSubmit}
         >
           {isLoading ? (
-            <ActivityIndicator size="small" color={theme.text} />
+            <ActivityIndicator size="small" color={theme.bg} />
           ) : (
             <Text
               style={{
-                color: theme.text,
+                color: theme.bg,
                 fontWeight: "bold",
                 fontSize: 15,
                 textAlign: "center",

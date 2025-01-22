@@ -9,9 +9,8 @@ import {
 } from "react-native";
 import { color } from "../../utilities/Colors";
 import { TextInput } from "react-native-gesture-handler";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
-// import { API_KEY } from "@env";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import * as AuthSession from "expo-auth-session";
@@ -21,6 +20,7 @@ import { login } from "../../state/auth/authSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import { ThemeContext } from "../../utilities/ThemeProvider";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -30,6 +30,7 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { theme } = useContext(ThemeContext);
   const dispatch = useDispatch();
   const redirectUri = AuthSession.makeRedirectUri({
     useProxy: true,
@@ -46,8 +47,6 @@ const LoginScreen = ({ navigation }) => {
   useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;
-      // Send id_token to your backend for verification
-      console.log(authentication);
     }
   }, [response]);
 
@@ -78,22 +77,22 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, { backgroundColor: theme.bg }]}>
+      <View style={[styles.header, { backgroundColor: theme.bg }]}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={styles.backIcon}
           >
-            <Feather name="arrow-left" size={24} color={color.fontColor} />
+            <Feather name="arrow-left" size={24} color={theme.text} />
           </TouchableOpacity>
-          <Text style={styles.title}>Login</Text>
+          <Text style={[styles.title, { color: theme.text }]}>Login</Text>
         </View>
       </View>
-      <View style={styles.loginCard}>
+      <View style={[styles.loginCard, { borderColor: theme.text2 }]}>
         <Text
           style={{
-            color: color.error,
+            color: theme.error,
           }}
         >
           {errors}
@@ -101,7 +100,7 @@ const LoginScreen = ({ navigation }) => {
         <Text
           style={{
             fontWeight: "bold",
-            color: color.primary,
+            color: theme.primary,
             paddingHorizontal: 5,
             fontSize: 20,
           }}
@@ -110,24 +109,29 @@ const LoginScreen = ({ navigation }) => {
         </Text>
         <TextInput
           placeholder="Email"
-          style={styles.textInput}
+          style={[styles.textInput, { backgroundColor: theme.bg2 }]}
+          placeholderTextColor={theme.text2}
           onChangeText={(text) => setEmail(text)}
           value={email}
         />
         <TextInput
           placeholder="Password"
-          style={styles.textInput}
+          style={[styles.textInput, { backgroundColor: theme.bg2 }]}
+          placeholderTextColor={theme.text2}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
         />
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: theme.primary }]}
+          onPress={handleSubmit}
+        >
           {isLoading ? (
-            <ActivityIndicator size="small" color={color.white} />
+            <ActivityIndicator size="small" color={theme.bg} />
           ) : (
             <Text
               style={{
-                color: color.white,
+                color: theme.bg,
                 fontWeight: "bold",
                 fontSize: 15,
                 textAlign: "center",
@@ -140,15 +144,15 @@ const LoginScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         <View style={styles.createAccount}>
-          <Text style={{ color: color.blue }}>New user?</Text>
+          <Text style={{ color: theme.icon }}>New user?</Text>
           <TouchableOpacity onPress={() => navigation.navigate("signUp")}>
-            <Text style={{ color: color.blue }}>Create an Account</Text>
+            <Text style={{ color: theme.icon }}>Create an Account</Text>
           </TouchableOpacity>
         </View>
       </View>
       <TouchableOpacity
         style={{
-          backgroundColor: color.blue,
+          backgroundColor: theme.icon,
           width: width * 0.5,
           marginHorizontal: "auto",
           paddingVertical: 20,
@@ -163,7 +167,7 @@ const LoginScreen = ({ navigation }) => {
       >
         <Text
           style={{
-            color: color.white,
+            color: theme.bg,
             fontWeight: "bold",
             textAlign: "center",
           }}
@@ -178,10 +182,8 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.white,
   },
   header: {
-    backgroundColor: color.white,
     marginHorizontal: 20,
     marginBottom: 15,
     flexDirection: "row",
@@ -193,7 +195,6 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   title: {
-    color: color.fontColor,
     fontFamily: "Figtree-Bold",
     fontSize: 18,
     lineHeight: 19.2,
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
     marginVertical: 40,
     padding: 25,
     borderWidth: 0.5,
-    borderColor: color.sourceColor,
+
     borderRadius: 15,
   },
   textInput: {
@@ -214,10 +215,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     marginVertical: 7,
     borderRadius: 5,
-    backgroundColor: color.white,
   },
   button: {
-    backgroundColor: color.primary,
     margin: 5,
     borderRadius: 5,
     paddingVertical: 14,
