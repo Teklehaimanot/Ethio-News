@@ -214,6 +214,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     flex: 1,
+    marginHorizontal: 15,
   },
 
   scrollToTopButton: {

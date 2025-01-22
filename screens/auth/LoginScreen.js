@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
     fontFamily: "Figtree-Bold",
     fontSize: 18,
     lineHeight: 19.2,
+    marginHorizontal: 15,
   },
   loginCard: {
     width: width * 0.88,
