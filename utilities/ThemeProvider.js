@@ -17,8 +17,8 @@ const ThemeProvider = ({ children }) => {
         text2: "#B3B3B3",
         primary: "#2D78A4",
         active: "#ffffff",
-        secondary: "#f8f8f2",
         icon: "#0e76a8",
+        error: "red",
       }
     : {
         bg: "#ffffff",
@@ -28,6 +28,7 @@ const ThemeProvider = ({ children }) => {
         primary: "#2D78A4",
         active: "#ffffff",
         icon: "#3A9CF1",
+        error: "red",
       };
 
   return (

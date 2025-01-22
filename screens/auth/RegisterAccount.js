@@ -5,19 +5,17 @@ import {
   Dimensions,
   Pressable,
   ActivityIndicator,
-  ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { color } from "../../utilities/Colors";
 import { TextInput } from "react-native-gesture-handler";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Feather } from "@expo/vector-icons";
-// import { API_KEY } from "@env";
 import { baseUrl } from "../../config";
 import { login } from "../../state/auth/authSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import { ThemeContext } from "../../utilities/ThemeProvider";
 
 const { width } = Dimensions.get("window");
 const RegisterAccount = ({ navigation }) => {
@@ -27,6 +25,7 @@ const RegisterAccount = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { theme } = useContext(ThemeContext);
   const dispatch = useDispatch();
   const basicUrl = baseUrl;
 
@@ -59,22 +58,24 @@ const RegisterAccount = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, { backgroundColor: theme.bg }]}>
+      <View style={[styles.header, { backgroundColor: theme.bg }]}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={styles.backIcon}
           >
-            <Feather name="arrow-left" size={24} color={color.fontColor} />
+            <Feather name="arrow-left" size={24} color={theme.text} />
           </TouchableOpacity>
-          <Text style={styles.title}>Create Account</Text>
+          <Text style={[styles.title, { color: theme.text }]}>
+            Create Account
+          </Text>
         </View>
       </View>
-      <View style={styles.loginCard}>
+      <View style={[styles.loginCard, { borderColor: theme.text2 }]}>
         <Text
           style={{
-            color: color.error,
+            color: theme.error,
           }}
         >
           {errors}
@@ -82,7 +83,7 @@ const RegisterAccount = ({ navigation }) => {
         <Text
           style={{
             fontWeight: "bold",
-            color: color.primary,
+            color: theme.primary,
             paddingHorizontal: 5,
             fontSize: 20,
           }}
@@ -91,37 +92,44 @@ const RegisterAccount = ({ navigation }) => {
         </Text>
         <TextInput
           placeholder="Name"
-          style={styles.textInput}
+          style={[styles.textInput, { backgroundColor: theme.bg2 }]}
+          placeholderTextColor={theme.text2}
           onChangeText={(text) => setName(text)}
           value={name}
         />
         <TextInput
           placeholder="Email"
-          style={styles.textInput}
+          style={[styles.textInput, { backgroundColor: theme.bg2 }]}
+          placeholderTextColor={theme.text2}
           onChangeText={(text) => setEmail(text)}
           value={email}
         />
         <TextInput
           placeholder="Password"
-          style={styles.textInput}
+          style={[styles.textInput, { backgroundColor: theme.bg2 }]}
+          placeholderTextColor={theme.text2}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
         />
         <TextInput
           placeholder="Confirm Password"
-          style={styles.textInput}
+          style={[styles.textInput, { backgroundColor: theme.bg2 }]}
+          placeholderTextColor={theme.text2}
           onChangeText={(text) => setConfirmPassword(text)}
           value={confirmPassword}
           secureTextEntry={true}
         />
-        <Pressable style={styles.button} onPress={handleSubmit}>
+        <Pressable
+          style={[styles.button, { backgroundColor: theme.primary }]}
+          onPress={handleSubmit}
+        >
           {isLoading ? (
-            <ActivityIndicator size="small" color={color.white} />
+            <ActivityIndicator size="small" color={theme.text} />
           ) : (
             <Text
               style={{
-                color: color.white,
+                color: theme.text,
                 fontWeight: "bold",
                 fontSize: 15,
                 textAlign: "center",
@@ -134,9 +142,9 @@ const RegisterAccount = ({ navigation }) => {
         </Pressable>
 
         <View style={styles.createAccount}>
-          <Text style={{ color: color.blue }}>Have an Account?</Text>
+          <Text style={{ color: theme.icon }}>Have an Account?</Text>
           <Pressable onPress={() => navigation.navigate("login")}>
-            <Text style={{ color: color.blue }}>Login</Text>
+            <Text style={{ color: theme.icon }}>Login</Text>
           </Pressable>
         </View>
       </View>
@@ -147,10 +155,8 @@ const RegisterAccount = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.white,
   },
   header: {
-    backgroundColor: color.white,
     marginHorizontal: 20,
     marginBottom: 15,
     flexDirection: "row",
@@ -159,7 +165,6 @@ const styles = StyleSheet.create({
     height: 60,
   },
   title: {
-    color: color.fontColor,
     fontFamily: "Figtree-Bold",
     fontSize: 18,
     lineHeight: 19.2,
@@ -175,17 +180,14 @@ const styles = StyleSheet.create({
     marginVertical: 40,
     padding: 25,
     borderWidth: 0.5,
-    borderColor: color.sourceColor,
   },
   textInput: {
     padding: 8,
     marginHorizontal: 5,
     marginVertical: 7,
     borderRadius: 5,
-    backgroundColor: color.white,
   },
   button: {
-    backgroundColor: color.primary,
     margin: 5,
     borderRadius: 5,
     paddingVertical: 14,
