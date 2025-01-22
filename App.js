@@ -4,13 +4,16 @@ import RootNavigator from "./navigators/RootNavigator";
 import { Provider } from "react-redux";
 import store from "./state/store";
 import { QueryClient, QueryClientProvider } from "react-query";
+import ThemeProvider from "./utilities/ThemeProvider";
 
 export default function App() {
   const queryClient = new QueryClient();
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <RootNavigator />
+        <ThemeProvider>
+          <RootNavigator />
+        </ThemeProvider>
       </QueryClientProvider>
     </Provider>
   );

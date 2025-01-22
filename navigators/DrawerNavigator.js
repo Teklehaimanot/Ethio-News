@@ -4,16 +4,19 @@ import CustomSidebarMenu from "../components/DrawerContent";
 import BookMarks from "../screens/bookmarks/BookMarks";
 import { Ionicons } from "@expo/vector-icons";
 import Home from "../screens/home/Home";
+import { useContext } from "react";
+import { ThemeContext } from "../utilities/ThemeProvider";
 
 const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => {
+  const { theme } = useContext(ThemeContext);
   return (
     <Drawer.Navigator
       initialRouteName="News"
       screenOptions={{
-        drawerInactiveTintColor: color.primary,
-        drawerActiveTintColor: color.white,
-        drawerActiveBackgroundColor: color.primary,
+        drawerInactiveTintColor: theme.text,
+        drawerActiveTintColor: theme.active,
+        drawerActiveBackgroundColor: theme.primary,
         drawerItemStyle: { marginVertical: 10 },
         drawerLabelStyle: { fontSize: 16 },
         headerShown: false,
@@ -30,7 +33,7 @@ const DrawerNavigator = () => {
             <Ionicons
               name={focused ? "home" : "home-outline"}
               size={20}
-              color={focused ? color.white : color.active}
+              color={focused ? theme.active : theme.text}
             />
           ),
         }}
@@ -45,7 +48,7 @@ const DrawerNavigator = () => {
             <Ionicons
               name={focused ? "bookmark" : "bookmark-outline"}
               size={20}
-              color={focused ? color.white : color.active}
+              color={focused ? theme.active : theme.text}
             />
           ),
         }}

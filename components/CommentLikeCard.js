@@ -2,9 +2,12 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { color } from "../utilities/Colors";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import { useSelector } from "react-redux";
+import { useContext } from "react";
+import { ThemeContext } from "../utilities/ThemeProvider";
 
 const CommentLikeCard = ({ news, navigation, handleLiked }) => {
   const { user } = useSelector((state) => state.auth);
+  const { theme } = useContext(ThemeContext);
 
   return (
     <View style={styles.bottomCardStyle}>
@@ -31,9 +34,9 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
               <EvilIcons
                 name="like"
                 size={32}
-                color={color.fontColor}
+                color={theme.text}
                 style={
-                  news.likedBy?.includes(user?.id) ? styles.likedeButton : " "
+                  news.likedBy?.includes(user?.id) ? { color: theme.icon } : " "
                 }
               />
             </TouchableOpacity>
@@ -51,6 +54,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
                     fontFamily: "Figtree-Regular",
                     fontSize: 14,
                     lineHeight: 19.2,
+                    color: theme.text,
                   }}
                 >
                   {news.likes > 99999
@@ -64,6 +68,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
                     fontFamily: "Figtree-Regular",
                     fontSize: 14,
                     lineHeight: 19.2,
+                    color: theme.text,
                   }}
                 >
                   {news.likes === 1 ? " Like " : " Likes "}
@@ -82,7 +87,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
                 })
               }
             >
-              <EvilIcons name="comment" size={28} color={color.fontColor} />
+              <EvilIcons name="comment" size={28} color={theme.text} />
             </TouchableOpacity>
           </View>
           <View>
@@ -98,6 +103,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
                     fontFamily: "Figtree-Regular",
                     fontSize: 14,
                     lineHeight: 19.2,
+                    color: theme.text,
                   }}
                 >
                   {news?.comments?.length}
@@ -107,6 +113,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
                     fontFamily: "Figtree-Regular",
                     fontSize: 14,
                     lineHeight: 19.2,
+                    color: theme.text,
                   }}
                   onPress={() =>
                     navigation.navigate("comments", {
@@ -132,9 +139,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginVertical: 15,
     marginHorizontal: 25,
-  },
-  likedeButton: {
-    color: color.blue,
   },
 });
 export default CommentLikeCard;

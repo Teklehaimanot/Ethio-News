@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Dimensions,
   SafeAreaView,
@@ -8,13 +8,12 @@ import {
   Text,
   Image,
 } from "react-native";
-import { color } from "../utilities/Colors";
 import CommentLikeCard from "./CommentLikeCard";
 import { useSelector } from "react-redux";
 import { useLikeNewsByIdMutation } from "../services";
-import { useFonts } from "expo-font";
 import { baseUrl } from "../config";
 import moment from "moment";
+import { ThemeContext } from "../utilities/ThemeProvider";
 
 const BASE_URL = baseUrl;
 const { width } = Dimensions.get("window");
@@ -23,6 +22,7 @@ const NewsCard = ({ item, navigation }) => {
   const [news, setNews] = useState({});
   const { user } = useSelector((state) => state.auth);
   const [likeNews] = useLikeNewsByIdMutation();
+  const { theme } = useContext(ThemeContext);
 
   const now = moment();
   const postMoment = moment(news.date);
@@ -32,9 +32,9 @@ const NewsCard = ({ item, navigation }) => {
 
   const formatDate = () => {
     if (diffInYears >= 1) {
-      return postMoment.format("MMM D, YYYY"); // Example: Aug 1, 2023
+      return postMoment.format("MMM D, YYYY");
     } else if (diffInDays > 7) {
-      return postMoment.format("MMM D"); // Example: Aug 1
+      return postMoment.format("MMM D");
     } else if (diffInDays >= 1) {
       return `${diffInDays} d`;
     } else if (now.diff(postMoment, "hours") >= 1) {
@@ -50,7 +50,6 @@ const NewsCard = ({ item, navigation }) => {
     setNews(item);
   }, [item]);
 
-  // console.log(news.image);
   const handleLiked = (newsid) => {
     try {
       if (user) {
@@ -74,7 +73,12 @@ const NewsCard = ({ item, navigation }) => {
 
   return (
     news && (
-      <SafeAreaView style={styles.cardview}>
+      <SafeAreaView
+        style={[
+          styles.cardview,
+          { backgroundColor: theme.bg2, borderColor: theme.text },
+        ]}
+      >
         <TouchableOpacity
           onPress={() =>
             navigation.navigate("Details", {
@@ -105,14 +109,19 @@ const NewsCard = ({ item, navigation }) => {
                 flexDirection: "row",
                 marginVertical: 20,
                 marginHorizontal: 25,
+                alignItems: "center",
               }}
             >
-              <Text style={styles.sourceStyle}>
+              <Text style={[styles.sourceStyle, { color: theme.text2 }]}>
                 {news.source ? `${news.source + " " + "|" + " "}` : " "}
               </Text>
-              <Text style={styles.sourceStyle}>{formatDate()}</Text>
+              <Text style={(styles.sourceStyle, { color: theme.text2 })}>
+                {formatDate()}
+              </Text>
             </View>
-            <Text style={styles.titleStyle}>{news.title}</Text>
+            <Text style={[styles.titleStyle, { color: theme.text }]}>
+              {news.title}
+            </Text>
           </View>
         </TouchableOpacity>
         <CommentLikeCard
@@ -127,11 +136,9 @@ const NewsCard = ({ item, navigation }) => {
 };
 const styles = StyleSheet.create({
   cardview: {
-    backgroundColor: color.white,
     flexDirection: "column",
     justifyContent: "space-between",
     width: width * 0.92,
-    borderColor: color.white,
     marginTop: width * 0.07,
     marginHorizontal: "auto",
     borderRadius: 10,
@@ -146,14 +153,12 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   titleStyle: {
-    color: color.fontColor,
     paddingHorizontal: 25,
     fontFamily: "Figtree-SemiBold",
     fontSize: 16,
     lineHeight: 19.2,
   },
   sourceStyle: {
-    color: color.sourceColor,
     fontFamily: "Figtree-Regular",
     fontSize: 14.5,
     lineHeight: 16.5,

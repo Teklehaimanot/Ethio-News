@@ -1,15 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
-import DrawerNavigator from "./DrawerNavigator";
 import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import { login } from "../state/auth/authSlice";
 import { StatusBar } from "react-native";
-import { color } from "../utilities/Colors";
 import HomeScreenNavigator from "./HomeScreenNavigator";
 import { useFonts } from "expo-font";
+import { ThemeContext } from "../utilities/ThemeProvider";
 
 const RootNavigator = () => {
   const [fontsLoaded] = useFonts({
@@ -18,6 +17,7 @@ const RootNavigator = () => {
     "Figtree-SemiBold": require("../assets/fonts/Figtree-SemiBold.ttf"),
   });
 
+  const { theme } = useContext(ThemeContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,7 +47,10 @@ const RootNavigator = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       {fontsLoaded && (
         <NavigationContainer>
-          <StatusBar backgroundColor={color.white} barStyle={"dark-content"} />
+          <StatusBar
+            backgroundColor={theme.bg}
+            barStyle={theme.isDark ? "light-content" : "dark-content"}
+          />
           <HomeScreenNavigator />
         </NavigationContainer>
       )}

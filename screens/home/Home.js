@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   FlatList,
@@ -11,13 +11,13 @@ import {
   Animated,
 } from "react-native";
 import { useGetNewsQuery } from "../../services";
-import { color } from "../../utilities/Colors";
 import NewsCard from "../../components/NewsCard";
 import Error from "../../components/Error";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { ThemeContext } from "../../utilities/ThemeProvider";
 
 const initialLimit = 15;
 const initialStart = 1;
@@ -31,6 +31,7 @@ const Home = ({ navigation }) => {
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const headerOffset = useState(new Animated.Value(0))[0];
   const flatListRef = React.useRef(null);
+  const { theme } = useContext(ThemeContext);
 
   const {
     data: posts,
@@ -101,7 +102,7 @@ const Home = ({ navigation }) => {
     return (
       <ActivityIndicator
         size={"large"}
-        color={color.primary}
+        color={theme.primary}
         style={{ marginVertical: "auto" }}
       />
     );
@@ -112,17 +113,25 @@ const Home = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.bg }]}>
       <Animated.View
-        style={[styles.header, { transform: [{ translateY: headerOffset }] }]}
+        style={[
+          styles.header,
+          {
+            backgroundColor: theme.bg,
+            transform: [{ translateY: headerOffset }],
+          },
+        ]}
       >
         <TouchableOpacity
           onPress={() => navigation.openDrawer()}
           style={styles.drawerIcon}
         >
-          <MaterialIcons name="menu" size={28} color={color.fontColor} />
+          <MaterialIcons name="menu" size={28} color={theme.text} />
         </TouchableOpacity>
-        <Text style={styles.title}>Ethiopian News</Text>
+        <Text style={[styles.title, { color: theme.text }]}>
+          Ethiopian News
+        </Text>
 
         <TouchableOpacity
           onPress={() => navigation.navigate("search")}
@@ -131,7 +140,7 @@ const Home = ({ navigation }) => {
           <Feather
             name="search"
             size={24}
-            color={color.fontColor}
+            color={theme.text}
             style={styles.searchIcon}
           />
         </TouchableOpacity>
@@ -139,7 +148,7 @@ const Home = ({ navigation }) => {
       {refreshing && <View style={{ height: 60 }}></View>}
       <FlatList
         ref={flatListRef}
-        style={styles.cardList}
+        style={{ backgroundColor: theme.bg }}
         data={news}
         keyExtractor={(item) => item._id}
         onEndReached={handleEndReached}
@@ -156,13 +165,13 @@ const Home = ({ navigation }) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            colors={[color.primary]}
+            colors={[theme.primary]}
           />
         }
         ListFooterComponent={() => (
           <View>
             {isFetching && (
-              <ActivityIndicator size="large" color={color.primary} />
+              <ActivityIndicator size="large" color={theme.primary} />
             )}
           </View>
         )}
@@ -170,10 +179,10 @@ const Home = ({ navigation }) => {
 
       {showScrollToTop && (
         <TouchableOpacity
-          style={styles.scrollToTopButton}
+          style={[styles.scrollToTopButton, { backgroundColor: theme.primary }]}
           onPress={handleScrollToTop}
         >
-          <AntDesign name="arrowup" size={24} color="white" />
+          <AntDesign name="arrowup" size={24} color={theme.active} />
         </TouchableOpacity>
       )}
     </SafeAreaView>
@@ -183,7 +192,6 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.white,
   },
   header: {
     position: "absolute",
@@ -197,28 +205,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     height: 60,
-    backgroundColor: color.white,
   },
   drawerIcon: {
     marginRight: 25,
   },
   title: {
-    color: color.fontColor,
     fontFamily: "Figtree-Bold",
     fontSize: 20,
     fontWeight: "bold",
     flex: 1,
   },
-  cardList: {
-    backgroundColor: color.white,
-  },
+
   scrollToTopButton: {
     position: "absolute",
     bottom: 20,
     right: 20,
     width: 50,
     height: 50,
-    backgroundColor: color.primary,
     borderRadius: 25,
     alignItems: "center",
     justifyContent: "center",
