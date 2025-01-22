@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -8,13 +8,14 @@ import {
   Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { color } from "../../utilities/Colors";
 import { Feather } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { ThemeContext } from "../../utilities/ThemeProvider";
 
 const { width } = Dimensions.get("window");
 const ContactUs = ({ navigation }) => {
+  const { theme } = useContext(ThemeContext);
   const handleEmailPress = () => {
     Linking.openURL("mailto:kelaltech24@gmail.com?subject=Support Request");
   };
@@ -31,23 +32,23 @@ const ContactUs = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, { backgroundColor: theme.bg }]}>
+      <View style={[styles.header, { backgroundColor: theme.bg }]}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={styles.backIcon}
           >
-            <Feather name="arrow-left" size={24} color={color.fontColor} />
+            <Feather name="arrow-left" size={24} color={theme.text} />
           </TouchableOpacity>
 
-          <Text style={styles.title}>Contact Us</Text>
+          <Text style={[styles.title, { color: theme.text }]}>Contact Us</Text>
         </View>
       </View>
-      <View style={styles.contactUscontainer}>
+      <View style={[styles.contactUscontainer, { borderColor: theme.text2 }]}>
         <View style={styles.emailCard}>
-          <Text style={styles.emailText}>Email</Text>
-          <Ionicons name="mail-outline" size={24} color={color.primary} />
+          <Text style={[styles.emailText, { color: theme.text }]}>Email</Text>
+          <Ionicons name="mail-outline" size={24} color={theme.primary} />
         </View>
         <TouchableOpacity
           onPress={handleEmailPress}
@@ -55,7 +56,7 @@ const ContactUs = ({ navigation }) => {
         >
           <Text
             style={{
-              color: color.primary,
+              color: theme.primary,
               fontFamily: "Figtree-Regular",
               fontSize: 16,
               lineHeight: 19.2,
@@ -66,10 +67,12 @@ const ContactUs = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.contactUscontainer}>
+      <View style={[styles.contactUscontainer, { borderColor: theme.text2 }]}>
         <View style={styles.emailCard}>
-          <Text style={styles.emailText}>Pone number</Text>
-          <Ionicons name="call-outline" size={24} color={color.primary} />
+          <Text style={[styles.emailText, { color: theme.text }]}>
+            Pone number
+          </Text>
+          <Ionicons name="call-outline" size={24} color={theme.primary} />
         </View>
         <TouchableOpacity
           onPress={handlePhonePress}
@@ -77,7 +80,7 @@ const ContactUs = ({ navigation }) => {
         >
           <Text
             style={{
-              color: color.primary,
+              color: theme.primary,
               fontFamily: "Figtree-Regular",
               fontSize: 16,
               lineHeight: 19.2,
@@ -87,7 +90,7 @@ const ContactUs = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.contactUscontainer}>
+      <View style={[styles.contactUscontainer, { borderColor: theme.text2 }]}>
         <View
           style={{
             flexDirection: "row",
@@ -95,26 +98,14 @@ const ContactUs = ({ navigation }) => {
             alignItems: "center",
           }}
         >
-          {/* <TouchableOpacity
-            onPress={handleEmailPress}
-            style={{ marginRight: 15 }}
-          >
-            <Ionicons name="mail-outline" size={32} color={color.primary} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handlePhonePress}
-            style={{ marginRight: 15 }}
-          >
-            <Ionicons name="call-outline" size={32} color={color.fontColor} />
-          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={handleTelegramPress}
             style={{ marginRight: 20 }}
           >
-            <FontAwesome name="telegram" size={32} color={color.primary} />
+            <FontAwesome name="telegram" size={32} color={theme.primary} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleTikTokPress}>
-            <FontAwesome5 name="tiktok" size={32} color={color.fontColor} />
+            <FontAwesome5 name="tiktok" size={32} color={theme.text} />
           </TouchableOpacity>
         </View>
       </View>
@@ -125,10 +116,8 @@ const ContactUs = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.white,
   },
   header: {
-    backgroundColor: color.white,
     marginHorizontal: 20,
     marginBottom: 15,
     flexDirection: "row",
@@ -137,7 +126,6 @@ const styles = StyleSheet.create({
     height: 60,
   },
   title: {
-    color: color.fontColor,
     fontFamily: "Figtree-Bold",
     fontSize: 18,
     lineHeight: 19.2,
@@ -148,7 +136,7 @@ const styles = StyleSheet.create({
     width: width * 0.92,
     marginHorizontal: "auto",
     borderWidth: 0.5,
-    borderColor: color.sourceColor,
+
     paddingVertical: 30,
     borderRadius: 8,
     marginTop: 25,
@@ -164,7 +152,6 @@ const styles = StyleSheet.create({
     fontFamily: "Figtree-Regular",
     fontSize: 18,
     lineHeight: 19.2,
-    color: color.fontColor,
     paddingBottom: 10,
   },
 });
