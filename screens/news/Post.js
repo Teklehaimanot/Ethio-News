@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -20,11 +20,11 @@ import {
   isBookmarked as checkIsBookmarked,
 } from "../../utilities/Bookmark";
 import moment from "moment";
-import { color } from "../../utilities/Colors";
 import CommentLikeCard from "../../components/CommentLikeCard";
 import Loading from "../../components/Loading";
 import Error from "../../components/Error";
 import Feather from "@expo/vector-icons/Feather";
+import { ThemeContext } from "../../utilities/ThemeProvider";
 
 const { width } = Dimensions.get("window");
 const Post = ({ route, navigation }) => {
@@ -36,6 +36,7 @@ const Post = ({ route, navigation }) => {
   const [news, setNews] = useState({});
   const [refreshing, setRefreshing] = useState(false);
   const [likeNews] = useLikeNewsByIdMutation();
+  const { theme } = useContext(ThemeContext);
 
   const now = moment();
   const postMoment = moment(date);
@@ -122,32 +123,34 @@ const Post = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.bg }]}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <View style={styles.header}>
+        <View style={[styles.header, { backgroundColor: theme.bg }]}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={styles.backIcon}
             >
-              <Feather name="arrow-left" size={24} color={color.fontColor} />
+              <Feather name="arrow-left" size={24} color={theme.text} />
             </TouchableOpacity>
 
-            <Text style={styles.title}>News Detail</Text>
+            <Text style={[styles.title, { color: theme.text }]}>
+              News Detail
+            </Text>
           </View>
           <FontAwesome
             name={isBookmarked ? "bookmark" : "bookmark-o"}
             size={24}
-            color={color.fontColor}
+            color={theme.text}
             onPress={handleBookmark}
           />
         </View>
 
-        <View style={styles.imageCard}>
+        <View style={[styles.imageCard, { backgroundColor: theme.bg2 }]}>
           <Image style={styles.image} source={{ uri: image }} />
         </View>
         <View
@@ -157,13 +160,19 @@ const Post = ({ route, navigation }) => {
             marginBottom: 20,
           }}
         >
-          <Text style={styles.sourceText} onPress={openSourceUrl}>
+          <Text
+            style={[styles.sourceText, { color: theme.text2 }]}
+            onPress={openSourceUrl}
+          >
             {source ? `${source} ` : " "}
           </Text>
-          <Text style={styles.sourceText}>{`  | ${formatDate()}`}</Text>
+          <Text
+            style={[styles.sourceText, { color: theme.text2 }]}
+          >{`  | ${formatDate()}`}</Text>
         </View>
-        <Text style={styles.description}>{description}</Text>
-        {/* <Text style={styles.description}>{description}</Text> */}
+        <Text style={[styles.description, { color: theme.text }]}>
+          {description}
+        </Text>
         {isLoading ? (
           <Loading size={"small"} />
         ) : (
@@ -186,10 +195,8 @@ export default Post;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.white,
   },
   header: {
-    backgroundColor: color.white,
     marginHorizontal: 20,
     marginBottom: 15,
     flexDirection: "row",
@@ -201,20 +208,17 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   title: {
-    color: color.fontColor,
     fontFamily: "Figtree-Bold",
     fontSize: 18,
     lineHeight: 19.2,
   },
   description: {
-    color: color.fontColor,
     paddingHorizontal: 20,
     fontFamily: "Figtree-Regular",
     fontSize: 16,
     lineHeight: 19.2,
   },
   sourceText: {
-    color: color.sourceColor,
     fontFamily: "Figtree-Regular",
     fontSize: 14,
     lineHeight: 16.5,
@@ -225,7 +229,6 @@ const styles = StyleSheet.create({
     height: 300,
     marginHorizontal: "auto",
     borderRadius: 10,
-    borderColor: color.white,
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,
@@ -245,12 +248,5 @@ const styles = StyleSheet.create({
   likeButton: {
     paddingHorizontal: 10,
     paddingVertical: 2,
-  },
-  likedeButton: {
-    backgroundColor: color.blueOcean,
-    color: color.white,
-    width: 20,
-    height: 20,
-    borderRadius: 50,
   },
 });
