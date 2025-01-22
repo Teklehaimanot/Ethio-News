@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import {
   View,
   FlatList,
@@ -12,10 +12,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useGetNewsByTitleQuery } from "../../services";
-import { color } from "../../utilities/Colors";
 import NewsCard from "../../components/NewsCard";
 import Error from "../../components/Error";
 import { Feather } from "@expo/vector-icons";
+import { ThemeContext } from "../../utilities/ThemeProvider";
 
 const initialLimit = 15;
 const initialStart = 1;
@@ -28,6 +28,7 @@ const SearchScreen = ({ navigation, route }) => {
   const [scrollY, setScrollY] = useState(0);
   const headerOffset = useState(new Animated.Value(0))[0];
   const [searchQuery, setSearchQuery] = useState("");
+  const { theme } = useContext(ThemeContext);
 
   const searchInputRef = useRef(null); // Reference for the TextInput
 
@@ -104,7 +105,7 @@ const SearchScreen = ({ navigation, route }) => {
   };
 
   if (isLoading && start === 1 && searchQuery) {
-    return <ActivityIndicator size={"large"} color={color.primary} />;
+    return <ActivityIndicator size={"large"} color={theme.primary} />;
   }
 
   if (isError) {
@@ -112,29 +113,40 @@ const SearchScreen = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.bg }]}>
       <Animated.View
-        style={[styles.header, { transform: [{ translateY: headerOffset }] }]}
+        style={[
+          styles.header,
+          {
+            backgroundColor: theme.bg,
+            transform: [{ translateY: headerOffset }],
+          },
+        ]}
       >
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backIcon}
         >
-          <Feather name="arrow-left" size={24} color={color.fontColor} />
+          <Feather name="arrow-left" size={24} color={theme.text} />
         </TouchableOpacity>
 
-        <View style={styles.searchContainer}>
+        <View
+          style={[
+            styles.searchContainer,
+            { borderColor: theme.text2, backgroundColor: theme.bg },
+          ]}
+        >
           <Feather
             name="search"
             size={20}
-            color={color.fontColor}
+            color={theme.text}
             style={styles.searchIcon}
           />
           <TextInput
             ref={searchInputRef}
-            style={styles.searchInput}
+            style={[styles.searchInput, { color: theme.text }]}
             placeholder="Search news..."
-            placeholderTextColor={color.sourceColor}
+            placeholderTextColor={theme.text2}
             value={searchQuery}
             onChangeText={handleSearchChange}
             autoCorrect={false}
@@ -145,7 +157,7 @@ const SearchScreen = ({ navigation, route }) => {
       {refreshing && <View style={{ height: 60 }}></View>}
       {searchQuery && (
         <FlatList
-          style={styles.cardList}
+          style={{ backgroundColor: theme.bg }}
           data={news}
           keyExtractor={(item) => item._id}
           onEndReached={handleEndReached}
@@ -163,7 +175,7 @@ const SearchScreen = ({ navigation, route }) => {
           }
           ListFooterComponent={() =>
             isFetching && (
-              <ActivityIndicator size="large" color={color.primary} />
+              <ActivityIndicator size="large" color={theme.primary} />
             )
           }
         />
@@ -175,7 +187,6 @@ const SearchScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.white,
   },
   header: {
     position: "absolute",
@@ -187,7 +198,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 15,
     height: 60,
-    backgroundColor: color.white,
   },
   backIcon: {
     marginRight: 15,
@@ -195,13 +205,12 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: color.white,
     borderRadius: 25,
     flex: 1,
     paddingHorizontal: 10,
     paddingVertical: 3,
     borderWidth: 0.5,
-    borderColor: color.sourceColor,
+    marginHorizontal: 15,
   },
   searchIcon: {
     marginRight: 8,
@@ -209,10 +218,9 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: color.fontColor,
   },
-  cardList: {
-    backgroundColor: color.white,
+  listContainer: {
+    paddingHorizontal: 15,
   },
   listContent: {
     paddingVertical: 10,
