@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   FlatList,
@@ -11,18 +11,19 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { useGetBookmarksQuery } from "../../services";
-import { color } from "../../utilities/Colors";
 import NewsCard from "../../components/NewsCard";
 import Error from "../../components/Error";
 import { getBookmarks } from "../../utilities/Bookmark";
 import { RefreshControl } from "react-native-gesture-handler";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { ThemeContext } from "../../utilities/ThemeProvider";
 const { width } = Dimensions.get("window");
 const BookMarks = ({ navigation }) => {
   const [isRefreshing, setRefreshing] = useState(false);
   const [bookmarkedIds, setBookmarkIds] = useState([]);
   const [scrollY, setScrollY] = useState(0); // Store the current scroll position
   const headerOffset = useState(new Animated.Value(0))[0];
+  const { theme } = useContext(ThemeContext);
 
   const [fontsLoaded] = useFonts({
     "Figtree-Regular": require("../../assets/fonts/Figtree-Regular.ttf"),
@@ -90,7 +91,7 @@ const BookMarks = ({ navigation }) => {
     return (
       <ActivityIndicator
         size={"large"}
-        color={color.primary}
+        color={theme.primary}
         style={{ marginVertical: "auto" }}
       />
     );
@@ -106,7 +107,7 @@ const BookMarks = ({ navigation }) => {
             onPress={() => navigation.openDrawer()}
             style={styles.drawerIcon}
           >
-            <MaterialIcons name="menu" size={28} color={color.fontColor} />
+            <MaterialIcons name="menu" size={28} color={theme.text} />
           </TouchableOpacity>
           <Text style={styles.title}>Bookmarks</Text>
         </Animated.View>
@@ -114,7 +115,7 @@ const BookMarks = ({ navigation }) => {
           style={{
             fontFamily: "Figtree-Regular",
             fontSize: 16,
-            color: color.sourceColor,
+            color: theme.text2,
           }}
         >
           Your data has been deleted from the server.
@@ -131,15 +132,21 @@ const BookMarks = ({ navigation }) => {
     return (
       <View style={styles.container}>
         <Animated.View
-          style={[styles.header, { transform: [{ translateY: headerOffset }] }]}
+          style={[
+            styles.header,
+            {
+              backgroundColor: theme.bg,
+              transform: [{ translateY: headerOffset }],
+            },
+          ]}
         >
           <TouchableOpacity
             onPress={() => navigation.openDrawer()}
             style={styles.drawerIcon}
           >
-            <MaterialIcons name="menu" size={28} color={color.fontColor} />
+            <MaterialIcons name="menu" size={28} color={theme.text} />
           </TouchableOpacity>
-          <Text style={styles.title}>Bookmarks</Text>
+          <Text style={[styles.title, { color: theme.text }]}>Bookmarks</Text>
         </Animated.View>
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -148,7 +155,7 @@ const BookMarks = ({ navigation }) => {
             style={{
               fontFamily: "Figtree-Regular",
               fontSize: 16,
-              color: color.sourceColor,
+              color: theme.text,
             }}
           >
             No Bookmarks Found
@@ -159,21 +166,27 @@ const BookMarks = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.bg }]}>
       <Animated.View
-        style={[styles.header, { transform: [{ translateY: headerOffset }] }]}
+        style={[
+          styles.header,
+          {
+            backgroundColor: theme.bg,
+            transform: [{ translateY: headerOffset }],
+          },
+        ]}
       >
         <TouchableOpacity
           onPress={() => navigation.openDrawer()}
           style={styles.drawerIcon}
         >
-          <MaterialIcons name="menu" size={28} color={color.fontColor} />
+          <MaterialIcons name="menu" size={28} color={theme.text} />
         </TouchableOpacity>
-        <Text style={styles.title}>Bookmarks</Text>
+        <Text style={[styles.title, { color: theme.text }]}>Bookmarks</Text>
       </Animated.View>
       {isRefreshing && <View style={{ height: 60 }}></View>}
       <FlatList
-        style={styles.cardList}
+        style={{ backgroundColor: theme.bg }}
         data={data}
         keyExtractor={(item) => item._id}
         onEndReachedThreshold={0.1}
@@ -189,7 +202,7 @@ const BookMarks = ({ navigation }) => {
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={handleRefresh}
-            colors={[color.primary]}
+            colors={[theme.primary]}
           />
         }
       />
@@ -200,7 +213,6 @@ const BookMarks = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.white,
   },
   header: {
     position: "absolute",
@@ -214,21 +226,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     height: 60,
-    backgroundColor: color.white,
   },
   drawerIcon: {
     marginRight: 25,
   },
   title: {
-    color: color.fontColor,
     fontFamily: "Figtree-Bold",
     fontSize: 20,
     fontWeight: "bold",
     flex: 1,
-  },
-
-  cardList: {
-    backgroundColor: color.white,
   },
 });
 
