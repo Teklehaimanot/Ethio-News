@@ -6,9 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "permissions": [
-      "INTERNET"
-    ],
+    "permissions": ["INTERNET"],
     "androidStatusBar": {
       "backgroundColor": "#fff",
       "translucent": true
@@ -18,9 +16,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -50,8 +46,7 @@
     "updates": {
       "url": "https://u.expo.dev/f0b90088-cdb3-4249-90d6-a1d652479b6d"
     },
-    "plugins": [
-      "expo-font"
-    ]
+    "plugins": ["expo-font"],
+    "newArchEnabled": true
   }
 }

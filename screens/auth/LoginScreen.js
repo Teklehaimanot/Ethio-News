@@ -5,18 +5,24 @@ import {
   Dimensions,
   ActivityIndicator,
   TouchableOpacity,
-  ScrollView,
+  Button,
 } from "react-native";
 import { color } from "../../utilities/Colors";
 import { TextInput } from "react-native-gesture-handler";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 // import { API_KEY } from "@env";
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
+import * as AuthSession from "expo-auth-session";
+
 import { baseUrl } from "../../config";
 import { login } from "../../state/auth/authSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+
+WebBrowser.maybeCompleteAuthSession();
 
 const { width } = Dimensions.get("window");
 const LoginScreen = ({ navigation }) => {
@@ -25,7 +31,25 @@ const LoginScreen = ({ navigation }) => {
   const [errors, setErrors] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const redirectUri = AuthSession.makeRedirectUri({
+    useProxy: true,
+  });
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId:
+      "399442306679-5licg5fgohae0m5cgair3jq0jbuqj5i2.apps.googleusercontent.com",
+    redirectUri,
+  });
+
   const basicUrl = baseUrl;
+
+  useEffect(() => {
+    if (response?.type === "success") {
+      const { authentication } = response;
+      // Send id_token to your backend for verification
+      console.log(authentication);
+    }
+  }, [response]);
 
   const handleSubmit = async (e) => {
     try {
@@ -77,7 +101,7 @@ const LoginScreen = ({ navigation }) => {
         <Text
           style={{
             fontWeight: "bold",
-            color: color.blueGray,
+            color: color.primary,
             paddingHorizontal: 5,
             fontSize: 20,
           }}
@@ -116,12 +140,37 @@ const LoginScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         <View style={styles.createAccount}>
-          <Text style={{ color: color.blueGray }}>New user?</Text>
+          <Text style={{ color: color.blue }}>New user?</Text>
           <TouchableOpacity onPress={() => navigation.navigate("signUp")}>
             <Text style={{ color: color.blue }}>Create an Account</Text>
           </TouchableOpacity>
         </View>
       </View>
+      <TouchableOpacity
+        style={{
+          backgroundColor: color.blue,
+          width: width * 0.5,
+          marginHorizontal: "auto",
+          paddingVertical: 20,
+          borderRadius: 5,
+          paddingVertical: 14,
+        }}
+        disabled={!request}
+        title="Sign in with Google"
+        onPress={() => {
+          promptAsync();
+        }}
+      >
+        <Text
+          style={{
+            color: color.white,
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          Sign in with Google
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };

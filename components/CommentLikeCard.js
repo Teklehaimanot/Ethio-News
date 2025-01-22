@@ -49,7 +49,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
                 <Text
                   style={{
                     fontFamily: "Figtree-Regular",
-                    fontSize: 16,
+                    fontSize: 14,
                     lineHeight: 19.2,
                   }}
                 >
@@ -62,7 +62,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
                 <Text
                   style={{
                     fontFamily: "Figtree-Regular",
-                    fontSize: 16,
+                    fontSize: 14,
                     lineHeight: 19.2,
                   }}
                 >
@@ -96,7 +96,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
                 <Text
                   style={{
                     fontFamily: "Figtree-Regular",
-                    fontSize: 16,
+                    fontSize: 14,
                     lineHeight: 19.2,
                   }}
                 >
@@ -105,7 +105,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
                 <Text
                   style={{
                     fontFamily: "Figtree-Regular",
-                    fontSize: 16,
+                    fontSize: 14,
                     lineHeight: 19.2,
                   }}
                   onPress={() =>

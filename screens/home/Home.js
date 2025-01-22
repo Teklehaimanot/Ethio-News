@@ -10,7 +10,6 @@ import {
   Dimensions,
   Animated,
 } from "react-native";
-import { useFonts } from "expo-font";
 import { useGetNewsQuery } from "../../services";
 import { color } from "../../utilities/Colors";
 import NewsCard from "../../components/NewsCard";
@@ -18,6 +17,7 @@ import Error from "../../components/Error";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 
 const initialLimit = 15;
 const initialStart = 1;
@@ -28,7 +28,9 @@ const Home = ({ navigation }) => {
   const [start, setStart] = useState(initialStart);
   const [refreshing, setRefreshing] = useState(false);
   const [scrollY, setScrollY] = useState(0); // Store the current scroll position
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
   const headerOffset = useState(new Animated.Value(0))[0];
+  const flatListRef = React.useRef(null);
 
   const {
     data: posts,
@@ -71,21 +73,28 @@ const Home = ({ navigation }) => {
   const handleScroll = (event) => {
     const currentOffset = event.nativeEvent.contentOffset.y;
     const direction = currentOffset > scrollY ? "down" : "up";
+    setScrollY(currentOffset);
+
     if (direction === "down" && currentOffset > 50) {
+      setShowScrollToTop(true);
       Animated.timing(headerOffset, {
         toValue: -100,
         duration: 100,
         useNativeDriver: true,
       }).start();
     } else if (direction === "up") {
+      setShowScrollToTop(false);
       Animated.timing(headerOffset, {
         toValue: 0,
         duration: 100,
         useNativeDriver: true,
       }).start();
     }
+  };
 
-    setScrollY(currentOffset);
+  const handleScrollToTop = () => {
+    flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
+    setShowScrollToTop(false);
   };
 
   if (isLoading && start === 1) {
@@ -127,8 +136,9 @@ const Home = ({ navigation }) => {
           />
         </TouchableOpacity>
       </Animated.View>
-
+      {refreshing && <View style={{ height: 60 }}></View>}
       <FlatList
+        ref={flatListRef}
         style={styles.cardList}
         data={news}
         keyExtractor={(item) => item._id}
@@ -157,6 +167,15 @@ const Home = ({ navigation }) => {
           </View>
         )}
       />
+
+      {showScrollToTop && (
+        <TouchableOpacity
+          style={styles.scrollToTopButton}
+          onPress={handleScrollToTop}
+        >
+          <AntDesign name="arrowup" size={24} color="white" />
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 };
@@ -190,9 +209,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     flex: 1,
   },
-
   cardList: {
     backgroundColor: color.white,
+  },
+  scrollToTopButton: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    width: 50,
+    height: 50,
+    backgroundColor: color.primary,
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 5,
   },
 });
 

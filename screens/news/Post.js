@@ -242,16 +242,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
-  bottomCommentCard: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    margin: 10,
-    borderTopColor: color.blueOcean,
-    borderTopWidth: 0.5,
-    backgroundColor: color.gray,
-    paddingTop: 10,
-  },
   likeButton: {
     paddingHorizontal: 10,
     paddingVertical: 2,

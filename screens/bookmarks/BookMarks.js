@@ -14,7 +14,7 @@ import { useGetBookmarksQuery } from "../../services";
 import { color } from "../../utilities/Colors";
 import NewsCard from "../../components/NewsCard";
 import Error from "../../components/Error";
-import { clearBookmarks, getBookmarks } from "../../utilities/Bookmark";
+import { getBookmarks } from "../../utilities/Bookmark";
 import { RefreshControl } from "react-native-gesture-handler";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 const { width } = Dimensions.get("window");
@@ -171,7 +171,7 @@ const BookMarks = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.title}>Bookmarks</Text>
       </Animated.View>
-
+      {isRefreshing && <View style={{ height: 60 }}></View>}
       <FlatList
         style={styles.cardList}
         data={data}

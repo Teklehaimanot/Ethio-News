@@ -12,7 +12,7 @@ const DrawerNavigator = () => {
       initialRouteName="News"
       screenOptions={{
         drawerInactiveTintColor: color.primary,
-        drawerActiveTintColor: color.secondary,
+        drawerActiveTintColor: color.white,
         drawerActiveBackgroundColor: color.primary,
         drawerItemStyle: { marginVertical: 10 },
         drawerLabelStyle: { fontSize: 16 },
@@ -30,7 +30,7 @@ const DrawerNavigator = () => {
             <Ionicons
               name={focused ? "home" : "home-outline"}
               size={20}
-              color={focused ? color.secondary : color.active}
+              color={focused ? color.white : color.active}
             />
           ),
         }}
@@ -45,7 +45,7 @@ const DrawerNavigator = () => {
             <Ionicons
               name={focused ? "bookmark" : "bookmark-outline"}
               size={20}
-              color={focused ? color.secondary : color.active}
+              color={focused ? color.white : color.active}
             />
           ),
         }}

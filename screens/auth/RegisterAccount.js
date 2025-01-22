@@ -82,7 +82,7 @@ const RegisterAccount = ({ navigation }) => {
         <Text
           style={{
             fontWeight: "bold",
-            color: color.blueGray,
+            color: color.primary,
             paddingHorizontal: 5,
             fontSize: 20,
           }}
@@ -134,7 +134,7 @@ const RegisterAccount = ({ navigation }) => {
         </Pressable>
 
         <View style={styles.createAccount}>
-          <Text style={{ color: color.blueGray }}>Have an Account?</Text>
+          <Text style={{ color: color.blue }}>Have an Account?</Text>
           <Pressable onPress={() => navigation.navigate("login")}>
             <Text style={{ color: color.blue }}>Login</Text>
           </Pressable>

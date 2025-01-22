@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   FlatList,
   ActivityIndicator,
   RefreshControl,
   StyleSheet,
-  Text,
-  Image,
   SafeAreaView,
   Dimensions,
   Animated,
@@ -31,6 +29,8 @@ const SearchScreen = ({ navigation, route }) => {
   const headerOffset = useState(new Animated.Value(0))[0];
   const [searchQuery, setSearchQuery] = useState("");
 
+  const searchInputRef = useRef(null); // Reference for the TextInput
+
   const {
     data: posts,
     isError,
@@ -52,6 +52,13 @@ const SearchScreen = ({ navigation, route }) => {
       }
     }
   }, [posts]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      searchInputRef.current?.focus();
+    }, 100);
+    return () => clearTimeout(timeout);
+  }, []);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -124,6 +131,7 @@ const SearchScreen = ({ navigation, route }) => {
             style={styles.searchIcon}
           />
           <TextInput
+            ref={searchInputRef}
             style={styles.searchInput}
             placeholder="Search news..."
             placeholderTextColor={color.sourceColor}
@@ -134,6 +142,7 @@ const SearchScreen = ({ navigation, route }) => {
           />
         </View>
       </Animated.View>
+      {refreshing && <View style={{ height: 60 }}></View>}
       {searchQuery && (
         <FlatList
           style={styles.cardList}
@@ -142,7 +151,11 @@ const SearchScreen = ({ navigation, route }) => {
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.1}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.listContent}
+          contentContainerStyle={{
+            gap: 2,
+            paddingHorizontal: 1,
+            paddingTop: 60,
+          }}
           renderItem={renderItem}
           onScroll={handleScroll}
           refreshControl={
@@ -186,7 +199,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     flex: 1,
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 3,
     borderWidth: 0.5,
     borderColor: color.sourceColor,
   },
@@ -199,7 +212,7 @@ const styles = StyleSheet.create({
     color: color.fontColor,
   },
   cardList: {
-    marginTop: 70,
+    backgroundColor: color.white,
   },
   listContent: {
     paddingVertical: 10,
