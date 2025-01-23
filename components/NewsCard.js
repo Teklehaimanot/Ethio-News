@@ -139,10 +139,9 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     width: width * 0.92,
-    marginTop: width * 0.07,
+    marginTop: width * 0.045,
     marginHorizontal: "auto",
     borderRadius: 10,
-    marginVertical: 10,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

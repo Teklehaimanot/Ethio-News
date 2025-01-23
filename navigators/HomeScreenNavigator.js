@@ -8,25 +8,21 @@ import RegisterAccount from "../screens/auth/RegisterAccount";
 import SearchScreen from "../screens/search/SearchScreen";
 import ContactUs from "../screens/contactUs/ContactUs";
 import DrawerNavigator from "./DrawerNavigator";
+import { useContext } from "react";
+import { ThemeContext } from "../utilities/ThemeProvider";
 
 const { width } = Dimensions.get("window");
 
 const Stack = createNativeStackNavigator();
 const HomeScreenNavigator = ({ navigation }) => {
+  const { theme } = useContext(ThemeContext);
   return (
     <Stack.Navigator
       screenOptions={{
         animation: "slide_from_right",
-        headerStyle: {
-          backgroundColor: color.white,
+        contentStyle: {
+          backgroundColor: theme.bg,
         },
-        headerTintColor: color.black,
-        headerTitleAlign: "center",
-        headerTitleStyle: {
-          fontWeight: "bold",
-          fontSize: 20,
-        },
-        headerBackTitleVisible: false,
       }}
     >
       <Stack.Screen

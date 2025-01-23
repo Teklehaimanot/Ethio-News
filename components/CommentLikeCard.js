@@ -25,7 +25,7 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
             alignItems: "center",
           }}
         >
-          <View style={{ marginRight: 5 }}>
+          <View style={{ marginRight: 5, borderRadius: 50, padding: 5 }}>
             <TouchableOpacity
               onPress={() => {
                 handleLiked(news._id);
@@ -78,7 +78,13 @@ const CommentLikeCard = ({ news, navigation, handleLiked }) => {
           </View>
         </View>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <View style={{ marginRight: 5 }}>
+          <View
+            style={{
+              marginRight: 5,
+              borderRadius: 50,
+              padding: 5,
+            }}
+          >
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate("comments", {
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 15,
+    marginVertical: 7,
     marginHorizontal: 25,
   },
 });

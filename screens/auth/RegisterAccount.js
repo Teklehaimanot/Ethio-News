@@ -92,21 +92,30 @@ const RegisterAccount = ({ navigation }) => {
         </Text>
         <TextInput
           placeholder="Name"
-          style={[styles.textInput, { backgroundColor: theme.bg2 }]}
+          style={[
+            styles.textInput,
+            { backgroundColor: theme.bg2, color: theme.text },
+          ]}
           placeholderTextColor={theme.text2}
           onChangeText={(text) => setName(text)}
           value={name}
         />
         <TextInput
           placeholder="Email"
-          style={[styles.textInput, { backgroundColor: theme.bg2 }]}
+          style={[
+            styles.textInput,
+            { backgroundColor: theme.bg2, color: theme.text },
+          ]}
           placeholderTextColor={theme.text2}
           onChangeText={(text) => setEmail(text)}
           value={email}
         />
         <TextInput
           placeholder="Password"
-          style={[styles.textInput, { backgroundColor: theme.bg2 }]}
+          style={[
+            styles.textInput,
+            { backgroundColor: theme.bg2, color: theme.text },
+          ]}
           placeholderTextColor={theme.text2}
           onChangeText={(text) => setPassword(text)}
           value={password}
@@ -114,7 +123,10 @@ const RegisterAccount = ({ navigation }) => {
         />
         <TextInput
           placeholder="Confirm Password"
-          style={[styles.textInput, { backgroundColor: theme.bg2 }]}
+          style={[
+            styles.textInput,
+            { backgroundColor: theme.bg2, color: theme.text },
+          ]}
           placeholderTextColor={theme.text2}
           onChangeText={(text) => setConfirmPassword(text)}
           value={confirmPassword}
@@ -125,11 +137,11 @@ const RegisterAccount = ({ navigation }) => {
           onPress={handleSubmit}
         >
           {isLoading ? (
-            <ActivityIndicator size="small" color={theme.bg} />
+            <ActivityIndicator size="small" color={theme.active} />
           ) : (
             <Text
               style={{
-                color: theme.bg,
+                color: theme.active,
                 fontWeight: "bold",
                 fontSize: 15,
                 textAlign: "center",
@@ -184,13 +196,13 @@ const styles = StyleSheet.create({
   textInput: {
     padding: 8,
     marginHorizontal: 5,
-    marginVertical: 7,
+    marginVertical: 6,
     borderRadius: 5,
   },
   button: {
     margin: 5,
     borderRadius: 5,
-    paddingVertical: 14,
+    paddingVertical: 8,
   },
   createAccount: {
     flexDirection: "row",

@@ -17,7 +17,7 @@ const RootNavigator = () => {
     "Figtree-SemiBold": require("../assets/fonts/Figtree-SemiBold.ttf"),
   });
 
-  const { theme } = useContext(ThemeContext);
+  const { theme, isDark } = useContext(ThemeContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -44,12 +44,12 @@ const RootNavigator = () => {
   };
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: theme.bg }}>
       {fontsLoaded && (
         <NavigationContainer>
           <StatusBar
             backgroundColor={theme.bg}
-            barStyle={theme.isDark ? "light-content" : "dark-content"}
+            barStyle={isDark ? "light-content" : "dark-content"}
           />
           <HomeScreenNavigator />
         </NavigationContainer>

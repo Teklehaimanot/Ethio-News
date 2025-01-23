@@ -11,13 +11,13 @@ const ThemeProvider = ({ children }) => {
 
   const theme = isDark
     ? {
-        bg: "#23252f",
-        bg2: "#282a36",
+        bg: "#18191A",
+        bg2: "#242526",
         text: "#ffffff",
         text2: "#B3B3B3",
         primary: "#2D78A4",
         active: "#ffffff",
-        icon: "#0e76a8",
+        icon: "#1877F2",
         error: "red",
       }
     : {
@@ -27,7 +27,7 @@ const ThemeProvider = ({ children }) => {
         text2: "#B3B3B3",
         primary: "#2D78A4",
         active: "#ffffff",
-        icon: "#3A9CF1",
+        icon: "#1877F2",
         error: "red",
       };
 

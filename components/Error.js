@@ -6,7 +6,14 @@ import { ThemeContext } from "../utilities/ThemeProvider";
 const Error = ({ message, refetch }) => {
   const { theme } = useContext(ThemeContext);
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: theme.bg,
+      }}
+    >
       <Text
         style={{
           fontFamily: "Figtree-Regular",

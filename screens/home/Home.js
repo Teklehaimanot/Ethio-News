@@ -100,11 +100,13 @@ const Home = ({ navigation }) => {
 
   if (isLoading && start === 1) {
     return (
-      <ActivityIndicator
-        size={"large"}
-        color={theme.primary}
-        style={{ marginVertical: "auto" }}
-      />
+      <View style={{ flex: 1, backgroundColor: theme.bg }}>
+        <ActivityIndicator
+          size={"large"}
+          color={theme.primary}
+          style={{ marginVertical: "auto" }}
+        />
+      </View>
     );
   }
 

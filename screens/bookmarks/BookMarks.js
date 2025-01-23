@@ -89,17 +89,26 @@ const BookMarks = ({ navigation }) => {
 
   if (isLoading || !fontsLoaded) {
     return (
-      <ActivityIndicator
-        size={"large"}
-        color={theme.primary}
-        style={{ marginVertical: "auto" }}
-      />
+      <View style={{ flex: 1, backgroundColor: theme.bg }}>
+        <ActivityIndicator
+          size={"large"}
+          color={theme.primary}
+          style={{ marginVertical: "auto" }}
+        />
+      </View>
     );
   }
 
   if (isError && error.data.error === "No news items found") {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: theme.bg,
+        }}
+      >
         <Animated.View
           style={[styles.header, { transform: [{ translateY: headerOffset }] }]}
         >
@@ -109,7 +118,7 @@ const BookMarks = ({ navigation }) => {
           >
             <MaterialIcons name="menu" size={28} color={theme.text} />
           </TouchableOpacity>
-          <Text style={styles.title}>Bookmarks</Text>
+          <Text style={[styles.title, { color: theme.text }]}>Bookmarks</Text>
         </Animated.View>
         <Text
           style={{
