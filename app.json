@@ -18,7 +18,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.teklehaimanot.ethionews"
     },
     "android": {
       "versionCode": 5,
@@ -40,13 +41,12 @@
         "projectId": "f0b90088-cdb3-4249-90d6-a1d652479b6d"
       }
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "exposdk:47.0.0",
     "updates": {
       "url": "https://u.expo.dev/f0b90088-cdb3-4249-90d6-a1d652479b6d"
     },
     "plugins": ["expo-font"],
     "newArchEnabled": true
-  }
+  },
+  "$scheme": "ethionews"
 }

@@ -22,6 +22,13 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { ThemeContext } from "../../utilities/ThemeProvider";
 
+const webClientId =
+  "399442306679-aemld02ftrr8rl4ga0f60ec2d6uesm2e.apps.googleusercontent.com";
+const androidClientId =
+  "399442306679-5licg5fgohae0m5cgair3jq0jbuqj5i2.apps.googleusercontent.com";
+const iosClientId =
+  "399442306679-3bj7gff3epft8f3032mg5tk4u5ra04g9.apps.googleusercontent.com";
+
 WebBrowser.maybeCompleteAuthSession();
 
 const { width } = Dimensions.get("window");
@@ -32,23 +39,22 @@ const LoginScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { theme } = useContext(ThemeContext);
   const dispatch = useDispatch();
-  // const redirectUri = AuthSession.makeRedirectUri({
-  //   useProxy: true,
-  // });
-
-  // const [request, response, promptAsync] = Google.useAuthRequest({
-  //   androidClientId:
-  //     "399442306679-5licg5fgohae0m5cgair3jq0jbuqj5i2.apps.googleusercontent.com",
-  //   redirectUri,
-  // });
-
   const basicUrl = baseUrl;
+  const config = { webClientId, androidClientId, iosClientId };
 
-  // useEffect(() => {
-  //   if (response?.type === "success") {
-  //     const { authentication } = response;
-  //   }
-  // }, [response]);
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest(config);
+
+  const handleTokken = async () => {
+    if (response?.type === "success") {
+      const { authentication } = response;
+      const token = authentication?.accessToken;
+      console.log("accessToken", token);
+    }
+  };
+
+  useEffect(() => {
+    handleTokken();
+  }, [response]);
 
   const handleSubmit = async (e) => {
     try {
@@ -150,15 +156,15 @@ const LoginScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         <View style={styles.createAccount}>
-          <Text style={{ color: theme.icon }}>New user?</Text>
+          <Text style={{ color: theme.primary }}>New user?</Text>
           <TouchableOpacity onPress={() => navigation.navigate("signUp")}>
-            <Text style={{ color: theme.icon }}>Create an Account</Text>
+            <Text style={{ color: theme.primary }}>Create an Account</Text>
           </TouchableOpacity>
         </View>
       </View>
-      {/* <TouchableOpacity
+      <TouchableOpacity
         style={{
-          backgroundColor: theme.icon,
+          backgroundColor: theme.primary,
           width: width * 0.5,
           marginHorizontal: "auto",
           paddingVertical: 20,
@@ -173,14 +179,15 @@ const LoginScreen = ({ navigation }) => {
       >
         <Text
           style={{
-            color: theme.bg,
-            fontWeight: "bold",
+            color: theme.active,
             textAlign: "center",
+            fontFamily: "Figtree-Bold",
+            fontSize: 16,
           }}
         >
           Sign in with Google
         </Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
     </View>
   );
 };
