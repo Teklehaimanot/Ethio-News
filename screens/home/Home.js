@@ -120,7 +120,7 @@ const Home = ({ navigation }) => {
         style={[
           styles.header,
           {
-            backgroundColor: theme.bg,
+            backgroundColor: theme.bg2,
             transform: [{ translateY: headerOffset }],
           },
         ]}
@@ -139,12 +139,7 @@ const Home = ({ navigation }) => {
           onPress={() => navigation.navigate("search")}
           style={styles.searchIcon}
         >
-          <Feather
-            name="search"
-            size={24}
-            color={theme.text}
-            style={styles.searchIcon}
-          />
+          <Feather name="search" size={24} color={theme.text} />
         </TouchableOpacity>
       </Animated.View>
       {refreshing && <View style={{ height: 60 }}></View>}
@@ -200,16 +195,26 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    paddingHorizontal: width * 0.04,
     zIndex: 1000,
     marginHorizontal: "auto",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     height: 60,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 1,
   },
   drawerIcon: {
     marginRight: 25,
+    paddingVertical: 6,
+    paddingHorizontal: width * 0.04,
+  },
+  searchIcon: {
+    paddingVertical: 6,
+    paddingHorizontal: width * 0.04,
   },
   title: {
     fontFamily: "Figtree-Bold",

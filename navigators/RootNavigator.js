@@ -44,11 +44,11 @@ const RootNavigator = () => {
   };
 
   return (
-    <GestureHandlerRootView style={{ flex: 1, backgroundColor: theme.bg }}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: theme.bg2 }}>
       {fontsLoaded && (
         <NavigationContainer>
           <StatusBar
-            backgroundColor={theme.bg}
+            backgroundColor={theme.bg2}
             barStyle={isDark ? "light-content" : "dark-content"}
           />
           <HomeScreenNavigator />

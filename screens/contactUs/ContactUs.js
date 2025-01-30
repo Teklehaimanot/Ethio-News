@@ -32,8 +32,8 @@ const ContactUs = ({ navigation }) => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.bg }]}>
-      <View style={[styles.header, { backgroundColor: theme.bg }]}>
+    <View style={[styles.container, { backgroundColor: theme.bg2 }]}>
+      <View style={[styles.header, { backgroundColor: theme.bg2 }]}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
@@ -48,7 +48,12 @@ const ContactUs = ({ navigation }) => {
       <View style={[styles.contactUscontainer, { borderColor: theme.text2 }]}>
         <View style={styles.emailCard}>
           <Text style={[styles.emailText, { color: theme.text }]}>Email</Text>
-          <Ionicons name="mail-outline" size={24} color={theme.primary} />
+          <TouchableOpacity
+            onPress={handleEmailPress}
+            style={{ paddingHorizontal: 15 }}
+          >
+            <Ionicons name="mail-outline" size={24} color={theme.primary} />
+          </TouchableOpacity>
         </View>
         <TouchableOpacity
           onPress={handleEmailPress}
@@ -72,7 +77,12 @@ const ContactUs = ({ navigation }) => {
           <Text style={[styles.emailText, { color: theme.text }]}>
             Pone number
           </Text>
-          <Ionicons name="call-outline" size={24} color={theme.primary} />
+          <TouchableOpacity
+            onPress={handlePhonePress}
+            style={{ paddingHorizontal: 15 }}
+          >
+            <Ionicons name="call-outline" size={24} color={theme.primary} />
+          </TouchableOpacity>
         </View>
         <TouchableOpacity
           onPress={handlePhonePress}
@@ -118,12 +128,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    marginHorizontal: 20,
     marginBottom: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     height: 60,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    // elevation: 1,
   },
   title: {
     fontFamily: "Figtree-Bold",
@@ -131,7 +145,11 @@ const styles = StyleSheet.create({
     lineHeight: 19.2,
     marginHorizontal: 15,
   },
-  backIcon: { marginRight: 15 },
+  backIcon: {
+    marginRight: 15,
+    paddingHorizontal: width * 0.04,
+    paddingVertical: 6,
+  },
 
   contactUscontainer: {
     width: width * 0.92,
@@ -141,7 +159,6 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     borderRadius: 8,
     marginTop: 25,
-    // height: 80,
   },
   emailCard: {
     flexDirection: "row",

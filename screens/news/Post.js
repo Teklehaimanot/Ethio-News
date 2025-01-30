@@ -123,13 +123,13 @@ const Post = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.bg }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.bg2 }]}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <View style={[styles.header, { backgroundColor: theme.bg }]}>
+        <View style={[styles.header, { backgroundColor: theme.bg2 }]}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -143,6 +143,7 @@ const Post = ({ route, navigation }) => {
             </Text>
           </View>
           <FontAwesome
+            style={styles.bookmarkIcon}
             name={isBookmarked ? "bookmark" : "bookmark-o"}
             size={24}
             color={theme.text}
@@ -197,15 +198,25 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    marginHorizontal: 20,
     marginBottom: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     height: 60,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    // elevation: 1,
   },
   backIcon: {
     marginRight: 15,
+    paddingHorizontal: width * 0.04,
+    paddingVertical: 6,
+  },
+  bookmarkIcon: {
+    paddingHorizontal: width * 0.04,
+    paddingVertical: 6,
   },
   title: {
     fontFamily: "Figtree-Bold",

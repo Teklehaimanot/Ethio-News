@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   SafeAreaView,
   View,
@@ -20,6 +20,12 @@ import { logout } from "../state/auth/authSlice";
 import axios from "axios";
 import { baseUrl } from "../config";
 import { ThemeContext } from "../utilities/ThemeProvider"; // Import ThemeContext
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 
 const BASE_URL = baseUrl;
 
@@ -47,21 +53,53 @@ const CustomSidebarMenu = (props) => {
     }
   };
 
+  const scale = useSharedValue(1);
+
+  useEffect(() => {
+    scale.value = withTiming(1.2, { duration: 150 });
+    setTimeout(() => {
+      scale.value = withTiming(1, { duration: 150 });
+    }, 150);
+  }, [isDark]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: withTiming(isDark ? 1 : 0.8, { duration: 150 }),
+  }));
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.bg2 }}>
-      <View style={[styles.profileContainer, { backgroundColor: theme.bg }]}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.bg }}>
+      <View style={[styles.profileContainer, { backgroundColor: theme.bg2 }]}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Image
             source={{ uri: BASE_PATH + profileImage }}
             style={styles.sideMenuProfileIcon}
           />
-          <Switch
+          <Animated.View
+            style={[
+              animatedStyle,
+              {
+                alignSelf: "center",
+                marginVertical: 10,
+                marginRight: 20,
+                padding: 3,
+              },
+            ]}
+          >
+            <MaterialIcons
+              name={isDark ? "dark-mode" : "light-mode"}
+              size={28}
+              color={isDark ? theme.active : theme.primary}
+              onPress={toggleTheme}
+            />
+          </Animated.View>
+          {/* <Switch
             value={isDark}
             onValueChange={toggleTheme}
             thumbColor={isDark ? theme.toggleColor : "#f4f3f4"}
             trackColor={{ false: "#767577", true: theme.toggleColor }}
             style={{ alignSelf: "center", marginVertical: 10, marginRight: 20 }}
-          />
+          /> */}
         </View>
         {user ? (
           <View style={{ marginHorizontal: 20 }}>

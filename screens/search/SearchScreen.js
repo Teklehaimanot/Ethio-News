@@ -113,12 +113,12 @@ const SearchScreen = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.bg }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.bg2 }]}>
       <Animated.View
         style={[
           styles.header,
           {
-            backgroundColor: theme.bg,
+            backgroundColor: theme.bg2,
             transform: [{ translateY: headerOffset }],
           },
         ]}
@@ -133,7 +133,7 @@ const SearchScreen = ({ navigation, route }) => {
         <View
           style={[
             styles.searchContainer,
-            { borderColor: theme.text2, backgroundColor: theme.bg },
+            { borderColor: theme.text2, backgroundColor: theme.bg2 },
           ]}
         >
           <Feather
@@ -196,11 +196,17 @@ const styles = StyleSheet.create({
     zIndex: 1000,
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 15,
     height: 60,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 1,
   },
   backIcon: {
     marginRight: 15,
+    paddingHorizontal: width * 0.04,
+    paddingVertical: 6,
   },
   searchContainer: {
     flexDirection: "row",
@@ -208,9 +214,9 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     flex: 1,
     paddingHorizontal: 10,
-    paddingVertical: 3,
     borderWidth: 0.5,
     marginHorizontal: 15,
+    paddingVertical: 3,
   },
   searchIcon: {
     marginRight: 8,

@@ -83,8 +83,8 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.bg }]}>
-      <View style={[styles.header, { backgroundColor: theme.bg }]}>
+    <View style={[styles.container, { backgroundColor: theme.bg2 }]}>
+      <View style={[styles.header, { backgroundColor: theme.bg2 }]}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
@@ -117,7 +117,7 @@ const LoginScreen = ({ navigation }) => {
           placeholder="Email"
           style={[
             styles.textInput,
-            { backgroundColor: theme.bg2, color: theme.text },
+            { backgroundColor: theme.bg, color: theme.text },
           ]}
           placeholderTextColor={theme.text2}
           onChangeText={(text) => setEmail(text)}
@@ -127,7 +127,7 @@ const LoginScreen = ({ navigation }) => {
           placeholder="Password"
           style={[
             styles.textInput,
-            { backgroundColor: theme.bg2, color: theme.text },
+            { backgroundColor: theme.bg, color: theme.text },
           ]}
           placeholderTextColor={theme.text2}
           onChangeText={(text) => setPassword(text)}
@@ -197,15 +197,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    marginHorizontal: 20,
     marginBottom: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     height: 60,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    // elevation: 1,
   },
   backIcon: {
     marginRight: 15,
+    paddingHorizontal: width * 0.04,
+    paddingVertical: 6,
   },
   title: {
     fontFamily: "Figtree-Bold",

@@ -87,7 +87,7 @@ const CommentScreen = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.bg }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.bg2 }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={0}
@@ -102,7 +102,7 @@ const CommentScreen = ({ route, navigation }) => {
               />
             }
           >
-            <View style={[styles.header, { backgroundColor: theme.bg }]}>
+            <View style={[styles.header, { backgroundColor: theme.bg2 }]}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <TouchableOpacity
                   onPress={() => navigation.goBack()}
@@ -130,11 +130,11 @@ const CommentScreen = ({ route, navigation }) => {
         <View
           style={[
             styles.commentInputCard,
-            { borderColor: theme.text2, backgroundColor: theme.bg },
+            { borderColor: theme.text2, backgroundColor: theme.bg2 },
           ]}
         >
           <View
-            style={[styles.commentInputWrapper, { backgroundColor: theme.bg }]}
+            style={[styles.commentInputWrapper, { backgroundColor: theme.bg2 }]}
           >
             <TextInput
               onChangeText={handleChangeComment}
@@ -163,12 +163,16 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    marginHorizontal: 20,
     marginBottom: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     height: 60,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    // elevation: 1,
   },
   title: {
     fontFamily: "Figtree-Bold",
@@ -178,6 +182,8 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     marginRight: 15,
+    paddingHorizontal: width * 0.04,
+    paddingVertical: 6,
   },
 
   commentInputCard: {
