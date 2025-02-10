@@ -148,7 +148,7 @@ const CommentScreen = ({ route, navigation }) => {
               style={[styles.sendButton, { backgroundColor: theme.primary }]}
               onPress={handleSubmit}
             >
-              <Feather name="send" size={20} color={theme.text} />
+              <Feather name="send" size={20} color={theme.active} />
             </TouchableOpacity>
           </View>
         </View>

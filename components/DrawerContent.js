@@ -82,24 +82,20 @@ const CustomSidebarMenu = (props) => {
                 alignSelf: "center",
                 marginVertical: 10,
                 marginRight: 20,
-                padding: 3,
               },
             ]}
           >
             <MaterialIcons
+              style={{
+                padding: 10,
+                borderRadius: 50,
+              }}
               name={isDark ? "dark-mode" : "light-mode"}
               size={28}
               color={isDark ? theme.active : theme.primary}
               onPress={toggleTheme}
             />
           </Animated.View>
-          {/* <Switch
-            value={isDark}
-            onValueChange={toggleTheme}
-            thumbColor={isDark ? theme.toggleColor : "#f4f3f4"}
-            trackColor={{ false: "#767577", true: theme.toggleColor }}
-            style={{ alignSelf: "center", marginVertical: 10, marginRight: 20 }}
-          /> */}
         </View>
         {user ? (
           <View style={{ marginHorizontal: 20 }}>

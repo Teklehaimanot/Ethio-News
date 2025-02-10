@@ -38,22 +38,47 @@ const LoginScreen = ({ navigation }) => {
   const [errors, setErrors] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { theme } = useContext(ThemeContext);
-  const dispatch = useDispatch();
   const basicUrl = baseUrl;
-  const config = { webClientId, androidClientId, iosClientId };
-
+  const config = {
+    webClientId,
+    androidClientId,
+    iosClientId,
+  };
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest(config);
+  const dispatch = useDispatch();
 
-  const handleTokken = async () => {
-    if (response?.type === "success") {
-      const { authentication } = response;
-      const token = authentication?.accessToken;
-      console.log("accessToken", token);
+  const handleGoogleLogin = async () => {
+    try {
+      if (response?.type === "success") {
+        const { id_token } = response.params;
+        console.log("ID Token:", id_token);
+
+        const { data } = await axios.post(
+          `${basicUrl}/api/v1/user/googleSignIn`,
+          {
+            idToken: id_token,
+          }
+        );
+
+        if (data) {
+          const { user, token } = data;
+          const jsonUser = JSON.stringify(data);
+          await AsyncStorage.setItem("token", jsonUser);
+          dispatch(login({ user, token }));
+          navigation.navigate("Home");
+        }
+      }
+    } catch (error) {
+      if (error.response) {
+        alert("err", error.response.data.error);
+      } else {
+        alert("Error setting up the request:", error.message);
+      }
     }
   };
 
   useEffect(() => {
-    handleTokken();
+    handleGoogleLogin();
   }, [response]);
 
   const handleSubmit = async (e) => {
