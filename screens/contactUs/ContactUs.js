@@ -110,12 +110,16 @@ const ContactUs = ({ navigation }) => {
         >
           <TouchableOpacity
             onPress={handleTelegramPress}
-            style={{ marginRight: 20 }}
+            style={{
+              marginRight: 20,
+              backgroundColor: theme.active,
+              borderRadius: 100,
+            }}
           >
-            <FontAwesome name="telegram" size={32} color={theme.primary} />
+            <FontAwesome name="telegram" size={40} color={theme.primary} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleTikTokPress}>
-            <FontAwesome5 name="tiktok" size={32} color={theme.text} />
+            <FontAwesome5 name="tiktok" size={40} color={theme.text} />
           </TouchableOpacity>
         </View>
       </View>
