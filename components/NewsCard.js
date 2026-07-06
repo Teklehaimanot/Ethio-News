@@ -11,14 +11,12 @@ import {
 import CommentLikeCard from "./CommentLikeCard";
 import { useSelector } from "react-redux";
 import { useLikeNewsByIdMutation } from "../services";
-import { baseUrl } from "../config";
+import { getImageUrl } from "../utilities/getImageUrl";
 import moment from "moment";
 import { ThemeContext } from "../utilities/ThemeProvider";
 
-const BASE_URL = baseUrl;
 const { width } = Dimensions.get("window");
 const NewsCard = ({ item, navigation }) => {
-  const basicUrl = BASE_URL;
   const [news, setNews] = useState({});
   const { user } = useSelector((state) => state.auth);
   const [likeNews] = useLikeNewsByIdMutation();
@@ -84,7 +82,7 @@ const NewsCard = ({ item, navigation }) => {
             navigation.navigate("Details", {
               _id: news._id,
               title: news.title,
-              image: basicUrl + "/" + news.image,
+              image: getImageUrl(news.image),
               source: news.source,
               sourceUrl: news.sourceUrl,
               description: news.description,
@@ -100,7 +98,7 @@ const NewsCard = ({ item, navigation }) => {
               <Image
                 style={styles.image}
                 source={{
-                  uri: `${basicUrl + "/" + news.image}`,
+                  uri: getImageUrl(news.image),
                 }}
               />
             </View>

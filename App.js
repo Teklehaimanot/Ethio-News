@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import store from "./state/store";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ThemeProvider from "./utilities/ThemeProvider";
+import NotificationHandler from "./utilities/NotificationHandler";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -12,6 +13,7 @@ export default function App() {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
+          <NotificationHandler />
           <RootNavigator />
         </ThemeProvider>
       </QueryClientProvider>

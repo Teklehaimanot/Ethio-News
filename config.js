@@ -1,2 +1,2 @@
-export const baseUrl = "https://smartcsvtool.com/ethioNewsApi";
-// export const baseUrl = "http://172.21.51.2:5001";
+// export const baseUrl = "https://smartcsvtool.com/ethioNewsApi";
+export const baseUrl = "http://10.63.86.171:5001";

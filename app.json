@@ -22,7 +22,7 @@
       "bundleIdentifier": "com.teklehaimanot.ethionews"
     },
     "android": {
-      "versionCode": 5,
+      "versionCode": 6,
       "package": "com.teklehaimanot.ethionews",
       "packageType": "apk",
       "config": {
@@ -37,16 +37,21 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
+      "googleClientId": "399442306679-aemld02ftrr8rl4ga0f60ec2d6uesm2e.apps.googleusercontent.com",
+      "googleRedirectUri": "https://auth.expo.io/@teklehaimanot/ethio-news",
       "eas": {
         "projectId": "f0b90088-cdb3-4249-90d6-a1d652479b6d"
       }
     },
     "runtimeVersion": "exposdk:47.0.0",
     "updates": {
-      "url": "https://u.expo.dev/f0b90088-cdb3-4249-90d6-a1d652479b6d"
+      "url": "https://auth.expo.dev/f0b90088-cdb3-4249-90d6-a1d652479b6d"
     },
     "plugins": ["expo-font"],
-    "newArchEnabled": true
-  },
-  "$scheme": "ethionews"
+    "newArchEnabled": true,
+    "authSession": {
+      "redirectUri": "https://auth.expo.io/@teklehaimanot/ethio-news"
+    },
+    "$scheme": "ethionews"
+  }
 }

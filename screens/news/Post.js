@@ -25,6 +25,7 @@ import Loading from "../../components/Loading";
 import Error from "../../components/Error";
 import Feather from "@expo/vector-icons/Feather";
 import { ThemeContext } from "../../utilities/ThemeProvider";
+import { getImageUrl } from "../../utilities/getImageUrl";
 
 const { width } = Dimensions.get("window");
 const Post = ({ route, navigation }) => {
@@ -38,8 +39,15 @@ const Post = ({ route, navigation }) => {
   const [likeNews] = useLikeNewsByIdMutation();
   const { theme } = useContext(ThemeContext);
 
+  const displayTitle = news?.title || title;
+  const displayContent =
+    news?.content || news?.description || description;
+  const displaySource = news?.source || source;
+  const displaySourceUrl = news?.sourceUrl || sourceUrl;
+  const displayDate = news?.date || date;
+
   const now = moment();
-  const postMoment = moment(date);
+  const postMoment = moment(displayDate);
 
   const diffInDays = now.diff(postMoment, "days");
   const diffInYears = now.diff(postMoment, "years");
@@ -109,12 +117,14 @@ const Post = ({ route, navigation }) => {
   };
 
   const openSourceUrl = () => {
-    if (sourceUrl) {
-      Linking.openURL(sourceUrl).catch((err) =>
+    if (displaySourceUrl) {
+      Linking.openURL(displaySourceUrl).catch((err) =>
         console.error("Failed to open URL:", err)
       );
     }
   };
+
+  const displayImage = getImageUrl(news?.image || image);
 
   if (isError) {
     return (
@@ -152,7 +162,7 @@ const Post = ({ route, navigation }) => {
         </View>
 
         <View style={[styles.imageCard, { backgroundColor: theme.bg2 }]}>
-          <Image style={styles.image} source={{ uri: image }} />
+          <Image style={styles.image} source={{ uri: displayImage }} />
         </View>
         <View
           style={{
@@ -165,15 +175,25 @@ const Post = ({ route, navigation }) => {
             style={[styles.sourceText, { color: theme.text2 }]}
             onPress={openSourceUrl}
           >
-            {source ? `${source} ` : " "}
+            {displaySource ? `${displaySource} ` : " "}
           </Text>
           <Text
             style={[styles.sourceText, { color: theme.text2 }]}
           >{`  | ${formatDate()}`}</Text>
         </View>
-        <Text style={[styles.description, { color: theme.text }]}>
-          {description}
+        <Text style={[styles.headline, { color: theme.text }]}>
+          {displayTitle}
         </Text>
+        <Text style={[styles.description, { color: theme.text }]}>
+          {displayContent}
+        </Text>
+        {/* {displaySourceUrl ? (
+          <TouchableOpacity onPress={openSourceUrl} style={styles.readMore}>
+            <Text style={[styles.readMoreText, { color: theme.text2 }]}>
+              Read full story at {displaySource || "source"}
+            </Text>
+          </TouchableOpacity>
+        ) : null} */}
         {isLoading ? (
           <Loading size={"small"} />
         ) : (
@@ -224,11 +244,29 @@ const styles = StyleSheet.create({
     lineHeight: 19.2,
     marginHorizontal: 15,
   },
+  headline: {
+    paddingHorizontal: 20,
+    marginBottom: 16,
+    fontFamily: "Figtree-SemiBold",
+    fontSize: 20,
+    lineHeight: 26,
+  },
   description: {
     paddingHorizontal: 20,
+    marginBottom: 20,
     fontFamily: "Figtree-Regular",
     fontSize: 16,
-    lineHeight: 19.2,
+    lineHeight: 24,
+  },
+  readMore: {
+    paddingHorizontal: 20,
+    marginBottom: 24,
+  },
+  readMoreText: {
+    fontFamily: "Figtree-SemiBold",
+    fontSize: 14,
+    lineHeight: 20,
+    textDecorationLine: "underline",
   },
   sourceText: {
     fontFamily: "Figtree-Regular",

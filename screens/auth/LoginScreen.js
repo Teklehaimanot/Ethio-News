@@ -5,15 +5,15 @@ import {
   Dimensions,
   ActivityIndicator,
   TouchableOpacity,
-  Button,
+  // Button,
 } from "react-native";
 import { color } from "../../utilities/Colors";
 import { TextInput } from "react-native-gesture-handler";
 import { useContext, useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
-import * as Google from "expo-auth-session/providers/google";
-import * as AuthSession from "expo-auth-session";
+// import * as Google from "expo-auth-session/providers/google";
+// import * as AuthSession from "expo-auth-session";
 
 import { baseUrl } from "../../config";
 import { login } from "../../state/auth/authSlice";
@@ -21,13 +21,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { ThemeContext } from "../../utilities/ThemeProvider";
-
-const webClientId =
-  "399442306679-aemld02ftrr8rl4ga0f60ec2d6uesm2e.apps.googleusercontent.com";
-const androidClientId =
-  "399442306679-5licg5fgohae0m5cgair3jq0jbuqj5i2.apps.googleusercontent.com";
-const iosClientId =
-  "399442306679-3bj7gff3epft8f3032mg5tk4u5ra04g9.apps.googleusercontent.com";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -39,47 +32,57 @@ const LoginScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { theme } = useContext(ThemeContext);
   const basicUrl = baseUrl;
-  const config = {
-    webClientId,
-    androidClientId,
-    iosClientId,
-  };
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest(config);
+  // const config = {
+  //   clientId:
+  //     "399442306679-aemld02ftrr8rl4ga0f60ec2d6uesm2e.apps.googleusercontent.com",
+  //   redirectUri: "https://auth.expo.io/@teklehaimanot/ethio-news",
+  //   useProxy: true,
+  // };
+
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   clientId:
+  //     "399442306679-aemld02ftrr8rl4ga0f60ec2d6uesm2e.apps.googleusercontent.com",
+  //   redirectUri: AuthSession.makeRedirectUri({
+  //     useProxy: true, // Important for Expo Go
+  //   }),
+  //   scopes: ["profile", "email"],
+  // });
   const dispatch = useDispatch();
 
-  const handleGoogleLogin = async () => {
-    try {
-      if (response?.type === "success") {
-        const { id_token } = response.params;
-        console.log("ID Token:", id_token);
+  // const handleGoogleLogin = async () => {
+  //   try {
+  //     console.log("Google OAuth Response:", response);
+  //     if (response?.type === "success") {
+  //       const { id_token } = response.params;
+  //       console.log("ID Token:", id_token);
 
-        const { data } = await axios.post(
-          `${basicUrl}/api/v1/user/googleSignIn`,
-          {
-            idToken: id_token,
-          }
-        );
+  //       const { data } = await axios.post(
+  //         `${basicUrl}/api/v1/user/googleSignIn`,
+  //         {
+  //           idToken: id_token,
+  //         }
+  //       );
 
-        if (data) {
-          const { user, token } = data;
-          const jsonUser = JSON.stringify(data);
-          await AsyncStorage.setItem("token", jsonUser);
-          dispatch(login({ user, token }));
-          navigation.navigate("Home");
-        }
-      }
-    } catch (error) {
-      if (error.response) {
-        alert("err", error.response.data.error);
-      } else {
-        alert("Error setting up the request:", error.message);
-      }
-    }
-  };
+  //       if (data) {
+  //         const { user, token } = data;
+  //         const jsonUser = JSON.stringify(data);
+  //         await AsyncStorage.setItem("token", jsonUser);
+  //         dispatch(login({ user, token }));
+  //         navigation.navigate("Home");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     if (error.response) {
+  //       alert("err", error.response.data.error);
+  //     } else {
+  //       alert("Error setting up the request:", error.message);
+  //     }
+  //   }
+  // };
 
-  useEffect(() => {
-    handleGoogleLogin();
-  }, [response]);
+  // useEffect(() => {
+  //   handleGoogleLogin();
+  // }, [response]);
 
   const handleSubmit = async (e) => {
     try {
@@ -187,7 +190,7 @@ const LoginScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           backgroundColor: theme.primary,
           width: width * 0.5,
@@ -212,7 +215,7 @@ const LoginScreen = ({ navigation }) => {
         >
           Sign in with Google
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
