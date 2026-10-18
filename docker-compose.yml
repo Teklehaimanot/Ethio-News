@@ -60,7 +60,7 @@ services:
     networks:
       - ethio-news
     ports:
-      - "3001:80"
+      - "3002:80"
 
 networks:
   ethio-news:
