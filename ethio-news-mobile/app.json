@@ -1,0 +1,69 @@
+{
+  "expo": {
+    "name": "Ethiopian News",
+    "slug": "ethio-news",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "permissions": [
+      "INTERNET"
+    ],
+    "androidStatusBar": {
+      "backgroundColor": "#fff",
+      "translucent": true
+    },
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.teklehaimanot.ethionews"
+    },
+    "android": {
+      "versionCode": 6,
+      "package": "com.teklehaimanot.ethionews",
+      "packageType": "apk",
+      "config": {
+        "cleartext": true
+      },
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "googleClientId": "399442306679-aemld02ftrr8rl4ga0f60ec2d6uesm2e.apps.googleusercontent.com",
+      "googleRedirectUri": "https://auth.expo.io/@teklehaimanot/ethio-news",
+      "eas": {
+        "projectId": "f0b90088-cdb3-4249-90d6-a1d652479b6d"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/f0b90088-cdb3-4249-90d6-a1d652479b6d"
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.399442306679-aemld02ftrr8rl4ga0f60ec2d6uesm2e"
+        }
+      ],
+      "expo-asset"
+    ],
+    "newArchEnabled": true,
+    "scheme": "ethionews"
+  }
+}
