@@ -1,0 +1,13 @@
+.env
+**/.env
+!**/.env.example
+**/node_modules/
+**/.venv/
+**/__pycache__/
+*.pyc
+*.session
+*.session-journal
+.DS_Store
+ethio-news-api/uploads/*
+!ethio-news-api/uploads/.gitkeep
+ethio-news-admin/build/

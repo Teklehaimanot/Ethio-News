@@ -1,0 +1,35 @@
+sources:
+  - name: BBC Amharic
+    type: rss
+    url: https://feeds.bbci.co.uk/amharic/rss.xml
+    enabled: true
+
+  - name: DW Amharic
+    type: rss
+    url: http://rss.dw-world.de/syndication/feeds/dwworld.amh.xml
+    enabled: true
+
+  - name: Fana MC
+    type: rss
+    url: https://www.fanamc.com/feed/
+    enabled: true
+
+  - name: Ethiopian Reporter
+    type: scraper
+    scraper: ethiopian_reporter
+    list_urls:
+      - https://ethiopianreporter.com/news/
+      - https://ethiopianreporter.com/politics/
+      - https://ethiopianreporter.com/business/
+    enabled: true
+
+  - name: Sheger FM
+    type: scraper
+    scraper: sheger
+    list_urls:
+      - https://www.shegerfm.com/
+    enabled: true
+
+  - name: Telegram
+    type: telegram
+    enabled: true

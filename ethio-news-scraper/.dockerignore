@@ -1,0 +1,10 @@
+.venv
+__pycache__
+*.pyc
+*.session
+*.session-journal
+.env
+.git
+.gitignore
+scripts/__pycache__
+**/.DS_Store

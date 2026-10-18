@@ -1,0 +1,72 @@
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - ethio-news
+    # Not published publicly — only reachable inside the Docker network
+
+  api:
+    build:
+      context: ./ethio-news-api
+    restart: unless-stopped
+    env_file:
+      - ./ethio-news-api/.env
+    environment:
+      # Override local Mongo host for Docker network
+      DB_CONNECTION: mongodb://mongo:27017/ndmc-mobile
+      PORT: "5001"
+    volumes:
+      - api_uploads:/app/uploads
+    depends_on:
+      - mongo
+    networks:
+      - ethio-news
+    ports:
+      - "5001:5001"
+
+  scraper:
+    build:
+      context: ./ethio-news-scraper
+    restart: unless-stopped
+    env_file:
+      - ./ethio-news-scraper/.env
+    environment:
+      MONGO_URI: mongodb://mongo:27017/ndmc-mobile
+      RUN_ON_START: ${SCRAPER_RUN_ON_START:-false}
+      INGEST_API_TOKEN: ${INGEST_API_TOKEN:-change-me}
+      SCRAPER_API_PORT: "8080"
+    volumes:
+      # Persist Telethon session between restarts
+      - scraper_sessions:/app/sessions
+    depends_on:
+      - mongo
+    networks:
+      - ethio-news
+    ports:
+      # Bind to localhost only — trigger from the server, not the public internet
+      - "127.0.0.1:8080:8080"
+
+  admin:
+    build:
+      context: ./ethio-news-admin
+      args:
+        REACT_APP_BACKEND_URL: https://api.diroconsultancy.com/api/v1
+    restart: unless-stopped
+    depends_on:
+      - api
+    networks:
+      - ethio-news
+    ports:
+      - "3000:80"
+
+networks:
+  ethio-news:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  api_uploads:
+  scraper_sessions:
