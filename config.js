@@ -1,7 +1,6 @@
-// export const baseUrl = "https://smartcsvtool.com/ethioNewsApi";
 // Production (after deploy):
-// export const baseUrl = "https://api.diroconsultancy.com";
-export const baseUrl = "http://192.168.1.3:5001";
+export const baseUrl = "https://api.diroconsultancy.com";
+// export const baseUrl = "http://192.168.1.3:5001";
 
 // Web OAuth client ID — must match GOOGLE_CLIENT_ID in ethio-news-api/.env
 export const googleWebClientId =
