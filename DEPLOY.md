@@ -63,7 +63,40 @@ sudo nginx -t && sudo systemctl reload nginx
 sudo certbot --nginx -d api.diroconsultancy.com -d ethio-news.diroconsultancy.com
 ```
 
-## 6. Manual scrape
+## 6. Create admin user (first login)
+
+There is no default admin until you create one:
+
+```bash
+cd /path/to/ethio-news   # folder with docker-compose.yml
+
+docker compose exec api node scripts/createAdmin.js
+```
+
+Defaults:
+
+- Email: `admin@diroconsultancy.com`
+- Password: `AdminPass123`
+
+Custom values:
+
+```bash
+docker compose exec \
+  -e ADMIN_EMAIL=you@example.com \
+  -e ADMIN_PASSWORD='YourSecurePass' \
+  -e ADMIN_NAME=Admin \
+  api node scripts/createAdmin.js
+```
+
+Then open https://ethio-news.diroconsultancy.com and sign in with that email/password.
+
+List users:
+
+```bash
+docker compose exec mongo mongosh ndmc-mobile --eval 'db.users.find({}, {name:1,email:1,role:1,active:1}).toArray()'
+```
+
+## 7. Manual scrape
 
 ```bash
 curl -X POST http://127.0.0.1:8080/ingest \
@@ -78,7 +111,7 @@ curl http://127.0.0.1:8080/health
 
 Scheduled runs use `CRON_HOURS` (Africa/Addis_Ababa) from the scraper `.env`.
 
-## 7. Telegram session (optional)
+## 8. Telegram session (optional)
 
 First login may need an interactive Telethon session. Create the session on a machine with phone access, then copy `*.session` into the `scraper_sessions` volume (or mount a host folder).
 
