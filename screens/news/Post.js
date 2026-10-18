@@ -3,13 +3,13 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   Dimensions,
   SafeAreaView,
   RefreshControl,
   Linking,
   TouchableOpacity,
 } from "react-native";
+import { Image } from "expo-image";
 import { FontAwesome } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
@@ -32,7 +32,7 @@ const Post = ({ route, navigation }) => {
   const { _id, title, image, description, source, sourceUrl, date } =
     route.params;
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth) || {};
   const { data, refetch, isLoading, isError } = useGetNewsByIdQuery(_id);
   const [news, setNews] = useState({});
   const [refreshing, setRefreshing] = useState(false);
@@ -124,7 +124,9 @@ const Post = ({ route, navigation }) => {
     }
   };
 
-  const displayImage = getImageUrl(news?.image || image);
+  const displayImage =
+    getImageUrl(news?.image || image) ||
+    "https://via.placeholder.com/800x450?text=Ethio+News";
 
   if (isError) {
     return (
@@ -162,7 +164,13 @@ const Post = ({ route, navigation }) => {
         </View>
 
         <View style={[styles.imageCard, { backgroundColor: theme.bg2 }]}>
-          <Image style={styles.image} source={{ uri: displayImage }} />
+          <Image
+            style={styles.image}
+            source={{ uri: displayImage }}
+            contentFit="cover"
+            transition={200}
+            cachePolicy="memory-disk"
+          />
         </View>
         <View
           style={{

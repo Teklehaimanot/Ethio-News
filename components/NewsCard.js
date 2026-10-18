@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   View,
   Text,
-  Image,
 } from "react-native";
+import { Image } from "expo-image";
 import CommentLikeCard from "./CommentLikeCard";
 import { useSelector } from "react-redux";
 import { useLikeNewsByIdMutation } from "../services";
@@ -16,11 +16,15 @@ import moment from "moment";
 import { ThemeContext } from "../utilities/ThemeProvider";
 
 const { width } = Dimensions.get("window");
+const PLACEHOLDER =
+  "https://via.placeholder.com/800x450?text=Ethio+News";
+
 const NewsCard = ({ item, navigation }) => {
-  const [news, setNews] = useState({});
-  const { user } = useSelector((state) => state.auth);
+  const [news, setNews] = useState(item || {});
+  const { user } = useSelector((state) => state.auth) || {};
   const [likeNews] = useLikeNewsByIdMutation();
   const { theme } = useContext(ThemeContext);
+  const imageUri = getImageUrl(news.image) || PLACEHOLDER;
 
   const now = moment();
   const postMoment = moment(news.date);
@@ -45,23 +49,22 @@ const NewsCard = ({ item, navigation }) => {
   };
 
   useEffect(() => {
-    setNews(item);
+    if (item) {
+      setNews(item);
+    }
   }, [item]);
 
   const handleLiked = (newsid) => {
     try {
       if (user) {
         likeNews(newsid);
+        const likedBy = news.likedBy || [];
         setNews({
           ...news,
-          likes: news.likedBy.includes(user.id)
-            ? news.likes - 1
-            : news.likes + 1,
-          likedBy: news.likedBy.includes(user.id)
-            ? news.likedBy.filter((eachLike) => {
-                return eachLike !== user.id;
-              })
-            : [...news.likedBy, user.id],
+          likes: likedBy.includes(user.id) ? news.likes - 1 : news.likes + 1,
+          likedBy: likedBy.includes(user.id)
+            ? likedBy.filter((eachLike) => eachLike !== user.id)
+            : [...likedBy, user.id],
         });
       } else navigation.navigate("login");
     } catch (error) {
@@ -69,76 +72,73 @@ const NewsCard = ({ item, navigation }) => {
     }
   };
 
+  if (!news?._id) {
+    return null;
+  }
+
   return (
-    news && (
-      <SafeAreaView
-        style={[
-          styles.cardview,
-          { backgroundColor: theme.bg2, borderColor: theme.text },
-        ]}
+    <SafeAreaView
+      style={[
+        styles.cardview,
+        { backgroundColor: theme.bg2, borderColor: theme.text },
+      ]}
+    >
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("Details", {
+            _id: news._id,
+            title: news.title,
+            image: imageUri,
+            source: news.source,
+            sourceUrl: news.sourceUrl,
+            description: news.description,
+            comments: news.comments,
+            date: news.date,
+            likes: news.likes,
+            likedBy: news.likedBy,
+          })
+        }
       >
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Details", {
-              _id: news._id,
-              title: news.title,
-              image: getImageUrl(news.image),
-              source: news.source,
-              sourceUrl: news.sourceUrl,
-              description: news.description,
-              comments: news.comments,
-              date: news.date,
-              likes: news.likes,
-              likedBy: news.likedBy,
-            })
-          }
-        >
-          <View>
-            <View style={styles.imageCard}>
-              <Image
-                style={styles.image}
-                source={{
-                  uri: getImageUrl(news.image),
-                }}
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                marginVertical: 20,
-                marginHorizontal: 25,
-                alignItems: "center",
-              }}
-            >
-              <Text style={[styles.sourceStyle, { color: theme.text2 }]}>
-                {news.source ? `${news.source + " " + "|" + " "}` : " "}
-              </Text>
-              <Text style={(styles.sourceStyle, { color: theme.text2 })}>
-                {formatDate()}
-              </Text>
-            </View>
-            <Text style={[styles.titleStyle, { color: theme.text }]}>
-              {news.title}
+        <View>
+          <View style={styles.imageCard}>
+            <Image
+              style={styles.image}
+              source={{ uri: imageUri }}
+              contentFit="cover"
+              transition={200}
+              cachePolicy="memory-disk"
+            />
+          </View>
+          <View style={styles.metaRow}>
+            <Text style={[styles.sourceStyle, { color: theme.text2 }]}>
+              {news.source ? `${news.source} | ` : ""}
+            </Text>
+            <Text style={[styles.sourceStyle, { color: theme.text2 }]}>
+              {formatDate()}
             </Text>
           </View>
-        </TouchableOpacity>
-        <CommentLikeCard
-          handleLiked={handleLiked}
-          news={news}
-          navigation={navigation}
-          setNews={setNews}
-        />
-      </SafeAreaView>
-    )
+          <Text style={[styles.titleStyle, { color: theme.text }]}>
+            {news.title}
+          </Text>
+        </View>
+      </TouchableOpacity>
+      <CommentLikeCard
+        handleLiked={handleLiked}
+        news={news}
+        navigation={navigation}
+        setNews={setNews}
+      />
+    </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   cardview: {
     flexDirection: "column",
     justifyContent: "space-between",
     width: width * 0.92,
+    alignSelf: "center",
     marginTop: width * 0.045,
-    marginHorizontal: "auto",
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: {
@@ -160,15 +160,23 @@ const styles = StyleSheet.create({
     fontSize: 14.5,
     lineHeight: 16.5,
   },
+  metaRow: {
+    flexDirection: "row",
+    marginVertical: 20,
+    marginHorizontal: 25,
+    alignItems: "center",
+  },
   imageCard: {
+    width: "100%",
     height: 240,
+    overflow: "hidden",
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
+    backgroundColor: "#e8e8e8",
   },
   image: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
   },
 });
 

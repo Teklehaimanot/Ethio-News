@@ -1,38 +1,72 @@
-import React, { useContext, useMemo } from "react";
-import { Dimensions, StyleSheet, View, Text } from "react-native";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { Dimensions, StyleSheet, View, Text, Image } from "react-native";
 import { ThemeContext } from "../utilities/ThemeProvider";
+import { getImageUrl } from "../utilities/getImageUrl";
 
 const { width } = Dimensions.get("window");
+const DEFAULT_UPLOAD = "uploads/image-1711019085615.png";
+
 const CommentViewCard = ({ comment }) => {
+  const user = comment.comment.user;
+  const rawProfileImage = user?.profileImage;
+  const hasCustomImage =
+    typeof rawProfileImage === "string" &&
+    rawProfileImage.trim().length > 0 &&
+    !rawProfileImage.includes(DEFAULT_UPLOAD);
+
+  const avatarUri = hasCustomImage ? getImageUrl(rawProfileImage) : null;
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [avatarUri]);
+
+  const showPhoto = !!avatarUri && !imageFailed;
+
   const randomColor = useMemo(() => {
     const colors = [
-      "#FFB6C1", // Light Pink
-      "#ADD8E6", // Light Blue
-      "#98FB98", // Pale Green
-      "#FFD700", // Gold
-      "#FF6347", // Tomato
-      "#7B68EE", // Medium Slate Blue
-      "#FF8C00", // Dark Orange
-      "#D3D3D3", // Light Gray
-      "#F0E68C", // Khaki
-      "#E6E6FA", // Lavender
+      "#FFB6C1",
+      "#ADD8E6",
+      "#98FB98",
+      "#FFD700",
+      "#FF6347",
+      "#7B68EE",
+      "#FF8C00",
+      "#D3D3D3",
+      "#F0E68C",
+      "#E6E6FA",
     ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  }, []);
+    const key = String(user?._id || user?.name || "x");
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) {
+      hash = (hash + key.charCodeAt(i) * (i + 1)) % colors.length;
+    }
+    return colors[hash];
+  }, [user?._id, user?.name]);
+
   const { theme } = useContext(ThemeContext);
+
   return (
     <View style={styles.commentCard} key={comment.comment._id}>
       <View style={styles.name}>
-        <View
-          style={[
-            styles.image,
-            { borderColor: theme.bg, backgroundColor: randomColor },
-          ]}
-        >
-          <Text style={[styles.text, { color: theme.text }]}>
-            {comment.comment.user.name.substring(0, 1).toUpperCase()}
-          </Text>
-        </View>
+        {showPhoto ? (
+          <Image
+            source={{ uri: avatarUri }}
+            style={[styles.image, { borderColor: theme.bg }]}
+            onError={() => setImageFailed(true)}
+          />
+        ) : (
+          <View
+            style={[
+              styles.image,
+              { borderColor: theme.bg, backgroundColor: randomColor },
+            ]}
+          >
+            <Text style={[styles.text, { color: theme.text }]}>
+              {(user?.name || "?").substring(0, 1).toUpperCase()}
+            </Text>
+          </View>
+        )}
         <Text
           style={{
             fontFamily: "Figtree-Regular",
@@ -41,7 +75,7 @@ const CommentViewCard = ({ comment }) => {
             lineHeight: 19.2,
           }}
         >
-          {comment.comment.user.name}
+          {user?.name}
         </Text>
       </View>
 
@@ -71,7 +105,6 @@ const styles = StyleSheet.create({
   commentCard: {
     flexDirection: "col",
     width: width * 1,
-    // marginVertical: 5,
   },
   name: {
     flexDirection: "row",
@@ -85,9 +118,10 @@ const styles = StyleSheet.create({
     borderRadius: (width * 0.1) / 2,
     alignItems: "center",
     justifyContent: "center",
-
+    resizeMode: "cover",
     borderWidth: 0.5,
     marginRight: 10,
+    overflow: "hidden",
   },
   text: {
     fontFamily: "Figtree-Bold",

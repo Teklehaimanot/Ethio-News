@@ -12,27 +12,26 @@ Notifications.setNotificationHandler({
 });
 
 export default function NotificationHandler() {
-    const [expoPushToken, setExpoPushToken] = useState("");
-    const notificationListener = useRef();
-    const responseListener = useRef();
-    const basicUrl = baseUrl;
-
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => {
-      if (token) {
-        setExpoPushToken(token);
+    registerForPushNotificationsAsync()
+      .then((token) => {
+        if (token) {
+          setExpoPushToken(token);
 
-        // Send token to backend
-        fetch(`${baseUrl}/api/v1/pushNotification/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token }),
-        });
-      }
-    });
+          fetch(`${baseUrl}/api/v1/pushNotification/register`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token }),
+          }).catch((err) => console.log("Push register failed:", err));
+        }
+      })
+      .catch((err) => console.log("Push setup failed:", err));
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
@@ -45,10 +44,8 @@ export default function NotificationHandler() {
       });
 
     return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
+      notificationListener.current?.remove?.();
+      responseListener.current?.remove?.();
     };
   }, []);
 
@@ -75,7 +72,8 @@ async function registerForPushNotificationsAsync() {
 
     token = (await Notifications.getExpoPushTokenAsync()).data;
   } else {
-    alert("Must use physical device for Push Notifications");
+    // Emulators can't register for push; skip quietly so Sign-In and browsing still work.
+    console.log("Push notifications skipped on emulator");
   }
 
   return token;

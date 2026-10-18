@@ -4,7 +4,6 @@ import { color } from "../utilities/Colors";
 import Post from "../screens/news/Post";
 import CommentScreen from "../screens/comment/CommentScreen";
 import LoginScreen from "../screens/auth/LoginScreen";
-import RegisterAccount from "../screens/auth/RegisterAccount";
 import SearchScreen from "../screens/search/SearchScreen";
 import ContactUs from "../screens/contactUs/ContactUs";
 import DrawerNavigator from "./DrawerNavigator";
@@ -54,13 +53,6 @@ const HomeScreenNavigator = ({ navigation }) => {
       <Stack.Screen
         name="login"
         component={LoginScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="signUp"
-        component={RegisterAccount}
         options={{
           headerShown: false,
         }}

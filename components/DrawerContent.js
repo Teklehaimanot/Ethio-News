@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -19,7 +19,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../state/auth/authSlice";
 import axios from "axios";
 import { baseUrl } from "../config";
-import { ThemeContext } from "../utilities/ThemeProvider"; // Import ThemeContext
+import { ThemeContext } from "../utilities/ThemeProvider";
+import { getImageUrl } from "../utilities/getImageUrl";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Animated, {
   useSharedValue,
@@ -28,16 +29,28 @@ import Animated, {
 } from "react-native-reanimated";
 
 const BASE_URL = baseUrl;
+const DEFAULT_UPLOAD = "uploads/image-1711019085615.png";
+const defaultAvatar = require("../assets/icon.png");
 
 const CustomSidebarMenu = (props) => {
-  const BASE_PATH =
-    "https://firebasestorage.googleapis.com/v0/b/ndmc-mobile-5a8b5.appspot.com/o/profileImage";
-  const profileImage =
-    "%2Fplaystore-icon.png?alt=media&token=932b1226-aa06-4547-9e56-dff558b63496";
-
   const { theme, isDark, toggleTheme } = useContext(ThemeContext);
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth) || {};
   const dispatch = useDispatch();
+  const [imageFailed, setImageFailed] = useState(false);
+
+  const rawProfileImage = user?.profileImage;
+  const hasCustomImage =
+    typeof rawProfileImage === "string" &&
+    rawProfileImage.trim().length > 0 &&
+    !rawProfileImage.includes(DEFAULT_UPLOAD);
+  const avatarUri = hasCustomImage ? getImageUrl(rawProfileImage) : null;
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [avatarUri]);
+
+  const avatarSource =
+    avatarUri && !imageFailed ? { uri: avatarUri } : defaultAvatar;
 
   const handleLogout = async () => {
     const response = await axios.get(
@@ -72,8 +85,9 @@ const CustomSidebarMenu = (props) => {
       <View style={[styles.profileContainer, { backgroundColor: theme.bg2 }]}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Image
-            source={{ uri: BASE_PATH + profileImage }}
+            source={avatarSource}
             style={styles.sideMenuProfileIcon}
+            onError={() => setImageFailed(true)}
           />
           <Animated.View
             style={[
@@ -97,16 +111,22 @@ const CustomSidebarMenu = (props) => {
             />
           </Animated.View>
         </View>
-        {user ? (
-          <View style={{ marginHorizontal: 20 }}>
+        <View style={{ marginHorizontal: 20 }}>
+          {user ? (
+            <>
+              <Text style={[styles.userName, { color: theme.text }]}>
+                {user.name.charAt(0).toUpperCase() + user.name.slice(1)}
+              </Text>
+              <Text style={[styles.userEmail, { color: theme.text2 }]}>
+                {user.email}
+              </Text>
+            </>
+          ) : (
             <Text style={[styles.userName, { color: theme.text }]}>
-              {user.name.charAt(0).toUpperCase() + user.name.slice(1)}
+              Ethiopian News
             </Text>
-            <Text style={[styles.userEmail, { color: theme.text2 }]}>
-              {user.email}
-            </Text>
-          </View>
-        ) : null}
+          )}
+        </View>
       </View>
 
       <DrawerContentScrollView {...props}>
@@ -130,7 +150,7 @@ const CustomSidebarMenu = (props) => {
 
         {!user ? (
           <DrawerItem
-            label="Login"
+            label="Sign in"
             onPress={() => props.navigation.navigate("login")}
             icon={() => <AntDesign name="login" size={24} color={theme.text} />}
             labelStyle={[styles.drawerItemText, { color: theme.text }]}
@@ -167,12 +187,13 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   sideMenuProfileIcon: {
-    resizeMode: "center",
+    resizeMode: "cover",
     width: 70,
     height: 70,
     borderRadius: 50,
     alignSelf: "center",
     margin: 20,
+    overflow: "hidden",
   },
   userName: {
     fontFamily: "Figtree-Regular",

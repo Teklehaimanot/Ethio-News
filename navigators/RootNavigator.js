@@ -11,7 +11,7 @@ import { useFonts } from "expo-font";
 import { ThemeContext } from "../utilities/ThemeProvider";
 
 const RootNavigator = () => {
-  const [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     "Figtree-Regular": require("../assets/fonts/Figtree-Regular.ttf"),
     "Figtree-Bold": require("../assets/fonts/Figtree-Bold.ttf"),
     "Figtree-SemiBold": require("../assets/fonts/Figtree-SemiBold.ttf"),
@@ -19,24 +19,31 @@ const RootNavigator = () => {
 
   const { theme, isDark } = useContext(ThemeContext);
   const dispatch = useDispatch();
+  const ready = fontsLoaded || !!fontError;
+
+  useEffect(() => {
+    if (fontError) {
+      console.log("Font load error, continuing with system fonts:", fontError);
+    }
+  }, [fontError]);
 
   useEffect(() => {
     getUser()
       .then((res) => {
-        const { user, token } = JSON.parse(res);
-        if (res) {
-          dispatch(login({ user, token }));
+        if (!res) return;
+        const parsed = JSON.parse(res);
+        if (parsed?.user && parsed?.token) {
+          dispatch(login({ user: parsed.user, token: parsed.token }));
         }
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [dispatch]);
 
   const getUser = async () => {
     try {
-      const token = await AsyncStorage.getItem("token");
-      return token;
+      return await AsyncStorage.getItem("token");
     } catch (error) {
       console.error("Error retrieving token:", error);
       return null;
@@ -45,7 +52,7 @@ const RootNavigator = () => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: theme.bg2 }}>
-      {fontsLoaded && (
+      {ready && (
         <NavigationContainer>
           <StatusBar
             backgroundColor={theme.bg2}

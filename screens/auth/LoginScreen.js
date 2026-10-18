@@ -5,15 +5,9 @@ import {
   Dimensions,
   ActivityIndicator,
   TouchableOpacity,
-  // Button,
 } from "react-native";
-import { color } from "../../utilities/Colors";
-import { TextInput } from "react-native-gesture-handler";
-import { useContext, useEffect, useState } from "react";
-import { Feather } from "@expo/vector-icons";
-import * as WebBrowser from "expo-web-browser";
-// import * as Google from "expo-auth-session/providers/google";
-// import * as AuthSession from "expo-auth-session";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Feather, AntDesign } from "@expo/vector-icons";
 
 import { baseUrl } from "../../config";
 import { login } from "../../state/auth/authSlice";
@@ -21,92 +15,65 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { ThemeContext } from "../../utilities/ThemeProvider";
-
-WebBrowser.maybeCompleteAuthSession();
+import {
+  configureGoogleSignIn,
+  isNativeGoogleSignInAvailable,
+  signInWithGoogleNative,
+} from "../../utilities/googleSignIn";
 
 const { width } = Dimensions.get("window");
+
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { theme } = useContext(ThemeContext);
-  const basicUrl = baseUrl;
-  // const config = {
-  //   clientId:
-  //     "399442306679-aemld02ftrr8rl4ga0f60ec2d6uesm2e.apps.googleusercontent.com",
-  //   redirectUri: "https://auth.expo.io/@teklehaimanot/ethio-news",
-  //   useProxy: true,
-  // };
-
-  // const [request, response, promptAsync] = Google.useAuthRequest({
-  //   clientId:
-  //     "399442306679-aemld02ftrr8rl4ga0f60ec2d6uesm2e.apps.googleusercontent.com",
-  //   redirectUri: AuthSession.makeRedirectUri({
-  //     useProxy: true, // Important for Expo Go
-  //   }),
-  //   scopes: ["profile", "email"],
-  // });
   const dispatch = useDispatch();
 
-  // const handleGoogleLogin = async () => {
-  //   try {
-  //     console.log("Google OAuth Response:", response);
-  //     if (response?.type === "success") {
-  //       const { id_token } = response.params;
-  //       console.log("ID Token:", id_token);
+  useEffect(() => {
+    configureGoogleSignIn().catch(() => {});
+  }, []);
 
-  //       const { data } = await axios.post(
-  //         `${basicUrl}/api/v1/user/googleSignIn`,
-  //         {
-  //           idToken: id_token,
-  //         }
-  //       );
-
-  //       if (data) {
-  //         const { user, token } = data;
-  //         const jsonUser = JSON.stringify(data);
-  //         await AsyncStorage.setItem("token", jsonUser);
-  //         dispatch(login({ user, token }));
-  //         navigation.navigate("Home");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     if (error.response) {
-  //       alert("err", error.response.data.error);
-  //     } else {
-  //       alert("Error setting up the request:", error.message);
-  //     }
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   handleGoogleLogin();
-  // }, [response]);
-
-  const handleSubmit = async (e) => {
-    try {
-      setIsLoading(true);
-      const { data } = await axios.post(`${basicUrl}/api/v1/user/login`, {
-        email,
-        password,
+  const completeSignIn = useCallback(
+    async (idToken) => {
+      const { data } = await axios.post(`${baseUrl}/api/v1/user/googleSignIn`, {
+        idToken,
       });
+
       if (data) {
         const { user, token } = data;
-        const jsonUser = JSON.stringify(data);
-        AsyncStorage.setItem("token", jsonUser);
-        setErrors(false);
-        setIsLoading(false);
+        await AsyncStorage.setItem("token", JSON.stringify(data));
         dispatch(login({ user, token }));
         navigation.navigate("Home");
       }
-    } catch (error) {
-      if (error.response) {
-        setErrors(error.response.data.error);
-        setIsLoading(false);
-      } else {
-        alert("Error setting up the request:", error.message);
+    },
+    [dispatch, navigation]
+  );
+
+  const handleGoogleLogin = async () => {
+    try {
+      setIsLoading(true);
+      setErrors("");
+
+      if (!isNativeGoogleSignInAvailable) {
+        setErrors(
+          "Google Sign-In needs a native app build (not Expo Go). Run: cd ethio-news-mobile && npx expo run:android"
+        );
+        return;
       }
+
+      const idToken = await signInWithGoogleNative();
+      await completeSignIn(idToken);
+    } catch (error) {
+      if (error.code === "CANCELLED" || error.code === "IN_PROGRESS") {
+        return;
+      }
+      setErrors(
+        error.response?.data?.error ||
+          error.message ||
+          "Google sign-in failed. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -120,102 +87,53 @@ const LoginScreen = ({ navigation }) => {
           >
             <Feather name="arrow-left" size={24} color={theme.text} />
           </TouchableOpacity>
-          <Text style={[styles.title, { color: theme.text }]}>Login</Text>
+          <Text style={[styles.title, { color: theme.text }]}>Sign in</Text>
         </View>
       </View>
+
       <View style={[styles.loginCard, { borderColor: theme.text2 }]}>
-        <Text
-          style={{
-            color: theme.error,
-          }}
-        >
-          {errors}
+        {errors ? (
+          <Text style={{ color: theme.error, marginBottom: 12 }}>{errors}</Text>
+        ) : null}
+
+        <Text style={[styles.heading, { color: theme.primary }]}>
+          Welcome back
         </Text>
-        <Text
-          style={{
-            fontWeight: "bold",
-            color: theme.primary,
-            paddingHorizontal: 5,
-            fontSize: 20,
-          }}
-        >
-          Login
+        <Text style={[styles.subtitle, { color: theme.text2 }]}>
+          Sign in with your Google account to like posts, comment, and bookmark
+          news.
         </Text>
-        <TextInput
-          placeholder="Email"
-          style={[
-            styles.textInput,
-            { backgroundColor: theme.bg, color: theme.text },
-          ]}
-          placeholderTextColor={theme.text2}
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-        />
-        <TextInput
-          placeholder="Password"
-          style={[
-            styles.textInput,
-            { backgroundColor: theme.bg, color: theme.text },
-          ]}
-          placeholderTextColor={theme.text2}
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-        />
+
         <TouchableOpacity
-          style={[styles.button, { backgroundColor: theme.primary }]}
-          onPress={handleSubmit}
+          style={[styles.googleButton, { backgroundColor: theme.bg }]}
+          onPress={handleGoogleLogin}
+          disabled={isLoading}
         >
           {isLoading ? (
-            <ActivityIndicator size="small" color={theme.active} />
+            <ActivityIndicator size="small" color={theme.primary} />
           ) : (
-            <Text
-              style={{
-                color: theme.active,
-                fontWeight: "bold",
-                fontSize: 15,
-                textAlign: "center",
-                letterSpacing: 1,
-              }}
-            >
-              Login
-            </Text>
+            <>
+              <AntDesign name="google" size={22} color="#DB4437" />
+              <Text style={[styles.googleButtonText, { color: theme.text }]}>
+                Sign in with Google
+              </Text>
+            </>
           )}
         </TouchableOpacity>
 
-        <View style={styles.createAccount}>
-          <Text style={{ color: theme.primary }}>New user?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("signUp")}>
-            <Text style={{ color: theme.primary }}>Create an Account</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      {/* <TouchableOpacity
-        style={{
-          backgroundColor: theme.primary,
-          width: width * 0.5,
-          marginHorizontal: "auto",
-          paddingVertical: 20,
-          borderRadius: 5,
-          paddingVertical: 14,
-        }}
-        disabled={!request}
-        title="Sign in with Google"
-        onPress={() => {
-          promptAsync();
-        }}
-      >
-        <Text
-          style={{
-            color: theme.active,
-            textAlign: "center",
-            fontFamily: "Figtree-Bold",
-            fontSize: 16,
-          }}
-        >
-          Sign in with Google
+        <Text style={[styles.hint, { color: theme.text2 }]}>
+          You can browse news without signing in.
         </Text>
-      </TouchableOpacity> */}
+        {!isNativeGoogleSignInAvailable ? (
+          <Text style={[styles.devHint, { color: theme.text2 }]}>
+            Google blocks sign-in inside Expo Go. Install a dev build with{" "}
+            <Text style={{ fontFamily: "Figtree-SemiBold" }}>
+              npx expo run:android
+            </Text>
+            .
+          </Text>
+        ) : null}
+      </View>
     </View>
   );
 };
@@ -234,7 +152,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.8,
     shadowRadius: 8,
-    // elevation: 1,
   },
   backIcon: {
     marginRight: 15,
@@ -250,30 +167,50 @@ const styles = StyleSheet.create({
   loginCard: {
     width: width * 0.88,
     marginHorizontal: width * 0.06,
-    borderRadius: 10,
     marginVertical: 40,
     padding: 25,
     borderWidth: 0.5,
-
     borderRadius: 15,
   },
-  textInput: {
-    padding: 10,
-    marginHorizontal: 5,
-    marginVertical: 7,
-    borderRadius: 5,
+  heading: {
+    fontFamily: "Figtree-Bold",
+    fontSize: 22,
+    marginBottom: 10,
   },
-  button: {
-    margin: 5,
-    borderRadius: 5,
-    paddingVertical: 10,
+  subtitle: {
+    fontFamily: "Figtree-Regular",
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 28,
   },
-  createAccount: {
+  googleButton: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginHorizontal: 10,
-    marginVertical: 10,
     alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
+    borderRadius: 8,
+    paddingVertical: 14,
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },
+  googleButtonText: {
+    fontFamily: "Figtree-SemiBold",
+    fontSize: 16,
+  },
+  hint: {
+    fontFamily: "Figtree-Regular",
+    fontSize: 13,
+    textAlign: "center",
+    marginTop: 24,
+    lineHeight: 18,
+  },
+  devHint: {
+    fontFamily: "Figtree-Regular",
+    fontSize: 12,
+    textAlign: "center",
+    marginTop: 12,
+    lineHeight: 17,
   },
 });
+
 export default LoginScreen;

@@ -27,7 +27,7 @@ const { width } = Dimensions.get("window");
 const CommentScreen = ({ route, navigation }) => {
   const { newsid } = route.params;
   const [comment, setComment] = useState("");
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth) || {};
   const { theme } = useContext(ThemeContext);
 
   const {

@@ -6,7 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "permissions": ["INTERNET"],
+    "permissions": [
+      "INTERNET"
+    ],
     "androidStatusBar": {
       "backgroundColor": "#fff",
       "translucent": true
@@ -16,7 +18,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.teklehaimanot.ethionews"
@@ -43,15 +47,23 @@
         "projectId": "f0b90088-cdb3-4249-90d6-a1d652479b6d"
       }
     },
-    "runtimeVersion": "exposdk:47.0.0",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "updates": {
-      "url": "https://auth.expo.dev/f0b90088-cdb3-4249-90d6-a1d652479b6d"
+      "url": "https://u.expo.dev/f0b90088-cdb3-4249-90d6-a1d652479b6d"
     },
-    "plugins": ["expo-font"],
+    "plugins": [
+      "expo-font",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.399442306679-aemld02ftrr8rl4ga0f60ec2d6uesm2e"
+        }
+      ],
+      "expo-asset"
+    ],
     "newArchEnabled": true,
-    "authSession": {
-      "redirectUri": "https://auth.expo.io/@teklehaimanot/ethio-news"
-    },
-    "$scheme": "ethionews"
+    "scheme": "ethionews"
   }
 }

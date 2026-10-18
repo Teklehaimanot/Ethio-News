@@ -12,7 +12,7 @@ const DrawerNavigator = () => {
   const { theme } = useContext(ThemeContext);
   return (
     <Drawer.Navigator
-      initialRouteName="News"
+      initialRouteName="Home Page"
       screenOptions={{
         drawerInactiveTintColor: theme.text,
         drawerActiveTintColor: theme.active,

@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { ThemeContext } from "../utilities/ThemeProvider";
 
 const CommentLikeCard = ({ news, navigation, handleLiked }) => {
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth) || {};
   const { theme } = useContext(ThemeContext);
 
   return (
